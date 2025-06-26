@@ -51,9 +51,8 @@ const MobileMenuOverlay = ({ isOpen, onClose, activeTab, setActiveTab }) => {
                 {['home', 'services', 'about', 'contact'].map((tabName) => {
                     const IconComponent = getTabIconComponent(tabName);
                     // Determine link styling based on the activeTab prop
-                    const linkClasses = `text-3xl font-light font-sans flex items-center justify-center space-x-4 transition-colors duration-200 ${
-                        activeTab === tabName ? 'text-white' : 'text-gray-300 hover:text-green-400' // Changed to green-400 for hover
-                    }`;
+                    const linkClasses = `text-3xl font-light font-sans flex items-center justify-center space-x-4 transition-colors duration-200 ${activeTab === tabName ? 'text-white' : 'text-gray-300 hover:text-green-400' // Changed to green-400 for hover
+                        }`;
                     return (
                         <a
                             key={tabName}
@@ -83,7 +82,7 @@ const TopNavigationBar = ({ toggleMenu, activeTab, setActiveTab }) => { // Recei
     const getLinkClass = (tabName) => {
         // Updated hover effect for a more ethereal, futuristic feel (scale and color change)
         const baseClasses = 'relative after:absolute after:bottom-0 after:left-0 after:w-0 hover:after:w-full after:h-0.5 after:bg-green-300 after:transition-all after:duration-300 ' + // Changed to green-300 for underline
-                               'transform hover:scale-105 transition-transform duration-300 ease-in-out';
+            'transform hover:scale-105 transition-transform duration-300 ease-in-out';
 
         if (activeTab === tabName) {
             return `text-white ${baseClasses}`;
@@ -111,16 +110,22 @@ const TopNavigationBar = ({ toggleMenu, activeTab, setActiveTab }) => { // Recei
     return (
         <nav
             className="fixed top-6 inset-x-4 md:inset-x-8 lg:inset-x-16 xl:inset-x-24 /* Updated responsive horizontal spacing */
-                       py-3 px-4 sm:px-8 lg:px-10 /* Internal padding for content */
-                       flex justify-between items-center /* Distribute items */
-                       bg-black bg-opacity-30 backdrop-filter backdrop-blur-3xl /* Enhanced glassmorphism */
-                       border-b border-t border-l border-r rounded-3xl border-gray-500 border-opacity-50 shadow-2xl z-50 /* Grey glowing border & stronger shadow */
-                       transition-transform duration-300 ease-out"
+                            py-3 px-4 sm:px-8 lg:px-10 /* Internal padding for content */
+                            flex justify-between items-center /* Distribute items */
+                            bg-black bg-opacity-30 backdrop-filter backdrop-blur-3xl /* Enhanced glassmorphism */
+                            border-b border-t border-l border-r rounded-3xl border-gray-500 border-opacity-50 shadow-2xl z-50 /* Grey glowing border & stronger shadow */
+                            transition-transform duration-300 ease-out"
         >
-            {/* Endorphind Company Name (Logo area) - Updated for professional, futuristic look */}
-            <div className="flex items-center text-2xl sm:text-3xl font-bold font-mono tracking-normal text-white drop-shadow-md
-                            hover:text-green-400 transition-colors duration-500"> {/* Dynamic color on hover - Changed to green-400 */}
-                Greenfinite
+            {/* Greenfinite Company Name (Logo area) - Updated for professional, futuristic look */}
+            <div className="flex items-center">
+                <a
+                    href="/"
+                    // Applied hover and transition classes directly to the anchor tag for precise control
+                    // Increased duration to duration-1000 for easier visibility of the transition during debugging
+                    className="flex items-center text-2xl sm:text-3xl font-bold font-mono tracking-normal text-white drop-shadow-md hover:text-green-400 transition-colors duration-1000 ease-in-out"
+                >
+                    Greenfinite
+                </a>
                 {/* AI Mode Indicator removed */}
             </div>
 
@@ -139,7 +144,7 @@ const TopNavigationBar = ({ toggleMenu, activeTab, setActiveTab }) => { // Recei
             <div className="hidden md:flex items-center space-x-6 sm:space-x-8 lg:space-x-8"> {/* Responsive spacing between links */}
                 {/* Home Link */}
                 <a
-                    href="#home"
+                    href="/"
                     onClick={() => handleTabClick('home')}
                     className={`focus:outline-none flex items-center group ${getLinkClass('home')}`}
                 >

@@ -59,7 +59,7 @@ const ChatBot = () => {
         // Changed width to w-[45%] to cover 45% of the screen.
         <div className="w-full md:w-[48%] h-[33em] bg-white bg-opacity-90 rounded-xl shadow-2xl p-6 flex flex-col transition-all duration-300 hover:shadow-xl hover:scale-[1.005] font-sans">
             {/* Chat Bot Title */}
-            <h2 className="text-3xl font-extrabold mb-5 text-gray-800 text-center">Chat Bot</h2>
+            <h2 className="text-2xl font-bold mb-5 text-gray-800 text-center">Talk to our chatbot, Earth v1.0</h2>
 
             {/* Chat Messages Display Area */}
             {/* flex-col ensures messages stack vertically */}

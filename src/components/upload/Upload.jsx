@@ -67,7 +67,12 @@ const Upload = () => {
     }
 
     const fileUrl = URL.createObjectURL(selectedFile);
-    navigate('/analyze', { state: { fileUrl } });
+    navigate('/analyze', {
+      state: {
+        fileUrl: URL.createObjectURL(selectedFile),
+        fileName: selectedFile.name
+      }
+    });
   };
 
   const handleDragOver = (e) => {

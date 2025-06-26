@@ -10,6 +10,7 @@ export default {
         brand: ['"Inter"', 'sans-serif'],
         display: ['"Playfair Display"', 'serif'],
         mono: ['"Fira Code"', 'monospace'],
+        primary: 'var(--font-primary)',
       },
       keyframes: {
         float: {
