@@ -1,6 +1,7 @@
 import Navbar from "../components/ui/Navbar";
 import Footer from "../components/ui/Footer";
 import UploadPage from "./UploadPage"; // or import UploadForm if extracted
+import AboutUs from "./AboutUs";
 
 export default function Home() {
   return (
@@ -13,6 +14,9 @@ export default function Home() {
           <Navbar />
           <main className="flex-1 flex justify-center items-center">
             <UploadPage />
+          </main>
+          <main>
+            <AboutUs />
           </main>
           <Footer />
         </div>
