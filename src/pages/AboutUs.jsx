@@ -6,7 +6,7 @@ export default function AboutUs() {
       className="min-h-screen flex flex-col bg-cover bg-center"
       style={{ backgroundImage: "url('bg.jpg')" }}
     >
-      <div className="w-screen">
+      <div className="w-screen" id='about'>
 
         {/* Top Divider Line with Margin */}
         <div style={{ margin: '0 4em' }}>
