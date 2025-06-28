@@ -1,15 +1,22 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CloudUpload } from 'lucide-react';
 import UploadButton from './UploadButton';
 
-const Upload = () => {
+const Upload = ({ selectedModule }) => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [isDragOver, setIsDragOver] = useState(false);
   const fileInputRef = useRef(null);
   const navigate = useNavigate();
 
-  const handleUpload = async () => {
+  // Log the selected module when it changes
+  useEffect(() => {
+    if (selectedModule) {
+      console.log("Upload component received module:", selectedModule);
+    }
+  }, [selectedModule]);
+
+  const handleUpload = () => {
     if (!selectedFile) {
       console.log("Please select a file to upload.");
       return;
@@ -18,7 +25,8 @@ const Upload = () => {
     navigate('/analyze', {
       state: {
         file: selectedFile,
-    fileName: selectedFile.name
+        fileName: selectedFile.name,
+        module: selectedModule
       }
     });
   };
@@ -56,6 +64,7 @@ const Upload = () => {
       onDrop={handleDrop}
     >
       <p className="text-base text-gray-700 text-center leading-relaxed max-w-lg">
+        {selectedModule ? `Selected Module: ${selectedModule}` : 'Select a module to begin.'}<br />
         Upload a file to get started. We support PDF, DOCX, and TXT formats.
       </p>
 
