@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CloudUpload } from 'lucide-react';
 import UploadButton from './UploadButton';
-import api from '../../api/axios'; // ✅ axios instance
+import axios from 'axios'; // ✅ Use axios directly
 
 const Upload = ({ selectedModule }) => {
   const [selectedFile, setSelectedFile] = useState(null);
@@ -19,25 +19,26 @@ const Upload = ({ selectedModule }) => {
 
   const handleUpload = async () => {
     if (!selectedFile) return;
-
+  
     setIsUploading(true);
-
+  
     try {
       const formData = new FormData();
       formData.append("file", selectedFile);
-
-      const response = await api.post('/upload-pdf/', formData, {
+  
+      // ✅ Inline Axios call
+      const response = await axios.post('http://localhost:8000/upload-pdf/', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
       });
-
+  
       const { processed_file } = response.data;
-
+  
       if (processed_file) {
         navigate("/analyze", {
           state: {
-            fileUrl: `${api.defaults.baseURL}/processed_files/${processed_file}`,
+            fileUrl: `http://localhost:8000/processed_files/${processed_file}`,
             fileName: processed_file,
             module: selectedModule,
           },
@@ -50,6 +51,7 @@ const Upload = ({ selectedModule }) => {
       setIsUploading(false);
     }
   };
+  
 
   const handleDragOver = (e) => {
     e.preventDefault();
