@@ -2,33 +2,53 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CloudUpload } from 'lucide-react';
 import UploadButton from './UploadButton';
+import api from '../../api/axios'; // ✅ axios instance
 
 const Upload = ({ selectedModule }) => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [isDragOver, setIsDragOver] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
   const fileInputRef = useRef(null);
   const navigate = useNavigate();
 
-  // Log the selected module when it changes
   useEffect(() => {
     if (selectedModule) {
       console.log("Upload component received module:", selectedModule);
     }
   }, [selectedModule]);
 
-  const handleUpload = () => {
-    if (!selectedFile) {
-      console.log("Please select a file to upload.");
-      return;
-    }
+  const handleUpload = async () => {
+    if (!selectedFile) return;
 
-    navigate('/analyze', {
-      state: {
-        file: selectedFile,
-        fileName: selectedFile.name,
-        module: selectedModule
+    setIsUploading(true);
+
+    try {
+      const formData = new FormData();
+      formData.append("file", selectedFile);
+
+      const response = await api.post('/upload-pdf/', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+
+      const { processed_file } = response.data;
+
+      if (processed_file) {
+        navigate("/analyze", {
+          state: {
+            fileUrl: `${api.defaults.baseURL}/processed_files/${processed_file}`,
+            fileName: processed_file,
+            module: selectedModule,
+          },
+        });
       }
-    });
+    } catch (err) {
+      console.error("Upload error:", err?.response?.data || err.message);
+      alert("Upload failed. Please try again.");
+    } finally {
+      setIsUploading(false);
+    }
   };
 
   const handleDragOver = (e) => {
@@ -84,7 +104,6 @@ const Upload = ({ selectedModule }) => {
         )}
       </div>
 
-      {/* Hidden file input for manual click */}
       <input
         type="file"
         accept=".pdf,.docx,.txt"
@@ -94,7 +113,7 @@ const Upload = ({ selectedModule }) => {
       />
 
       <div className="w-full max-w-xs">
-        <UploadButton onUpload={handleUpload} />
+        <UploadButton onUpload={handleUpload} loading={isUploading} />
       </div>
     </div>
   );
