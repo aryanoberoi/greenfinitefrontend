@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 const DocPreview = () => {
@@ -9,16 +9,11 @@ const DocPreview = () => {
   const fileName = location.state?.fileName;
   const module = location.state?.module;
 
-  if (!fileUrl) {
-    return (
-      <div className="text-center p-8 text-red-600 font-semibold border-2 border-grey-600 rounded-xl">
-        No file URL provided. Please{' '}
-        <button onClick={() => navigate('/')} className="underline text-blue-600">
-          upload a file first
-        </button>.
-      </div>
-    );
-  }
+  useEffect(() => {
+    if (!fileUrl) {
+      navigate('/');
+    }
+  }, [fileUrl, navigate]);
 
   return (
     <div className="w-full md:w-[48%] h-[33em] bg-white bg-opacity-90 rounded-xl shadow-2xl p-6 flex flex-col transition-all duration-300 hover:shadow-xl hover:scale-[1.005] font-sans overflow-hidden">
