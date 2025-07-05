@@ -118,7 +118,7 @@ const Upload = ({ selectedModule }) => {
             {file.name}
             <button
               onClick={() => removeFile(file.name)}
-              className="ml-1 text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+              className="ml-1 !bg-transparent text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
               title="Remove"
             >
               <X size={12} />
