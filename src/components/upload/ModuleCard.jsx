@@ -9,7 +9,16 @@ const ModuleCard = ({ onModuleSelect }) => {
           <button
             key={label}
             onClick={() => onModuleSelect(label)}
-            className="bg-gray-800 text-white px-5 py-2 rounded-full text-sm border border-gray-600 transition duration-300 hover:bg-gray-700"
+            className="
+              px-6 py-2
+              !border !border-gray-300 !border-solid
+              !rounded-3xl
+              font-mono !text-md !font-medium
+              !text-[#083417]
+              !bg-[#F8F7F2] hover:!bg-white active:!bg-[#D2DAB6]
+              transition-all duration-150 ease-in-out
+              cursor-pointer
+            "
           >
             {label}
           </button>

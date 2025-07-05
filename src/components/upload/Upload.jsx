@@ -67,16 +67,22 @@ const Upload = ({ selectedModule }) => {
   const handleDrop = (e) => {
     e.preventDefault();
     setIsDragOver(false);
-    const droppedFile = e.dataTransfer.files[0];
-    if (droppedFile && !selectedFiles.find(f => f.name === droppedFile.name)) {
-      setSelectedFiles(prev => [...prev, droppedFile]);
+    const droppedFiles = Array.from(e.dataTransfer.files);
+    const newFiles = droppedFiles.filter(
+      (file) => !selectedFiles.find((f) => f.name === file.name)
+    );
+    if (newFiles.length > 0) {
+      setSelectedFiles((prev) => [...prev, ...newFiles]);
     }
   };
 
   const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    if (file && !selectedFiles.find(f => f.name === file.name)) {
-      setSelectedFiles(prev => [...prev, file]);
+    const files = Array.from(e.target.files);
+    const newFiles = files.filter(
+      (file) => !selectedFiles.find((f) => f.name === file.name)
+    );
+    if (newFiles.length > 0) {
+      setSelectedFiles((prev) => [...prev, ...newFiles]);
     }
     e.target.value = ""; // reset for same file
   };
@@ -103,10 +109,10 @@ const Upload = ({ selectedModule }) => {
             {file.name}
             <button
               onClick={() => removeFile(file.name)}
-              className="ml-1 text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+              className="ml-1 !bg-transparent !border-none text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
               title="Remove"
             >
-              <X size={12} />
+              <X size={20} />
             </button>
           </div>
         ))}
@@ -134,6 +140,7 @@ const Upload = ({ selectedModule }) => {
         ref={fileInputRef}
         onChange={handleFileChange}
         className="hidden"
+        multiple
       />
 
       {/* Upload Button */}

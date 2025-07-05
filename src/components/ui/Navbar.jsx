@@ -110,11 +110,11 @@ const TopNavigationBar = ({ toggleMenu, activeTab, setActiveTab }) => { // Recei
     return (
         <nav
             className="fixed top-6 inset-x-4 md:inset-x-8 lg:inset-x-16 xl:inset-x-24 /* Updated responsive horizontal spacing */
-                            py-3 px-4 sm:px-8 lg:px-10 /* Internal padding for content */
-                            flex justify-between items-center /* Distribute items */
-                            bg-black bg-opacity-30 backdrop-filter backdrop-blur-3xl /* Enhanced glassmorphism */
-                            border-b border-t border-l border-r rounded-3xl border-gray-500 border-opacity-50 shadow-2xl z-50 /* Grey glowing border & stronger shadow */
-                            transition-transform duration-300 ease-out"
+                                py-3 px-4 sm:px-8 lg:px-10 /* Internal padding for content */
+                                flex justify-between items-center /* Distribute items */
+                                bg-gradient-to-r from-emerald-500/30 to-cyan-500/30 backdrop-filter backdrop-blur-3xl /* Enhanced glassmorphism with green-to-teal gradient */
+                                border-b border-t border-l border-r rounded-3xl border-gray-500 border-opacity-50 shadow-2xl z-50 /* Grey glowing border & stronger shadow */
+                                transition-transform duration-300 ease-out"
         >
             {/* Greenfinite Company Name (Logo area) - Updated for professional, futuristic look */}
             <div className="flex items-center">
