@@ -21,39 +21,54 @@ const Upload = ({ selectedModule }) => {
 
   const handleUpload = async () => {
     if (selectedFiles.length === 0) return;
-
+  
     setIsUploading(true);
-
+  
     try {
       const formData = new FormData();
       selectedFiles.forEach(file => {
         formData.append("files", file);
       });
-
-      const response = await axios.post('http://localhost:8000/upload-pdf/', formData, {
-        headers: { 'Content-Type': 'multipart/form-data' },
-      });
-
-      const { processed_file } = response.data;
-
-      if (processed_file) {
-        navigate("/analyze", {
-          state: {
-            fileUrl: `http://localhost:8000/processed_files/${processed_file}`,
-            fileName: processed_file,
-            module: selectedModule,
+  
+      const response = await axios.post(
+        `http://localhost:8000/uploadpdf`,
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
           },
-        });
-      }
-
+          responseType: 'blob', // Expect PDF blob back
+        }
+      );
+      
+  
+      // Extract filename from headers
+      const contentDisposition = response.headers['content-disposition'];
+      const fileNameMatch = contentDisposition?.match(/filename="?(.+)"?/);
+      const fileName = fileNameMatch ? fileNameMatch[1] : 'processed.pdf';
+  
+      // Create a Blob URL for the PDF
+      const fileBlob = new Blob([response.data], { type: 'application/pdf' });
+      const fileUrl = URL.createObjectURL(fileBlob);
+  
+      // Navigate with blob URL
+      navigate("/analyze", {
+        state: {
+          fileUrl,
+          fileName,
+          module: selectedModule,
+        },
+      });
+  
     } catch (err) {
-      console.error("Upload error:", err?.response?.data || err.message);
-      alert("Upload failed. Please try again.");
+      console.error("Upload error:", err);
+      alert("Upload failed.");
     } finally {
       setIsUploading(false);
     }
   };
-
+  
+  
   const handleDragOver = (e) => {
     e.preventDefault();
     setIsDragOver(true);
@@ -67,16 +82,22 @@ const Upload = ({ selectedModule }) => {
   const handleDrop = (e) => {
     e.preventDefault();
     setIsDragOver(false);
-    const droppedFile = e.dataTransfer.files[0];
-    if (droppedFile && !selectedFiles.find(f => f.name === droppedFile.name)) {
-      setSelectedFiles(prev => [...prev, droppedFile]);
+    const droppedFiles = Array.from(e.dataTransfer.files);
+    const newFiles = droppedFiles.filter(
+      (file) => !selectedFiles.find((f) => f.name === file.name)
+    );
+    if (newFiles.length > 0) {
+      setSelectedFiles((prev) => [...prev, ...newFiles]);
     }
   };
 
   const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    if (file && !selectedFiles.find(f => f.name === file.name)) {
-      setSelectedFiles(prev => [...prev, file]);
+    const files = Array.from(e.target.files);
+    const newFiles = files.filter(
+      (file) => !selectedFiles.find((f) => f.name === file.name)
+    );
+    if (newFiles.length > 0) {
+      setSelectedFiles((prev) => [...prev, ...newFiles]);
     }
     e.target.value = ""; // reset for same file
   };
@@ -103,10 +124,10 @@ const Upload = ({ selectedModule }) => {
             {file.name}
             <button
               onClick={() => removeFile(file.name)}
-              className="ml-1 text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+              className="ml-1 !bg-transparent !border-none text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
               title="Remove"
             >
-              <X size={12} />
+              <X size={20} />
             </button>
           </div>
         ))}
@@ -134,6 +155,7 @@ const Upload = ({ selectedModule }) => {
         ref={fileInputRef}
         onChange={handleFileChange}
         className="hidden"
+        multiple
       />
 
       {/* Upload Button */}

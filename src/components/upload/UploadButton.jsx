@@ -4,16 +4,26 @@ const UploadButton = ({ onUpload, loading }) => {
   return (
     <button
       onClick={onUpload}
-      disabled={loading}
-      className={`w-full flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg text-lg font-semibold transition duration-200 shadow-md ${
-        loading ? 'opacity-70 cursor-not-allowed' : ''
-      }`}
+      className={`
+        w-full max-w-xs text-center
+        px-6 py-2
+        !border !border-gray-300 !border-solid {/* Added !important to border and border-gray-300 */}
+        !rounded-3xl
+        font-mono !text-lg !font-medium {/* Added !important to text-lg and font-medium */}
+        !text-[#083417]
+        !bg-[#F8F7F2] hover:!bg-white active:!bg-[#D2DAB6]
+        transition-all duration-150 ease-in-out
+        ${loading ? 'opacity-60 cursor-not-allowed' : 'cursor-pointer'}
+      `}
+      style={{
+        fontFamily: 'monospace', // if global inherits something else
+      }}
     >
       {loading ? (
-        <>
-          <span className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+        <span className="flex items-center justify-center gap-2">
+          <span className="w-4 h-4 border-2 border-[#083417] border-t-transparent rounded-full animate-spin"></span>
           Uploading...
-        </>
+        </span>
       ) : (
         'Upload'
       )}

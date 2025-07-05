@@ -1,10 +1,10 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import App from './App.jsx'
-import './index.css'
-import { BrowserRouter } from 'react-router-dom'
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import App from './App.jsx';
+import './index.css';
+import { BrowserRouter } from 'react-router-dom';
 
-// ✅ Vite-specific env usage
+// ✅ Set CSS variables from env
 document.documentElement.style.setProperty(
   '--font-primary',
   import.meta.env.VITE_FONT_PRIMARY || "'Inter', sans-serif"
@@ -21,4 +21,4 @@ ReactDOM.createRoot(document.getElementById('root')).render(
       <App />
     </BrowserRouter>
   </React.StrictMode>
-)
+);
