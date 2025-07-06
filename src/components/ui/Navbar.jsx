@@ -42,7 +42,7 @@ const MobileMenuOverlay = ({ isOpen, onClose, activeTab, setActiveTab }) => {
         <div className="fixed inset-0 bg-black bg-opacity-70 backdrop-filter backdrop-blur-lg z-40 flex flex-col items-center justify-center p-8">
             <button
                 onClick={onClose}
-                className="absolute top-6 right-6 text-white text-3xl focus:outline-none z-50"
+                className="absolute top-6 right-6 text-[#F8F7F2] text-3xl focus:outline-none z-50"
                 aria-label="Close menu"
             >
                 <Cross1Icon className="w-8 h-8" />
@@ -51,7 +51,7 @@ const MobileMenuOverlay = ({ isOpen, onClose, activeTab, setActiveTab }) => {
                 {['home', 'services', 'about', 'contact'].map((tabName) => {
                     const IconComponent = getTabIconComponent(tabName);
                     // Determine link styling based on the activeTab prop
-                    const linkClasses = `text-3xl font-light font-sans flex items-center justify-center space-x-4 transition-colors duration-200 ${activeTab === tabName ? 'text-white' : 'text-gray-300 hover:text-green-400' // Changed to green-400 for hover
+                    const linkClasses = `text-3xl font-light font-sans flex items-center justify-center space-x-4 transition-colors duration-200 ${activeTab === tabName ? 'text-[#F8F7F2]' : 'text-gray-300 hover:text-green-400'
                         }`;
                     return (
                         <a
@@ -81,13 +81,13 @@ const TopNavigationBar = ({ toggleMenu, activeTab, setActiveTab }) => { // Recei
     // Helper function to determine link styling based on active state and add hover transform
     const getLinkClass = (tabName) => {
         // Updated hover effect for a more ethereal, futuristic feel (scale and color change)
-        const baseClasses = 'relative after:absolute after:bottom-0 after:left-0 after:w-0 hover:after:w-full after:h-0.5 after:bg-green-300 after:transition-all after:duration-300 ' + // Changed to green-300 for underline
+        const baseClasses = 'relative after:absolute after:bottom-0 after:left-0 after:w-0 hover:after:w-full after:h-0.5 after:bg-[#F8F7F2] after:transition-all after:duration-300 ' + // Changed to new text color for underline
             'transform hover:scale-105 transition-transform duration-300 ease-in-out';
 
         if (activeTab === tabName) {
-            return `text-white ${baseClasses}`;
+            return `text-[#F8F7F2] ${baseClasses}`;
         } else {
-            return `text-white hover:text-green-400 ${baseClasses}`; // Changed hover color to green-400
+            return `text-[#F8F7F2] hover:text-green-400 ${baseClasses}`; // Changed hover color to green-400
         }
     };
 
@@ -109,12 +109,12 @@ const TopNavigationBar = ({ toggleMenu, activeTab, setActiveTab }) => { // Recei
 
     return (
         <nav
-            className="fixed top-6 inset-x-4 md:inset-x-8 lg:inset-x-16 xl:inset-x-24 /* Updated responsive horizontal spacing */
-                                py-3 px-4 sm:px-8 lg:px-10 /* Internal padding for content */
-                                flex justify-between items-center /* Distribute items */
-                                bg-gradient-to-r from-emerald-500/30 to-cyan-500/30 backdrop-filter backdrop-blur-3xl /* Enhanced glassmorphism with green-to-teal gradient */
-                                border-b border-t border-l border-r rounded-3xl border-gray-500 border-opacity-50 shadow-2xl z-50 /* Grey glowing border & stronger shadow */
-                                transition-transform duration-300 ease-out"
+            className="fixed top-0 left-0 w-full h-[115px] /* Covers entire width, set fixed height */
+                                 py-[32px] pl-[104px] pr-[64px] /* Custom padding from user specifications */
+                                 flex justify-between items-center /* Distribute items */
+                                 bg-[#003E3E] /* Solid background color */
+                                 shadow-2xl z-50 /* Stronger shadow */
+                                 transition-transform duration-300 ease-out"
         >
             {/* Greenfinite Company Name (Logo area) - Updated for professional, futuristic look */}
             <div className="flex items-center">
@@ -122,7 +122,7 @@ const TopNavigationBar = ({ toggleMenu, activeTab, setActiveTab }) => { // Recei
                     href="/"
                     // Applied hover and transition classes directly to the anchor tag for precise control
                     // Increased duration to duration-1000 for easier visibility of the transition during debugging
-                    className="flex items-center text-2xl sm:text-3xl font-bold font-mono tracking-normal text-white drop-shadow-md hover:text-green-400 transition-colors duration-1000 ease-in-out"
+                    className="flex items-center text-2xl sm:text-3xl font-bold font-mono tracking-normal text-[#F8F7F2] drop-shadow-md hover:text-green-400 transition-colors duration-1000 ease-in-out"
                 >
                     Greenfinite
                 </a>
@@ -132,7 +132,7 @@ const TopNavigationBar = ({ toggleMenu, activeTab, setActiveTab }) => { // Recei
             {/* Hamburger Menu Icon (visible on small screens, hidden on md and up) */}
             <button
                 onClick={toggleMenu}
-                className="md:hidden text-white focus:outline-none p-2"
+                className="md:hidden text-[#F8F7F2] focus:outline-none p-2"
                 aria-label="Open menu"
                 tabIndex="0" // Make it focusable
                 role="button" // Indicate it's an interactive element
@@ -240,11 +240,8 @@ const App = () => {
             />
 
             {/* Main Content Area - Adjust pt to accommodate fixed top navbar height and its top spacing */}
-            <div className="flex-grow flex items-center justify-center pt-[calc(2em+4rem)]
-                                md:pt-[calc(2em+4rem)] /* Desktop padding */
-                                sm:pt-[calc(1em+4rem)] /* Smaller padding for medium screens */
-                                pt-[calc(0.5em+4rem)] /* Default smallest padding for extra small screens */
-                                ">
+            <div className="flex-grow flex items-center justify-center pt-[115px] /* Adjusted padding for new navbar height */
+                                 ">
                 {/* Content can be added here later */}
             </div>
         </div>
