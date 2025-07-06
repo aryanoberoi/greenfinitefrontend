@@ -4,9 +4,10 @@ export default function AboutUs() {
   return (
     <div
       className="min-h-screen flex flex-col bg-cover bg-center"
-      style={{ backgroundImage: "url('bg.jpg')" }}
     >
-      <div className="w-screen" id='about'>
+      <div className="w-screen" id='about'
+      style={{fontFamily: 'var(--font-primary) !important'}}
+      >
 
         {/* Top Divider Line with Margin */}
         <div style={{ margin: '0 4em' }}>
@@ -18,7 +19,7 @@ export default function AboutUs() {
           <div
             className="text-black text-center py-12 px-[3em]"
             style={{
-              backgroundColor: 'white',
+              backgroundColor: '#F8F7F2',
               
             }}
           >

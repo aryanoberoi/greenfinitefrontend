@@ -2,32 +2,48 @@ import React from 'react';
 
 const UploadButton = ({ onUpload, loading }) => {
   return (
-    <button
-      onClick={onUpload}
-      className={`
-        w-full max-w-xs text-center
-        px-6 py-2
-        !border !border-gray-300 !border-solid {/* Added !important to border and border-gray-300 */}
-        !rounded-3xl
-        font-mono !text-lg !font-medium {/* Added !important to text-lg and font-medium */}
-        !text-[#083417]
-        !bg-[#F8F7F2] hover:!bg-white active:!bg-[#D2DAB6]
-        transition-all duration-150 ease-in-out
-        ${loading ? 'opacity-60 cursor-not-allowed' : 'cursor-pointer'}
-      `}
-      style={{
-        fontFamily: 'monospace', // if global inherits something else
-      }}
-    >
-      {loading ? (
-        <span className="flex items-center justify-center gap-2">
-          <span className="w-4 h-4 border-2 border-[#083417] border-t-transparent rounded-full animate-spin"></span>
-          Uploading...
-        </span>
-      ) : (
-        'Upload'
-      )}
-    </button>
+    <div className="w-full flex justify-center items-center">
+      <button
+        onClick={onUpload}
+        className={`
+          flex items-center justify-center
+          text-center
+          !transition-all !duration-150 !ease-in-out
+          !border !border-[#828282] !border-solid
+          !rounded-none
+          !text-[#083417]
+          !bg-[#F8F7F2]
+          !w-[115px] !h-[40px]
+          hover:!bg-white
+          active:!bg-[#003E3E]
+          active:!text-[#F8F7F2]
+          ${loading ? '!opacity-60 !cursor-not-allowed' : '!cursor-pointer'}
+        `}
+        style={{
+          fontFamily: 'var(--font-primary) !important',
+          fontWeight: '400 !important',
+          fontStyle: 'normal !important',
+          fontSize: '14px !important',
+          lineHeight: '16px !important',
+          letterSpacing: '0 !important',
+          verticalAlign: 'middle !important',
+          paddingTop: '12px !important',
+          paddingBottom: '12px !important',
+          paddingLeft: '23px !important',
+          paddingRight: '23px !important',
+          gap: '10px !important',
+        }}
+      >
+        {loading ? (
+          <span className="flex items-center justify-center gap-2">
+            <span className="w-4 h-4 border-2 border-[#083417] border-t-transparent rounded-full animate-spin"></span>
+            Uploading...
+          </span>
+        ) : (
+          'Upload'
+        )}
+      </button>
+    </div>
   );
 };
 

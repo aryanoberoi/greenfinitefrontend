@@ -104,7 +104,7 @@ const Upload = ({ selectedModule }) => {
     <div className="w-[35em] h-[35em] flex flex-col justify-between items-center p-6 bg-white bg-opacity-80 rounded-xl shadow-2xl border-4 border-transparent space-y-4 overflow-hidden">
       
       {/* Selected Module Info */}
-      <p className="text-base text-gray-700 text-center leading-relaxed">
+      <p className="text-base text-gray-700 text-center leading-relaxed" style={{fontFamily: 'var(--font-primary) !important'}}>
         {selectedModule ? `Selected Module: ${selectedModule}` : 'Select a module to begin.'}
       </p>
 
@@ -136,6 +136,7 @@ const Upload = ({ selectedModule }) => {
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
         onClick={() => fileInputRef.current?.click()}
+        style={{fontFamily: 'var(--font-primary) !important'}}
       >
         <CloudUpload className="w-12 h-12 mb-2 text-gray-500" />
         <p className="text-base font-semibold mb-1">Drag & Drop or Click to Add File</p>

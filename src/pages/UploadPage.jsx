@@ -13,7 +13,7 @@ export default function UploadPage() {
   return (
     <div
       className="min-h-screen flex flex-col"
-      style={{ backgroundImage: "url('bg.jpg')", backgroundSize: "cover" }}
+      
     >
       <div className="w-screen">
         <div className="min-h-[30vh] flex flex-col">
