@@ -29,6 +29,8 @@ const Upload = ({ selectedModule }) => {
       selectedFiles.forEach(file => {
         formData.append("files", file);
       });
+
+      formData.append("module", selectedModule);
   
       const response = await axios.post(
         `http://localhost:8000/uploadpdf`,
