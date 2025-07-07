@@ -31,15 +31,24 @@ const Upload = ({ selectedModule }) => {
     }
   
     setIsUploading(true);
-  
+  console.log(selectedModule);
     try {
+      const moduleMap = {
+        "MODULE ONE": 1,
+        "MODULE TWO": 2,
+        "MODULE THREE": 3,
+      };
       const formData = new FormData();
+      formData.append("module", moduleMap[selectedModule]);
       selectedFiles.forEach(file => {
         formData.append("files", file);
       });
+<<<<<<< HEAD
 
       // The selectedModule is already a number, so this is safe
       formData.append("module", selectedModule);
+=======
+>>>>>>> main
   
       const response = await axios.post(
         `http://localhost:8000/uploadpdf`,
