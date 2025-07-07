@@ -17,15 +17,19 @@ const ChatMessage = ({ sender, message, timestamp }) => {
     const messageAlignment = isUser ? 'justify-end' : 'justify-start';
 
     // Tailwind CSS classes for background color and text color based on sender
-    // Applying colors from the image: #003E3E for AI (ChatBot) and #7B7A81 for User (Member)
-    const messageBg = isUser ? 'bg-[#7B7A81] text-white' : 'bg-[#003E3E] text-white';
+    const messageBg = isUser ? 'bg-[#9e9a9a] text-gray-800' : 'bg-[#004b46] text-white';
+    const timestampColor = isUser ? 'text-gray-600' : 'text-gray-300';
+
+    // Custom border for 0.5px, if Tailwind's border-[0.5px] doesn't render consistently
+    const borderClass = "border-[0.5px] border-[#828282]";
 
     // Return the JSX for a single chat message
     return (
         // Flex container to control the alignment of the message bubble
         <div className={`flex ${messageAlignment} mb-3`}>
             {/* Message bubble styling */}
-            <div className={`max-w-[70%] p-3 rounded-xl ${messageBg} shadow-md`}>
+            <div className={`max-w-[343px] w-full p-4 rounded-xl shadow-md ${messageBg} ${borderClass} flex flex-col justify-between`}
+                 style={{ minHeight: isUser ? '121px' : '124px' }}>
                 <p className="leading-relaxed">
                     {/* Display sender name with bold styling */}
                     <span className="font-bold">
@@ -34,9 +38,9 @@ const ChatMessage = ({ sender, message, timestamp }) => {
                     {/* Display the message content */}
                     {message}
                 </p>
-                {/* Display the timestamp, always aligned to the right and in grey color */}
+                {/* Display the timestamp */}
                 {timestamp && (
-                    <p className="text-xs mt-1 text-right text-gray-300">
+                    <p className={`text-xs mt-1 text-right ${timestampColor}`}>
                         {timestamp}
                     </p>
                 )}
@@ -46,51 +50,49 @@ const ChatMessage = ({ sender, message, timestamp }) => {
 };
 
 /**
- * ChatBot Component
+ * ChatUI Component
  * Renders the main chat interface with an input field and send button.
  * Displays a simulated chat history using the ChatMessage component.
  */
-const ChatBot = () => {
+const App = () => {
     // Simulated chat history. In a real application, this would come from component state (e.g., useState).
     const chatHistory = [
-        { id: 1, sender: 'user', message: 'Hello, I need help analyzing a document.', timestamp: '9:30 AM' },
-        { id: 2, sender: 'ai', message: 'Absolutely! Please upload your PDF in the adjacent panel.', timestamp: '9:31 AM' },
-        { id: 3, sender: 'user', message: "I'm particularly interested in extracting key financial figures.", timestamp: '9:32 AM' },
-        { id: 4, sender: 'ai', message: 'Understood. Would you like a summary, or specific tables and figures?', timestamp: '9:33 AM' },
-        { id: 5, sender: 'user', message: 'Just the key financial figures for now, please.', timestamp: '9:34 AM' },
-        { id: 6, sender: 'ai', message: 'Processing... Please check the PDF Analyzer panel.', timestamp: '9:35 AM' },
+        { id: 1, sender: 'ai', message: 'Absolutely! Please upload your PDF in the adjacent panel.', timestamp: '9:31 AM' },
+        { id: 2, sender: 'user', message: "I'm particularly interested in extracting key financial figures.", timestamp: '9:32 AM' },
+        { id: 3, sender: 'ai', message: 'Understood. Would you like a summary, or specific tables and figures?', timestamp: '9:33 AM' },
+        { id: 4, sender: 'user', message: 'Just the key financial figures for now, please.', timestamp: '9:34 AM' },
+        { id: 5, sender: 'ai', message: 'Processing... Please check the PDF Analyzer panel.', timestamp: '9:35 AM' },
     ];
 
     return (
-        // Changed width to w-[45%] to cover 45% of the screen.
-        <div className="w-full md:w-[48%] h-[33em] bg-white bg-opacity-90 rounded-xl shadow-2xl p-6 flex flex-col transition-all duration-300 hover:shadow-xl hover:scale-[1.005] font-sans">
-            {/* Chat Bot Title */}
-            <h2 className="text-2xl font-bold mb-5 text-gray-800 text-center" style={{fontFamily: 'var(--font-primary) !important'}}>Talk to our chatbot, Earth v1.0</h2>
+        <div className="bg-[#f8f7f4] min-h-screen flex items-center justify-center p-4 font-mono">
+            {/* Updated dimensions to match DocPreview */}
+            <div className="w-full md:w-[48%] h-[33em] bg-white rounded-xl shadow-lg p-6 flex flex-col">
+                {/* Chat Bot Title */}
+                <h2 className="text-2xl font-bold mb-5 text-gray-800 text-center">Talk to our chatbot, Earth v1.0</h2>
 
-            {/* Chat Messages Display Area */}
-            {/* flex-col ensures messages stack vertically */}
-            {/* overflow-y-auto enables scrolling for long chat histories */}
-            <div className="flex-1 border border-gray-300 bg-gray-50 rounded-lg p-4 mb-4 overflow-y-auto custom-scrollbar flex flex-col" style={{fontFamily: 'var(--font-primary) !important'}}>
-                {/* Map through chatHistory array to render each message */}
-                {chatHistory.map((msg) => (
-                    <ChatMessage key={msg.id} sender={msg.sender} message={msg.message} timestamp={msg.timestamp} />
-                ))}
-            </div>
+                {/* Chat Messages Display Area */}
+                <div className="flex-1 overflow-y-auto p-4 mb-4 custom-scrollbar rounded-lg border-[0.5px] border-[#828282]">
+                    {/* Map through chatHistory array to render each message */}
+                    {chatHistory.map((msg) => (
+                        <ChatMessage key={msg.id} sender={msg.sender} message={msg.message} timestamp={msg.timestamp} />
+                    ))}
+                </div>
 
-            {/* Message Input Area */}
-            <div className="flex items-center">
-                <input
-                    type="text"
-                    placeholder="Type your message here..."
-                    className="flex-1 border border-gray-300 rounded-l-lg p-3 text-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200"
-                    style={{fontFamily: 'var(--font-primary) !important'}}
-                />
-                <button className="bg-blue-600 text-white px-6 py-3 rounded-r-lg text-lg font-semibold hover:bg-blue-700 transition-colors duration-200 shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500" style={{fontFamily: 'var(--font-primary) !important'}}>
-                    Send
-                </button>
+                {/* Message Input Area */}
+                <div className="flex items-center max-w-[580px] w-full mx-auto mt-4">
+                    <input
+                        type="text"
+                        placeholder="Form Input Label"
+                        className="flex-1 h-8 border-[0.5px] border-[#828282] rounded-l-lg p-2 text-sm text-[#828282] placeholder-[#828282] focus:outline-none focus:ring-1 focus:ring-blue-500"
+                    />
+                    <button className="bg-blue-600 text-white px-4 py-2 rounded-r-lg text-sm font-semibold hover:bg-blue-700 transition-colors duration-200 shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        Send
+                    </button>
+                </div>
             </div>
         </div>
     );
 };
 
-export default ChatBot;
+export default App;
