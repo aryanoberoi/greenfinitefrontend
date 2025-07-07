@@ -23,14 +23,18 @@ const Upload = ({ selectedModule }) => {
     if (selectedFiles.length === 0) return;
   
     setIsUploading(true);
-  
+  console.log(selectedModule);
     try {
+      const moduleMap = {
+        "MODULE ONE": 1,
+        "MODULE TWO": 2,
+        "MODULE THREE": 3,
+      };
       const formData = new FormData();
+      formData.append("module", moduleMap[selectedModule]);
       selectedFiles.forEach(file => {
         formData.append("files", file);
       });
-
-      formData.append("module", selectedModule);
   
       const response = await axios.post(
         `http://localhost:8000/uploadpdf`,
