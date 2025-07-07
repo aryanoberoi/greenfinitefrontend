@@ -10,7 +10,7 @@ export default function Analyze() {
   return (
     <div
       className="min-h-screen flex flex-col"
-      style={{ backgroundImage: "url('bg.jpg')", backgroundSize: "cover" }}
+      style={{backgroundColor: "#F8F7F2", backgroundSize: "cover" }}
     >
       <div className="w-screen">
         <div className="min-h-[30vh] flex flex-col">
