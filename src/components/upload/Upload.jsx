@@ -12,15 +12,23 @@ const Upload = ({ selectedModule }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    // This will now log a number, e.g., 1, 2, or 3
     if (selectedModule) {
-      console.log("Upload component received module:", selectedModule);
+      console.log("Upload component received module:", selectedModule, typeof selectedModule);
     }
   }, [selectedModule]);
 
-  
-
   const handleUpload = async () => {
-    if (selectedFiles.length === 0) return;
+    // --- FIX 1: Add robust validation before sending the request ---
+    if (selectedFiles.length === 0) {
+      alert("Please select a file to upload.");
+      return;
+    }
+    // This check is now more reliable because we expect a number
+    if (!selectedModule || typeof selectedModule !== 'number' || selectedModule <= 0) {
+      alert("Please select a valid module before uploading.");
+      return;
+    }
   
     setIsUploading(true);
   
@@ -30,30 +38,27 @@ const Upload = ({ selectedModule }) => {
         formData.append("files", file);
       });
 
+      // The selectedModule is already a number, so this is safe
       formData.append("module", selectedModule);
   
       const response = await axios.post(
         `http://localhost:8000/uploadpdf`,
         formData,
         {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-          responseType: 'blob', // Expect PDF blob back
+          // --- FIX 2: REMOVE manual Content-Type header ---
+          // Let the browser set it automatically with the correct boundary.
+          // This is a common cause of 422 errors with FormData.
+          responseType: 'blob',
         }
       );
       
-  
-      // Extract filename from headers
       const contentDisposition = response.headers['content-disposition'];
       const fileNameMatch = contentDisposition?.match(/filename="?(.+)"?/);
       const fileName = fileNameMatch ? fileNameMatch[1] : 'processed.pdf';
   
-      // Create a Blob URL for the PDF
       const fileBlob = new Blob([response.data], { type: 'application/pdf' });
       const fileUrl = URL.createObjectURL(fileBlob);
   
-      // Navigate with blob URL
       navigate("/analyze", {
         state: {
           fileUrl,
@@ -64,12 +69,18 @@ const Upload = ({ selectedModule }) => {
   
     } catch (err) {
       console.error("Upload error:", err);
-      alert("Upload failed.");
+      // More descriptive error for the user
+      if (err.response && err.response.status === 422) {
+        alert("Upload failed: The data sent was invalid. Please ensure a file and module are correctly selected.");
+      } else {
+        alert("Upload failed. Please check the console for details.");
+      }
     } finally {
       setIsUploading(false);
     }
   };
   
+  // --- No changes needed below this line ---
   
   const handleDragOver = (e) => {
     e.preventDefault();
@@ -104,10 +115,8 @@ const Upload = ({ selectedModule }) => {
 
   return (
     <div className="w-[35em] h-[35em] flex flex-col justify-between items-center p-6 bg-white bg-opacity-80 rounded-xl shadow-2xl border-4 border-transparent space-y-4 overflow-hidden">
-      
-      {/* Selected Module Info */}
-      <p className="text-base text-gray-700 text-center leading-relaxed" style={{fontFamily: 'var(--font-primary) !important'}}>
-        {selectedModule ? `Selected Module: ${selectedModule}` : 'Select a module to begin.'}
+      <p className="text-base text-gray-700 text-center leading-relaxed">
+        {selectedModule ? `Selected Module ID: ${selectedModule}` : 'Select a module to begin.'}
       </p>
 
       {/* Uploaded File Tags */}

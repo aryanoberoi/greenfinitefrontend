@@ -1,21 +1,28 @@
 import React, { useState } from 'react';
 
-const ModuleCard = ({ onModuleSelect }) => {
-  const [activeModule, setActiveModule] = useState(null);
+// Define modules with both ID and Label for clarity and robustness
+const modules = [
+  { id: 1, label: 'MODULE ONE' },
+  { id: 2, label: 'MODULE TWO' },
+  { id: 3, label: 'MODULE THREE' },
+];
 
-  const handleClick = (label) => {
-    setActiveModule(label);
-    onModuleSelect(label);
+const ModuleCard = ({ onModuleSelect }) => {
+  const [activeModuleId, setActiveModuleId] = useState(null);
+
+  const handleClick = (moduleId) => {
+    setActiveModuleId(moduleId);
+    onModuleSelect(moduleId); // Pass the numeric ID, not the label
   };
 
   return (
     <div className="w-[35em] h-[35em] flex flex-col justify-between items-center p-10 bg-white bg-opacity-80 rounded-xl shadow-2xl space-y-8 border-4 border-transparent">
       {/* Module Tabs */}
       <div className="flex gap-3 mb-4">
-        {['MODULE ONE', 'MODULE TWO', 'MODULE THREE'].map((label) => (
+        {modules.map((module) => (
           <button
-            key={label}
-            onClick={() => handleClick(label)}
+            key={module.id}
+            onClick={() => handleClick(module.id)} // Pass the ID on click
             className={`
               flex items-center justify-center
               text-center
@@ -24,13 +31,13 @@ const ModuleCard = ({ onModuleSelect }) => {
               !rounded-none
               !w-[160px] !h-[40px]
               !text-[14px] !leading-[16px] !font-normal
-              ${activeModule === label 
+              ${activeModuleId === module.id // Compare with the active ID
                 ? '!bg-[#003E3E] !text-[#F8F7F2]' 
                 : '!bg-[#F8F7F2] !text-[#083417] hover:!bg-white'}
               cursor-pointer
             `}
             style={{
-          fontFamily: 'var(--font-primary) !important',
+              fontFamily: 'var(--font-primary) !important',
               paddingTop: '12px !important',
               paddingBottom: '12px !important',
               paddingLeft: '10px !important',
@@ -39,7 +46,7 @@ const ModuleCard = ({ onModuleSelect }) => {
               whiteSpace: 'nowrap !important',
             }}
           >
-            {label}
+            {module.label} {/* Display the label */}
           </button>
         ))}
       </div>
