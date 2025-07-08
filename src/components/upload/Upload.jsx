@@ -17,8 +17,6 @@ const Upload = ({ selectedModule }) => {
     }
   }, [selectedModule]);
 
-  
-
   const handleUpload = async () => {
     if (selectedFiles.length === 0) return;
   
@@ -30,7 +28,12 @@ const Upload = ({ selectedModule }) => {
         formData.append("files", file);
       });
 
-      formData.append("module", selectedModule);
+      const moduleMap = {
+        "MODULE ONE": 1,
+        "MODULE TWO": 2,
+        "MODULE THREE": 3,
+      };
+      formData.append("module", moduleMap[selectedModule]);
   
       const response = await axios.post(
         `http://localhost:8000/uploadpdf`,
@@ -43,12 +46,18 @@ const Upload = ({ selectedModule }) => {
         }
       );
       
-  
       // Extract filename from headers
       const contentDisposition = response.headers['content-disposition'];
-      const fileNameMatch = contentDisposition?.match(/filename="?(.+)"?/);
-      const fileName = fileNameMatch ? fileNameMatch[1] : 'processed.pdf';
-  
+      let filename = 'downloaded-file.pdf'; // Default filename
+      
+      if (contentDisposition) {
+          const filenameMatch = contentDisposition.match(/filename="?([^"]+)"?/);
+          if (filenameMatch && filenameMatch.length > 1) {
+              filename = filenameMatch[1];
+          }
+      }
+      
+      const sessionId = filename.split('_')[1].split('.')[0];
       // Create a Blob URL for the PDF
       const fileBlob = new Blob([response.data], { type: 'application/pdf' });
       const fileUrl = URL.createObjectURL(fileBlob);
@@ -57,8 +66,9 @@ const Upload = ({ selectedModule }) => {
       navigate("/analyze", {
         state: {
           fileUrl,
-          fileName,
+          filename,
           module: selectedModule,
+          sessionId: sessionId,
         },
       });
   
@@ -69,7 +79,6 @@ const Upload = ({ selectedModule }) => {
       setIsUploading(false);
     }
   };
-  
   
   const handleDragOver = (e) => {
     e.preventDefault();
