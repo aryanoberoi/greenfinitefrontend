@@ -112,7 +112,7 @@ const Upload = ({ selectedModule }) => {
   };
 
   return (
-    <div className="w-[35em] h-[35em] flex flex-col justify-between items-center p-6 bg-white bg-opacity-80 rounded-xl shadow-2xl border-4 border-transparent space-y-4 overflow-hidden">
+<div className="w-full md:w-[35em] h-auto md:h-[35em] flex flex-col justify-between items-center p-6 bg-white bg-opacity-80 rounded-xl shadow-2xl border-4 border-transparent space-y-6 md:space-y-4 overflow-hidden">
       
       {/* Selected Module Info */}
       <p className="text-base text-gray-700 text-center leading-relaxed" style={{fontFamily: 'var(--font-primary) !important'}}>

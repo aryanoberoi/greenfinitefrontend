@@ -75,27 +75,27 @@ const ChatBot = ({ sessionId }) => {
 
     return (
         <div className="w-full md:w-[48%] h-[33em] bg-white bg-opacity-90 rounded-xl shadow-2xl p-6 flex flex-col transition-all duration-300 hover:shadow-xl hover:scale-[1.005] font-sans">
-            <h2 className="text-2xl font-bold mb-5 text-gray-800 text-center" style={{fontFamily: 'var(--font-primary) !important'}}>Talk to our chatbot, Earth v1.0</h2>
+            <h2 className="text-2xl font-bold mb-5 text-gray-800 text-center" style={{ fontFamily: 'var(--font-primary) !important' }}>Talk to our chatbot, Earth v1.0</h2>
 
-            <div className="flex-1 border border-gray-300 bg-gray-50 rounded-lg p-4 mb-4 overflow-y-auto custom-scrollbar flex flex-col" style={{fontFamily: 'var(--font-primary) !important'}}>
+            <div className="flex-1 border border-gray-300 bg-gray-50 rounded-lg p-4 mb-4 overflow-y-auto custom-scrollbar flex flex-col" style={{ fontFamily: 'var(--font-primary) !important' }}>
                 {chatHistory.map((msg) => (
                     <ChatMessage key={msg.id} sender={msg.sender} message={msg.message} timestamp={msg.timestamp} />
                 ))}
             </div>
 
-            <div className="flex items-center">
+            <div className="flex items-center w-full max-w-3xl mx-auto px-2 sm:px-4 gap-x-2">
                 <input
                     type="text"
                     placeholder="Type your message here..."
                     value={inputValue}
                     onChange={(e) => setInputValue(e.target.value)}
-                    className="flex-1 border border-gray-300 rounded-l-lg p-3 text-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200"
-                    style={{fontFamily: 'var(--font-primary) !important'}}
+                    className="flex-1 border border-gray-300 rounded-lg px-3 py-2 sm:py-3 text-sm sm:text-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200 font-sans"
+                    style={{ fontFamily: 'var(--font-primary)' }}
                 />
                 <button
                     onClick={handleSendMessage}
-                    className="bg-blue-600 text-white px-6 py-3 rounded-r-lg text-lg font-semibold hover:bg-blue-700 transition-colors duration-200 shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    style={{fontFamily: 'var(--font-primary) !important'}}
+                    className="!bg-[#003E3E] text-white px-4 py-2 sm:px-6 sm:py-2 rounded-lg text-sm sm:text-lg font-semibold hover:bg-green-700 transition-colors duration-200 shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 font-sans"
+                    style={{ fontFamily: 'var(--font-primary)' }}
                 >
                     Send
                 </button>
