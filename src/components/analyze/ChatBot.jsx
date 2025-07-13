@@ -94,7 +94,7 @@ const ChatBot = ({ sessionId }) => {
                 />
                 <button
                     onClick={handleSendMessage}
-                    className="!bg-[#003E3E] text-white px-4 py-2 sm:px-6 sm:py-2 rounded-lg text-sm sm:text-lg font-semibold hover:bg-green-700 transition-colors duration-200 shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 font-sans"
+                    className="!bg-[#003E3E] text-white px-4 py-2 sm:px-6 sm:py-3 rounded-lg text-sm sm:text-lg font-semibold hover:bg-green-700 transition-colors duration-200 shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 font-sans"
                     style={{ fontFamily: 'var(--font-primary)' }}
                 >
                     Send
