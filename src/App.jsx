@@ -5,7 +5,7 @@ import Analyze from './pages/Analyze'
 function App() {
   return (
 
-    <div className="min-h-screen flex flex-col">
+    <div className="w-screen h-screen flex flex-col">
     <CustomCursor />
 
       <div className="flex-1">
