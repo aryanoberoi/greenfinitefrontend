@@ -14,23 +14,25 @@ export default function Analyze() {
       <Navbar />
 
       <main className="w-full min-h-screen flex flex-col md:flex-row items-start justify-center gap-6 px-4 md:px-8 py-10 relative">
-        <DocPreview fullWidth={!isChatOpen} />
+        
         {isChatOpen && (
           <ChatBot sessionId={sessionId} onClose={() => setIsChatOpen(false)} />
         )}
+
+<DocPreview fullWidth={!isChatOpen} />
       </main>
 
       {/* Floating ChatBot Icon (when minimized) */}
       {!isChatOpen && (
         <button
         onClick={() => setIsChatOpen(true)}
-        className="fixed bottom-6 left-6 !bg-transparent rounded-full z-50 flex items-center justify-center transition-transform hover:scale-110"
+        className="fixed bottom-6 left-1 !bg-transparent rounded-full z-50 flex items-center justify-center transition-transform hover:scale-110"
         style={{ width: '8.5rem', height: '4.5rem' }} // ~72px
       >
         <img
           src="/chatbot.png"
           alt="Chatbot Icon"
-          className="w-25 h-20 opacity-80 hover: transition duration-200"
+          className="w-25 h-25 opacity-100 hover: transition duration-200"
         />
       </button>
       )}

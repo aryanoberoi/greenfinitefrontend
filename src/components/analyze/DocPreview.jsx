@@ -6,8 +6,8 @@ const DocPreview = ({ fullWidth = false }) => {
   const navigate = useNavigate();
 
   const fileUrl = location.state?.fileUrl;
-  const fileName = location.state?.fileName;
-  const module = location.state?.module;
+  const fileName = location.state?.fileName || 'Untitled';
+  const module = location.state?.module || '';
 
   useEffect(() => {
     if (!fileUrl) {
@@ -15,8 +15,14 @@ const DocPreview = ({ fullWidth = false }) => {
     }
   }, [fileUrl, navigate]);
 
+  if (!fileUrl) return null;
+
   return (
-    <div className={`${fullWidth ? 'w-full' : 'w-full md:w-[48%]'} h-[33em] bg-white bg-opacity-90 rounded-xl shadow-2xl p-6 flex flex-col transition-all duration-300 hover:shadow-xl hover:scale-[1.005] font-sans overflow-hidden`}>
+    <div
+      className={`${
+        fullWidth ? 'w-full' : 'w-full md:w-[48%]'
+      } h-[33em] bg-white bg-opacity-90 rounded-xl shadow-2xl p-6 flex flex-col transition-all duration-300 hover:shadow-xl hover:scale-[1.005] font-sans overflow-hidden`}
+    >
       <p className="text-sm text-gray-500 text-center mb-1 italic truncate">
         {module ? `Module: ${module}` : ''} | {fileName}
       </p>

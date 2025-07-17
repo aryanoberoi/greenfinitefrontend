@@ -1,6 +1,5 @@
-import React from 'react';
+import React, { useRef, useEffect, useState, useCallback } from 'react';
 
-// Static array of climate-related quotes
 const climateQuotes = [
   {
     text: "We are the first generation to feel the effect of climate change and the last generation who can do something about it.",
@@ -34,77 +33,104 @@ const climateQuotes = [
   },
 ];
 
-// Define approximate SVG coordinates (percentages) for the center of each quote box.
-// These are relative to the parent container of the Earth (the div with relative positioning).
-// These values are fine-tuned to align with the new quote positioning.
-// This object is now technically not used since lines are removed, but kept for reference if lines were to be re-added.
-const quoteLineCoordinates = {
-  "top-left": { x: 10, y: 10 }, // Adjusted to spread out more for wider boxes
-  "top-right": { x: 85, y: 15 }, // Adjusted to spread out more for wider boxes
-  "left": { x: 10, y: 50 },     // Adjusted to spread out more for wider boxes
-  "right": { x: 90, y: 50 },    // Adjusted to spread out more for wider boxes
-  "bottom-left": { x: 15, y: 85 }, // Adjusted to spread out more for wider boxes
-  "bottom-right": { x: 85, y: 85 },// Adjusted to spread out more for wider boxes
-};
-
-// Earth's center is always 50%, 50% relative to its parent container.
-const earthCenterX = 50;
-const earthCenterY = 50;
-
 export default function ClimateQuotesGlobe() {
+  const [currentQuoteIndex, setCurrentQuoteIndex] = useState(0);
+  const [isPlaying, setIsPlaying] = useState(true);
+  const quoteIntervalRef = useRef(null);
+
+  const showNextQuote = useCallback(() => {
+    setCurrentQuoteIndex((prevIndex) => (prevIndex + 1) % climateQuotes.length);
+  }, []);
+
+  useEffect(() => {
+    if (isPlaying) {
+      if (quoteIntervalRef.current) clearInterval(quoteIntervalRef.current);
+      quoteIntervalRef.current = setInterval(showNextQuote, 8000);
+    } else {
+      if (quoteIntervalRef.current) clearInterval(quoteIntervalRef.current);
+    }
+    return () => {
+      if (quoteIntervalRef.current) clearInterval(quoteIntervalRef.current);
+    };
+  }, [isPlaying, showNextQuote]);
+
+  const isMobile = window.innerWidth < 768;
+  const mobilePositions = ["top-left", "top-right", "bottom-left", "bottom-right"];
+
   return (
-    <div className="relative min-h-screen bg- offwhitetext-gray-900 flex items-center justify-center px-4"> {/* Changed background to off-white and text to dark gray */}
-      {/* Container for Earth and quotes, establishing relative positioning context */}
-      <div className="relative w-full max-w-sm aspect-square flex items-center justify-center"> {/* Reduced max-w-md to max-w-sm */}
-        {/* SVG for drawing connecting lines. Removed as per request. */}
-        {/* <svg className="absolute inset-0 w-full h-full pointer-events-none z-10">
-          {climateQuotes.map((quote, index) => {
-            const endPoint = quoteLineCoordinates[quote.position];
-            if (!endPoint) return null; // Safety check
+    <div className="relative min-h-screen bg-offwhite text-gray-900 flex flex-col items-center justify-center p-4 font-inter overflow-hidden">
+      <style>{`
+        @keyframes rotate-earth {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
+        }
+        .earth-rotate {
+          animation: rotate-earth 60s linear infinite;
+        }
+      `}</style>
 
-            return (
-              <line
-                key={`line-${index}`}
-                x1={`${earthCenterX}%`}
-                y1={`${earthCenterY}%`}
-                x2={`${endPoint.x}%`}
-                y2={`${endPoint.y}%`}
-                stroke="rgba(255, 255, 255, 0.4)" // Semi-transparent white
-                strokeWidth="1.5"
-                strokeDasharray="4 4" // Dashed line effect
-                className="transition-all duration-300" // For potential future animations
-              />
-            );
-          })}
-        </svg> */}
-
-        {/* Earth Image */}
+      {/* Wrapper div with hover group */}
+      <div className="group relative w-full max-w-[10rem] sm:max-w-[14rem] md:max-w-[20rem] lg:max-w-[24rem] xl:max-w-[28rem] aspect-square flex items-center justify-center z-20 mb-4">
         <img
-          src="/public/earth.png" // Using the path from your provided code
+          src="/public/earth.png"
           alt="Earth"
-          // Ensure Earth scales responsively within its parent container
-         className="w-[80%] h-[80%] object-contain rounded-full shadow-2xl shadow-blue-500/50 z-20"
+          className="w-full h-full object-contain rounded-full shadow-2xl earth-rotate select-none outline-none focus:outline-none"
+          draggable={false}
         />
+      </div>
 
-        {/* Quotes */}
-        {climateQuotes.map((quote, idx) => (
+      {climateQuotes.map((quote, idx) => {
+        if (isMobile && !mobilePositions.includes(quote.position)) return null;
+
+        const basePosition = isMobile
+        ? {
+            'top-left': 'top-[15%] left-[4%]',
+            'top-right': 'top-[15%] right-[4%]',
+            'bottom-left': 'bottom-[15%] left-[4%]',
+            'bottom-right': 'bottom-[15%] right-[4%]',
+          }[quote.position]
+          : {
+            'top-left': 'top-[10%] left-[12%]',
+            'top-right': 'top-[10%] right-[12%]',
+            'left': 'top-1/2 left-[6%] -translate-y-1/2',
+            'right': 'top-1/2 right-[6%] -translate-y-1/2',
+            'bottom-left': 'bottom-[10%] left-[12%]',
+            'bottom-right': 'bottom-[10%] right-[12%]',
+          }[quote.position];
+
+        const isActive = idx === currentQuoteIndex;
+
+        return (
           <div
             key={idx}
-            className={`absolute text-center p-2 sm:p-3 bg-blur backdrop-blur-sm rounded-lg shadow-lg border border-gray-300 transition-all duration-300 hover:scale-105 hover:bg-white/90 z-30
-              max-w-[180px] sm:max-w-[230px] md:max-w-[280px] text-[0.6rem] sm:text-xs md:text-sm lg:text-base
-              ${quote.position === "top-left" && "top-0 left-15 -translate-x-1/1 -translate-y-1/2 transform -rotate-2"}
-              ${quote.position === "top-right" && "top-0 right-20 translate-x-1/1 -translate-y-1/2 transform rotate-2"}
-              ${quote.position === "left" && "top-1/2 left-0 -translate-x-full -translate-y-1/2 transform -rotate-2"}
-              ${quote.position === "right" && "top-1/2 right-0 translate-x-full -translate-y-1/2 transform rotate-2"}
-              ${quote.position === "bottom-left" && "bottom-0 left-20 -translate-x-1/1 translate-y-1/2 transform rotate-2"}
-              ${quote.position === "bottom-right" && "bottom-0 right-20 translate-x-1/1 translate-y-1/2 transform -rotate-2"}
-            `}
+            onClick={() => setCurrentQuoteIndex(idx)}
+            className={`absolute ${basePosition}
+        text-center flex flex-col justify-center items-center
+        bg-white/60 backdrop-blur-md rounded-xl shadow-md border cursor-pointer
+        transition-all duration-500 ease-in-out overflow-hidden
+        ${isActive
+                ? ''
+                : 'z-30 scale-100 border-gray-400 text-gray-700 hover:scale-105'
+              }
+
+        ${isMobile
+                ? 'w-40 h-28 p-2 text-[0.55rem]' // Tighter, responsive for mobile
+                : 'w-48 h-36 sm:w-56 sm:h-40 md:w-72 md:h-44 lg:w-80 lg:h-48 xl:w-96 xl:h-52 p-3 sm:p-4 md:p-5'
+              }
+      `}
           >
-            <p className="italic mb-1">"{quote.text}"</p>
-            <p className="font-semibold text-right">— {quote.author}</p>
+            <p className={`leading-snug transition-all duration-300 
+        ${isMobile ? 'text-[0.55rem]' : 'text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl'}
+      `}>
+              "{quote.text}"
+            </p>
+            <p className={`${isMobile ? 'text-[0.45rem] mt-1' : 'font-semibold text-[0.6rem] sm:text-xs md:text-sm mt-2'}`}>
+              — {quote.author}
+            </p>
           </div>
-        ))}
-      </div>
+        );
+      })}
+
     </div>
   );
 }
