@@ -72,7 +72,7 @@ export default function ClimateQuotesGlobe() {
       {/* Wrapper div with hover group */}
       <div className="group relative w-full max-w-[10rem] sm:max-w-[14rem] md:max-w-[20rem] lg:max-w-[24rem] xl:max-w-[28rem] aspect-square flex items-center justify-center z-20 mb-4">
         <img
-          src="/public/earth.png"
+          src="/earth.png"
           alt="Earth"
           className="w-full h-full object-contain rounded-full shadow-2xl earth-rotate select-none outline-none focus:outline-none"
           draggable={false}
