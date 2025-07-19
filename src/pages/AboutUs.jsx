@@ -21,10 +21,6 @@ export default function AboutUs() {
             className="text-black text-center py-12 px-4 sm:px-8 md:px-20"
             style={{ backgroundColor: '#F8F7F2' }}
           >
-            <h1 className="text-5xl md:text-6xl lg:text-7xl italic font-bold mb-12 tracking-wide">
-              ABOUT US
-            </h1>
-
             {/* Who We Are */}
             <section className="mb-12">
               <h2 className="text-3xl font-semibold mb-4">Who We Are</h2>
