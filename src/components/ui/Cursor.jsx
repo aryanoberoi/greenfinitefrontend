@@ -15,6 +15,17 @@ function CustomCursor() {
   }, []);
 
   useEffect(() => {
+    if (isMobile) {
+      document.body.classList.remove("hide-default-cursor");
+      return;
+    }
+    document.body.classList.add("hide-default-cursor");
+    return () => {
+      document.body.classList.remove("hide-default-cursor");
+    };
+  }, [isMobile]);
+
+  useEffect(() => {
     if (isMobile) return; // Disable custom cursor on mobile
 
     const moveCursor = (e) => {
@@ -32,16 +43,26 @@ function CustomCursor() {
   if (isMobile) return null; // Don't render at all on mobile
 
   return (
-    <img
-      ref={cursorRef}
-      src="/plant.png" // Replace with your sapling path
-      alt="cursor"
-      className={`fixed pointer-events-none z-50 transition-transform duration-300 ease-out 
-        ${location.pathname === "/analyze" ? "w-15 h-15" : "w-10 h-10"}`}
-      style={{
-        transform: "translate(-50%, -50%)",
-      }}
-    />
+    <>
+      {/* Inject CSS to hide the default cursor */}
+      {/* <style>
+        {`
+          .hide-default-cursor {
+            cursor: none !important;
+          }
+        `}
+      </style> */}
+      <img
+        ref={cursorRef}
+        src="/plant.png" // Replace with your sapling path
+        alt="cursor"
+        className={`fixed pointer-events-none z-50 transition-transform duration-300 ease-out 
+          ${location.pathname === "/analyze" ? "w-15 h-15" : "w-10 h-10"}`}
+        style={{
+          transform: "translate(-50%, -50%)",
+        }}
+      />
+    </>
   );
 }
 

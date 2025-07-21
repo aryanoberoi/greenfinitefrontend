@@ -18,14 +18,14 @@ export default function AboutUs() {
         {/* Main Full-Width Content Section */}
         <div className="w-full">
           <div
-            className="text-black text-center py-12 px-4 sm:px-8 md:px-20"
+            className="text-black text-center py-18 px-4 sm:px-8 md:px-20"
             style={{ backgroundColor: '#F8F7F2' }}
           >
             {/* Who We Are */}
             <section className="mb-12">
               <h2 className="text-3xl font-semibold mb-4">Who We Are</h2>
               <p className="text-lg md:text-xl leading-relaxed mb-4 max-w-5xl mx-auto">
-                At <strong>Greenfinite.ai</strong>, we’re a team of sustainability-minded builders, technologists, and change-makers on a mission to make ESG accessible to everyone — not just big corporations.
+                At <a href="https://greenfinite.ai" className="!text-green-700 font-semibold hover:underline" target="_blank" rel="noopener noreferrer">Greenfinite.ai</a>, we’re a team of sustainability-minded builders, technologists, and change-makers on a mission to make ESG accessible to everyone — not just big corporations.
               </p>
               <p className="text-lg md:text-xl leading-relaxed mb-4 max-w-5xl mx-auto">
                 We created a modular, AI-powered ESG platform specifically for SMEs, ESG consultants, and public sector teams who want to lead with purpose — even if they’re starting from zero.
@@ -52,9 +52,9 @@ export default function AboutUs() {
                 This creates a massive blind spot — for governments, suppliers, and the planet.
               </p>
               <p className="text-lg md:text-xl leading-relaxed mb-4 max-w-5xl mx-auto">
-                We believe climate action shouldn’t require a compliance department. With Greenfinite.ai, any SME can start their sustainability journey with guided tools, smart estimates, and AI support — no PhD required.
+                We believe climate action shouldn’t require a compliance department. With <a href="https://greenfinite.ai" className="text-green-700 font-semibold hover:underline" target="_blank" rel="noopener noreferrer">Greenfinite.ai</a>, any SME can start their sustainability journey with guided tools, smart estimates, and AI support — no PhD required.
               </p>
-              <p className="text-lg md:text-xl leading-relaxed max-w-5xl mx-auto">
+              <p className="text-lg md:text-xl leading-relaxed mb-4 max-w-5xl mx-auto">
                 Because the future won’t wait, and neither should your business.
               </p>
             </section>
@@ -66,7 +66,7 @@ export default function AboutUs() {
                 Most ESG platforms are built for enterprise clients — expensive, complex, and often disconnected from the needs of everyday businesses.
               </p>
               <p className="text-lg md:text-xl leading-relaxed mb-4 max-w-5xl mx-auto">
-                <strong>Greenfinite.ai</strong> is built from the ground up for SMEs. We offer tools that are:
+                <a href="https://greenfinite.ai" className="!text-green-700 font-semibold hover:underline" target="_blank" rel="noopener noreferrer">Greenfinite.ai</a> is built from the ground up for SMEs. We offer tools that are:
               </p>
               <ul className="text-left text-lg md:text-xl leading-relaxed list-disc pl-8 mb-4 max-w-5xl mx-auto">
                 <li><strong>Modular</strong> – Use what you need, skip what you don’t.</li>
@@ -76,15 +76,16 @@ export default function AboutUs() {
               </ul>
               <p className="text-lg md:text-xl leading-relaxed max-w-5xl mx-auto">
                 And unlike legacy ESG tools, we don’t assume you already have policies in place.
-                We help you generate them — from carbon estimates to sustainability reports to ESG policy drafts.
+                We help you generate them — from carbon estimates to sustainability reports to ESG policy drafts — all with <a href="https://greenfinite.ai" className="text-green-700 font-semibold hover:underline" target="_blank" rel="noopener noreferrer">Greenfinite.ai</a>.
               </p>
             </section>
           </div>
+
           <div className=''>
-            <Quotes/>
+            <Quotes />
           </div>
           <div>
-            <GreenFiniteQuote/>
+            <GreenFiniteQuote />
           </div>
         </div>
       </div>

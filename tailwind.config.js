@@ -9,7 +9,8 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        primary: ['var(--font-primary)'],
+        jetbrains: ['JetBrains Mono', 'monospace'], // Add this
+        primary: ['var(--font-primary)', 'JetBrains Mono', 'monospace'],
         secondary: ['var(--font-secondary)'],
       },
       keyframes: {

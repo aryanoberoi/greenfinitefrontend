@@ -15,7 +15,7 @@ export default function Home() {
           <main className="flex-1 flex justify-center items-center">
             <UploadPage />
           </main>
-          <main>
+          <main id="about">
             <AboutUs />
           </main>
           <Footer />

@@ -188,3 +188,8 @@ button:focus-visible {
     @apply bg-background text-foreground;
   }
 }
+
+:root {
+  --font-primary: 'JetBrains Mono', monospace;
+  --font-secondary: 'Georgia', serif;
+}
