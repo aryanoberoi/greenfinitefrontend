@@ -40,7 +40,7 @@ const ChatBot = ({ sessionId, onClose }) => {
         setInputValue('');
 
         try {
-            const response = await axios.post('http://localhost:8000/chat', {
+            const response = await axios.post('https://api.greenfinite.ai/chat', {
                 message: inputValue,
                 sessionid: sessionId,
             });
