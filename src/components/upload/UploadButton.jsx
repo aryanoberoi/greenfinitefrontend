@@ -38,10 +38,10 @@ const UploadButton = ({ onUpload, loading }) => {
         {loading ? (
           <span className="flex items-center justify-center gap-2">
             <span className="w-4 h-4 border-2 border-[#F8F7F2] border-t-transparent rounded-full animate-spin"></span>
-            Uploading...
+            Processing...
           </span>
         ) : (
-          'Upload'
+          'Process'
         )}
       </button>
     </div>
