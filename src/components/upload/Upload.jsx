@@ -8,6 +8,12 @@ const Upload = ({ selectedModule }) => {
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [isDragOver, setIsDragOver] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
+  const [formDataInputs, setFormDataInputs] = useState({
+    industry: '',
+    electricity: '',
+    fuelType: ''
+  });
+
   const fileInputRef = useRef(null);
   const navigate = useNavigate();
 
@@ -19,9 +25,8 @@ const Upload = ({ selectedModule }) => {
 
   const handleUpload = async () => {
     if (selectedFiles.length === 0) return;
-  
     setIsUploading(true);
-  
+
     try {
       const formData = new FormData();
       selectedFiles.forEach(file => {
@@ -29,12 +34,17 @@ const Upload = ({ selectedModule }) => {
       });
 
       const moduleMap = {
-        "MODULE ONE": 1,
-        "MODULE TWO": 2,
-        "MODULE THREE": 3,
+        "ESG Analyzer": 1,
+        "Carbon Estimator": 2,
+        "Sustainability Report Generator": 3,
       };
       formData.append("module", moduleMap[selectedModule]);
-  
+
+      // Add questionnaire inputs
+      formData.append("industry", formDataInputs.industry);
+      formData.append("electricity", formDataInputs.electricity);
+      formData.append("fuelType", formDataInputs.fuelType);
+
       const response = await axios.post(
         `https://api.greenfinite.ai/uploadpdf`,
         formData,
@@ -42,36 +52,32 @@ const Upload = ({ selectedModule }) => {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
-          responseType: 'blob', // Expect PDF blob back
+          responseType: 'blob',
         }
       );
-      
-      // Extract filename from headers
+
       const contentDisposition = response.headers['content-disposition'];
-      let filename = 'downloaded-file.pdf'; // Default filename
-      
+      let filename = 'downloaded-file.pdf';
       if (contentDisposition) {
-          const filenameMatch = contentDisposition.match(/filename="?([^"]+)"?/);
-          if (filenameMatch && filenameMatch.length > 1) {
-              filename = filenameMatch[1];
-          }
+        const match = contentDisposition.match(/filename="?([^"]+)"?/);
+        if (match?.length > 1) {
+          filename = match[1];
+        }
       }
-      
+
       const sessionId = filename.split('_')[1].split('.')[0];
-      // Create a Blob URL for the PDF
       const fileBlob = new Blob([response.data], { type: 'application/pdf' });
       const fileUrl = URL.createObjectURL(fileBlob);
-  
-      // Navigate with blob URL
+
       navigate("/analyze", {
         state: {
           fileUrl,
           filename,
           module: selectedModule,
-          sessionId: sessionId,
+          sessionId,
         },
       });
-  
+
     } catch (err) {
       console.error("Upload error:", err);
       alert("Upload failed.");
@@ -79,7 +85,7 @@ const Upload = ({ selectedModule }) => {
       setIsUploading(false);
     }
   };
-  
+
   const handleDragOver = (e) => {
     e.preventDefault();
     setIsDragOver(true);
@@ -104,23 +110,28 @@ const Upload = ({ selectedModule }) => {
     if (file && !selectedFiles.find(f => f.name === file.name)) {
       setSelectedFiles(prev => [...prev, file]);
     }
-    e.target.value = ""; // reset for same file
+    e.target.value = "";
   };
 
   const removeFile = (name) => {
     setSelectedFiles(prev => prev.filter(f => f.name !== name));
   };
 
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormDataInputs(prev => ({ ...prev, [name]: value }));
+  };
+
   return (
-<div className="w-full md:w-[35em] h-auto md:h-[35em] flex flex-col justify-between items-center p-6 bg-white bg-opacity-80 rounded-xl shadow-2xl border-4 border-transparent space-y-6 md:space-y-4 overflow-hidden">
-      
+    <div className="w-full md:w-[35em] h-auto md:h-[35em] flex flex-col justify-between items-center p-4 bg-white bg-opacity-80 rounded-xl shadow-2xl border-4 border-transparent space-y-3 overflow-hidden">
+
       {/* Selected Module Info */}
-      <p className="text-base text-gray-700 text-center leading-relaxed" style={{fontFamily: 'var(--font-primary) !important'}}>
+      <p className="text-sm text-gray-700 text-center leading-tight" style={{ fontFamily: 'var(--font-primary) !important' }}>
         {selectedModule ? `Selected Module: ${selectedModule}` : 'Select a module to begin.'}
       </p>
 
       {/* Uploaded File Tags */}
-      <div className="flex flex-wrap gap-2 justify-start w-full max-w-lg max-h-[3.5em] overflow-y-auto">
+      <div className="flex flex-wrap gap-2 justify-start w-full max-w-lg max-h-[3em] overflow-y-auto">
         {selectedFiles.map((file, index) => (
           <div
             key={index}
@@ -140,18 +151,18 @@ const Upload = ({ selectedModule }) => {
 
       {/* Drag-and-Drop Box */}
       <div
-        className={`flex-1 flex flex-col justify-center items-center w-full max-w-lg p-6 text-center
+        className={`flex flex-col justify-center items-center w-full max-w-lg p-4 text-center
         border-2 border-gray-300 border-dashed rounded-lg bg-gray-50 text-gray-600 hover:border-blue-400 hover:text-blue-500 cursor-pointer 
         transition-all duration-300 ${isDragOver ? 'border-blue-500' : ''}`}
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
         onClick={() => fileInputRef.current?.click()}
-        style={{fontFamily: 'var(--font-primary) !important'}}
+        style={{ fontFamily: 'var(--font-primary) !important' }}
       >
-        <CloudUpload className="w-12 h-12 mb-2 text-gray-500" />
-        <p className="text-base font-semibold mb-1">Drag & Drop or Click to Add File</p>
-        <p className="text-xs">You can upload one file at a time</p>
+        <CloudUpload className="w-10 h-10 mb-1 text-gray-500" />
+        <p className="text-sm font-medium mb-1">Drag & Drop or Click to Add File</p>
+        <p className="text-xs">One file at a time</p>
       </div>
 
       {/* Hidden File Input */}
@@ -162,6 +173,54 @@ const Upload = ({ selectedModule }) => {
         onChange={handleFileChange}
         className="hidden"
       />
+
+      {/* Quick Questionnaire (Compact) */}
+      {/* Quick Questionnaire (Text Fields Version) */}
+<div style={{fontFamily:'var(--font-primary) !important'}} className="w-full max-w-lg space-y-2 text-left text-gray-700 text-sm mt-1">
+  <p className="font-semibold text-sm">Quick Questionnaire</p>
+
+  <div className="flex flex-col gap-y-2">
+    {/* Industry sector */}
+    <label className="flex flex-col">
+      <span className="mb-[2px] text-xs">1. What is your industry sector?</span>
+      <input
+        type="text"
+        name="industry"
+        value={formDataInputs.industry}
+        onChange={handleInputChange}
+        placeholder="e.g. Manufacturing, IT, Retail..."
+        className="border border-gray-300 rounded px-2 py-1 text-xs focus:outline-none focus:ring-2 focus:ring-blue-400"
+      />
+    </label>
+
+    {/* Electricity usage */}
+    <label className="flex flex-col">
+      <span className="mb-[2px] text-xs">2. How much electricity do you consume monthly (in kWh)?</span>
+      <input
+        type="text"
+        name="electricity"
+        value={formDataInputs.electricity}
+        onChange={handleInputChange}
+        placeholder="e.g. 2000"
+        className="border border-gray-300 rounded px-2 py-1 text-xs focus:outline-none focus:ring-2 focus:ring-blue-400"
+      />
+    </label>
+
+    {/* Vehicle fuel type */}
+    <label className="flex flex-col">
+      <span className="mb-[2px] text-xs">3. What type of fuel do your vehicles use?</span>
+      <input
+        type="text"
+        name="fuelType"
+        value={formDataInputs.fuelType}
+        onChange={handleInputChange}
+        placeholder="e.g. Diesel, Petrol, Electric"
+        className="border border-gray-300 rounded px-2 py-1 text-xs focus:outline-none focus:ring-2 focus:ring-blue-400"
+      />
+    </label>
+  </div>
+</div>
+
 
       {/* Upload Button */}
       <div className="w-full max-w-xs">
