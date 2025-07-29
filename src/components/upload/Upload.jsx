@@ -4,6 +4,8 @@ import { CloudUpload, X } from 'lucide-react';
 import UploadButton from './UploadButton';
 import axios from 'axios';
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 const Upload = ({ selectedModule }) => {
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [isDragOver, setIsDragOver] = useState(false);
@@ -46,7 +48,7 @@ const Upload = ({ selectedModule }) => {
       formData.append("fuelType", formDataInputs.fuelType);
 
       const response = await axios.post(
-        `http://localhost:8000/uploadpdf`,
+        `${API_URL}/uploadpdf`,
         formData,
         {
           headers: {
@@ -151,9 +153,13 @@ const Upload = ({ selectedModule }) => {
 
       {/* Drag-and-Drop Box */}
       <div
-        className={`flex flex-col justify-center items-center w-full max-w-lg p-4 text-center
-        border-2 border-gray-300 border-dashed rounded-lg bg-gray-50 text-gray-600 hover:border-blue-400 hover:text-blue-500 cursor-pointer 
-        transition-all duration-300 ${isDragOver ? 'border-blue-500' : ''}`}
+        className={`
+          flex flex-col justify-center items-center w-full max-w-lg text-center
+          border-2 border-gray-300 border-dashed rounded-lg bg-gray-50 text-gray-600
+          hover:border-blue-400 hover:text-blue-500 cursor-pointer transition-all duration-300
+          ${isDragOver ? 'border-blue-500' : ''}
+          ${selectedFiles.length === 0 ? 'h-[25em] p-8' : 'h-auto p-4'}
+        `}
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
@@ -174,53 +180,53 @@ const Upload = ({ selectedModule }) => {
         className="hidden"
       />
 
-      {/* Quick Questionnaire (Compact) */}
-      {/* Quick Questionnaire (Text Fields Version) */}
-<div style={{fontFamily:'var(--font-primary) !important'}} className="w-full max-w-lg space-y-2 text-left text-gray-700 text-sm mt-1">
-  <p className="font-semibold text-sm">Quick Questionnaire</p>
+      {/* Quick Questionnaire */}
+      {selectedFiles.length > 0 && (
+        <div
+          style={{ fontFamily: 'var(--font-primary) !important' }}
+          className="w-full max-w-lg space-y-2 text-left text-gray-700 text-sm mt-1"
+        >
+          <p className="font-semibold text-sm">Quick Questionnaire</p>
 
-  <div className="flex flex-col gap-y-2">
-    {/* Industry sector */}
-    <label className="flex flex-col">
-      <span className="mb-[2px] text-xs">1. What is your industry sector?</span>
-      <input
-        type="text"
-        name="industry"
-        value={formDataInputs.industry}
-        onChange={handleInputChange}
-        placeholder="e.g. Manufacturing, IT, Retail..."
-        className="border border-gray-300 rounded px-2 py-1 text-xs focus:outline-none focus:ring-2 focus:ring-blue-400"
-      />
-    </label>
+          <div className="flex flex-col gap-y-2">
+            <label className="flex flex-col">
+              <span className="mb-[2px] text-xs">1. What is your industry sector?</span>
+              <input
+                type="text"
+                name="industry"
+                value={formDataInputs.industry}
+                onChange={handleInputChange}
+                placeholder="e.g. Manufacturing, IT, Retail..."
+                className="border border-gray-300 rounded px-2 py-1 text-xs focus:outline-none focus:ring-2 focus:ring-blue-400"
+              />
+            </label>
 
-    {/* Electricity usage */}
-    <label className="flex flex-col">
-      <span className="mb-[2px] text-xs">2. How much electricity do you consume monthly (in kWh)?</span>
-      <input
-        type="text"
-        name="electricity"
-        value={formDataInputs.electricity}
-        onChange={handleInputChange}
-        placeholder="e.g. 2000"
-        className="border border-gray-300 rounded px-2 py-1 text-xs focus:outline-none focus:ring-2 focus:ring-blue-400"
-      />
-    </label>
+            <label className="flex flex-col">
+              <span className="mb-[2px] text-xs">2. How much electricity do you consume monthly (in kWh)?</span>
+              <input
+                type="text"
+                name="electricity"
+                value={formDataInputs.electricity}
+                onChange={handleInputChange}
+                placeholder="e.g. 2000"
+                className="border border-gray-300 rounded px-2 py-1 text-xs focus:outline-none focus:ring-2 focus:ring-blue-400"
+              />
+            </label>
 
-    {/* Vehicle fuel type */}
-    <label className="flex flex-col">
-      <span className="mb-[2px] text-xs">3. What type of fuel do your vehicles use?</span>
-      <input
-        type="text"
-        name="fuelType"
-        value={formDataInputs.fuelType}
-        onChange={handleInputChange}
-        placeholder="e.g. Diesel, Petrol, Electric"
-        className="border border-gray-300 rounded px-2 py-1 text-xs focus:outline-none focus:ring-2 focus:ring-blue-400"
-      />
-    </label>
-  </div>
-</div>
-
+            <label className="flex flex-col">
+              <span className="mb-[2px] text-xs">3. What type of fuel do your vehicles use?</span>
+              <input
+                type="text"
+                name="fuelType"
+                value={formDataInputs.fuelType}
+                onChange={handleInputChange}
+                placeholder="e.g. Diesel, Petrol, Electric"
+                className="border border-gray-300 rounded px-2 py-1 text-xs focus:outline-none focus:ring-2 focus:ring-blue-400"
+              />
+            </label>
+          </div>
+        </div>
+      )}
 
       {/* Upload Button */}
       <div className="w-full max-w-xs">
