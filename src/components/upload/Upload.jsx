@@ -25,6 +25,7 @@ const Upload = ({ selectedModule }) => {
     }
   }, [selectedModule]);
 
+  // ✅ Updated handleUpload
   const handleUpload = async () => {
     if (selectedFiles.length === 0) return;
     setIsUploading(true);
@@ -35,49 +36,22 @@ const Upload = ({ selectedModule }) => {
         formData.append("files", file);
       });
 
-      const moduleMap = {
-        "ESG Analyzer": 1,
-        "Carbon Estimator": 2,
-        "Sustainability Report Generator": 3,
-      };
-      formData.append("module", moduleMap[selectedModule]);
-
-      // Add questionnaire inputs
-      formData.append("industry", formDataInputs.industry);
-      formData.append("electricity", formDataInputs.electricity);
-      formData.append("fuelType", formDataInputs.fuelType);
-
-      const response = await axios.post(
-        `${API_URL}/uploadpdf`,
+      // ✅ Call new dummy route
+      const missingResponse = await axios.post(
+        `${API_URL}/get-missing-fields`,
         formData,
-        {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-          responseType: 'blob',
-        }
+        { headers: { 'Content-Type': 'multipart/form-data' } }
       );
 
-      const contentDisposition = response.headers['content-disposition'];
-      let filename = 'downloaded-file.pdf';
-      if (contentDisposition) {
-        const match = contentDisposition.match(/filename="?([^"]+)"?/);
-        if (match?.length > 1) {
-          filename = match[1];
-        }
-      }
+      const { missing_fields, session_id } = missingResponse.data;
 
-      const sessionId = filename.split('_')[1].split('.')[0];
-      const fileBlob = new Blob([response.data], { type: 'application/pdf' });
-      const fileUrl = URL.createObjectURL(fileBlob);
-
+      // ✅ Navigate with dummy JSON
       navigate("/analyze", {
         state: {
-          fileUrl,
-          filename,
-          module: selectedModule,
-          sessionId,
-        },
+          missingFields: missing_fields,
+          sessionId: session_id,
+          module: selectedModule
+        }
       });
 
     } catch (err) {
@@ -88,16 +62,8 @@ const Upload = ({ selectedModule }) => {
     }
   };
 
-  const handleDragOver = (e) => {
-    e.preventDefault();
-    setIsDragOver(true);
-  };
-
-  const handleDragLeave = (e) => {
-    e.preventDefault();
-    setIsDragOver(false);
-  };
-
+  const handleDragOver = (e) => { e.preventDefault(); setIsDragOver(true); };
+  const handleDragLeave = (e) => { e.preventDefault(); setIsDragOver(false); };
   const handleDrop = (e) => {
     e.preventDefault();
     setIsDragOver(false);
@@ -106,7 +72,6 @@ const Upload = ({ selectedModule }) => {
       setSelectedFiles(prev => [...prev, droppedFile]);
     }
   };
-
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file && !selectedFiles.find(f => f.name === file.name)) {
@@ -114,11 +79,7 @@ const Upload = ({ selectedModule }) => {
     }
     e.target.value = "";
   };
-
-  const removeFile = (name) => {
-    setSelectedFiles(prev => prev.filter(f => f.name !== name));
-  };
-
+  const removeFile = (name) => setSelectedFiles(prev => prev.filter(f => f.name !== name));
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormDataInputs(prev => ({ ...prev, [name]: value }));
@@ -127,31 +88,21 @@ const Upload = ({ selectedModule }) => {
   return (
     <div className="w-full md:w-[35em] h-auto md:h-[35em] flex flex-col justify-between items-center p-4 bg-white bg-opacity-80 rounded-xl shadow-2xl border-4 border-transparent space-y-3 overflow-hidden">
 
-      {/* Selected Module Info */}
       <p className="text-sm text-gray-700 text-center leading-tight" style={{ fontFamily: 'var(--font-primary) !important' }}>
         {selectedModule ? `Selected Module: ${selectedModule}` : 'Select a module to begin.'}
       </p>
 
-      {/* Uploaded File Tags */}
       <div className="flex flex-wrap gap-2 justify-start w-full max-w-lg max-h-[3em] overflow-y-auto">
         {selectedFiles.map((file, index) => (
-          <div
-            key={index}
-            className="flex items-center gap-1 bg-green-100 text-green-800 px-2 py-[2px] rounded-full text-xs relative group"
-          >
+          <div key={index} className="flex items-center gap-1 bg-green-100 text-green-800 px-2 py-[2px] rounded-full text-xs relative group">
             {file.name}
-            <button
-              onClick={() => removeFile(file.name)}
-              className="ml-1 !bg-transparent text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
-              title="Remove"
-            >
+            <button onClick={() => removeFile(file.name)} className="ml-1 !bg-transparent text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
               <X size={12} />
             </button>
           </div>
         ))}
       </div>
 
-      {/* Drag-and-Drop Box */}
       <div
         className={`
           flex flex-col justify-center items-center w-full max-w-lg text-center
@@ -171,64 +122,31 @@ const Upload = ({ selectedModule }) => {
         <p className="text-xs">One file at a time</p>
       </div>
 
-      {/* Hidden File Input */}
-      <input
-        type="file"
-        accept=".pdf,.docx,.txt"
-        ref={fileInputRef}
-        onChange={handleFileChange}
-        className="hidden"
-      />
+      <input type="file" accept=".pdf,.docx,.txt" ref={fileInputRef} onChange={handleFileChange} className="hidden" />
 
-      {/* Quick Questionnaire */}
       {selectedFiles.length > 0 && (
-        <div
-          style={{ fontFamily: 'var(--font-primary) !important' }}
-          className="w-full max-w-lg space-y-2 text-left text-gray-700 text-sm mt-1"
-        >
+        <div style={{ fontFamily: 'var(--font-primary) !important' }} className="w-full max-w-lg space-y-2 text-left text-gray-700 text-sm mt-1">
           <p className="font-semibold text-sm">Quick Questionnaire</p>
 
           <div className="flex flex-col gap-y-2">
             <label className="flex flex-col">
               <span className="mb-[2px] text-xs">1. What is your industry sector?</span>
-              <input
-                type="text"
-                name="industry"
-                value={formDataInputs.industry}
-                onChange={handleInputChange}
-                placeholder="e.g. Manufacturing, IT, Retail..."
-                className="border border-gray-300 rounded px-2 py-1 text-xs focus:outline-none focus:ring-2 focus:ring-blue-400"
-              />
+              <input type="text" name="industry" value={formDataInputs.industry} onChange={handleInputChange} placeholder="e.g. Manufacturing, IT, Retail..." className="border border-gray-300 rounded px-2 py-1 text-xs focus:outline-none focus:ring-2 focus:ring-blue-400" />
             </label>
 
             <label className="flex flex-col">
               <span className="mb-[2px] text-xs">2. How much electricity do you consume monthly (in kWh)?</span>
-              <input
-                type="text"
-                name="electricity"
-                value={formDataInputs.electricity}
-                onChange={handleInputChange}
-                placeholder="e.g. 2000"
-                className="border border-gray-300 rounded px-2 py-1 text-xs focus:outline-none focus:ring-2 focus:ring-blue-400"
-              />
+              <input type="text" name="electricity" value={formDataInputs.electricity} onChange={handleInputChange} placeholder="e.g. 2000" className="border border-gray-300 rounded px-2 py-1 text-xs focus:outline-none focus:ring-2 focus:ring-blue-400" />
             </label>
 
             <label className="flex flex-col">
               <span className="mb-[2px] text-xs">3. What type of fuel do your vehicles use?</span>
-              <input
-                type="text"
-                name="fuelType"
-                value={formDataInputs.fuelType}
-                onChange={handleInputChange}
-                placeholder="e.g. Diesel, Petrol, Electric"
-                className="border border-gray-300 rounded px-2 py-1 text-xs focus:outline-none focus:ring-2 focus:ring-blue-400"
-              />
+              <input type="text" name="fuelType" value={formDataInputs.fuelType} onChange={handleInputChange} placeholder="e.g. Diesel, Petrol, Electric" className="border border-gray-300 rounded px-2 py-1 text-xs focus:outline-none focus:ring-2 focus:ring-blue-400" />
             </label>
           </div>
         </div>
       )}
 
-      {/* Upload Button */}
       <div className="w-full max-w-xs">
         <UploadButton onUpload={handleUpload} loading={isUploading} />
       </div>
