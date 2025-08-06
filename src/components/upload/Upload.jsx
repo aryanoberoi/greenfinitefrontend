@@ -4,6 +4,8 @@ import { CloudUpload, X } from 'lucide-react';
 import UploadButton from './UploadButton';
 import axios from 'axios';
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 const Upload = ({ selectedModule }) => {
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [isDragOver, setIsDragOver] = useState(false);
@@ -61,7 +63,7 @@ const Upload = ({ selectedModule }) => {
       
       // Send JSON to the endpoint
       const response = await axios.post(
-        `http://localhost:8000/uploadpdf`,
+        `${API_URL}/uploadpdf`,
         jsonPayload,
         {
           headers: {
@@ -106,7 +108,7 @@ const Upload = ({ selectedModule }) => {
       formData.append("module", moduleMap[selectedModule]);
       
       const response = await axios.post(
-        `http://localhost:8000/get-missing-fields`,
+        `${API_URL}/get-missing-fields`,
         formData,
         { 
           headers: { 'Content-Type': 'multipart/form-data' }
