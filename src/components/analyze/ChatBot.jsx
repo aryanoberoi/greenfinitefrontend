@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { X } from 'lucide-react';
 import axios from 'axios';
+const API_URL = import.meta.env.VITE_API_URL;
 
 const ChatMessage = ({ sender, message, timestamp }) => {
     const isUser = sender === 'user';
@@ -40,7 +41,7 @@ const ChatBot = ({ sessionId, onClose }) => {
         setInputValue('');
 
         try {
-            const response = await axios.post('https://api.greenfinite.ai/chat', {
+            const response = await axios.post(`${API_URL}/chat`, {
                 message: inputValue,
                 sessionid: sessionId,
             });

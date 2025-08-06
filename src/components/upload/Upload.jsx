@@ -8,11 +8,10 @@ const Upload = ({ selectedModule }) => {
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [isDragOver, setIsDragOver] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
-  const [formDataInputs, setFormDataInputs] = useState({
-    industry: '',
-    electricity: '',
-    fuelType: ''
-  });
+  const [formDataInputs, setFormDataInputs] = useState({});
+  const [missingFields, setMissingFields] = useState([]);
+  const [allResponses, setAllResponses] = useState([]);
+  const [dummyValues, setDummyValues] = useState({});
 
   const fileInputRef = useRef(null);
   const navigate = useNavigate();
@@ -28,59 +27,120 @@ const Upload = ({ selectedModule }) => {
     setIsUploading(true);
 
     try {
-      const formData = new FormData();
-      selectedFiles.forEach(file => {
-        formData.append("files", file);
+      // Create a complete content object with all responses
+      const content = {};
+      
+      // Add all the responses from the API
+      allResponses.forEach(response => {
+        content[response.key] = response.response;
       });
-
-      const moduleMap = {
-        "ESG Analyzer": 1,
-        "Carbon Estimator": 2,
-        "Sustainability Report Generator": 3,
+      
+      // Override with user-provided answers for the missing fields
+      if (missingFields.length > 0) {
+        missingFields.forEach(field => {
+          if (dummyValues[field.key]) {
+            content[field.key] = "This will be filled by dummy value";
+          } else if (formDataInputs[field.key]) {
+            content[field.key] = formDataInputs[field.key];
+          }
+        });
+      }
+      
+      // Generate a filename using the original file's name
+      const originalFileName = selectedFiles[0].name;
+      const fileNameWithoutExt = originalFileName.split('.')[0];
+      const timestamp = new Date().getTime();
+      const filename = `${fileNameWithoutExt}_${timestamp}.json`;
+      
+      // Create the JSON payload
+      const jsonPayload = {
+        filename: filename,
+        content: content,
+        moduleType: selectedModule
       };
-      formData.append("module", moduleMap[selectedModule]);
-
-      // Add questionnaire inputs
-      formData.append("industry", formDataInputs.industry);
-      formData.append("electricity", formDataInputs.electricity);
-      formData.append("fuelType", formDataInputs.fuelType);
-
+      
+      // Send JSON to the endpoint
       const response = await axios.post(
-        `https://api.greenfinite.ai/uploadpdf`,
-        formData,
+        `http://localhost:8000/uploadpdf`,
+        jsonPayload,
         {
           headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-          responseType: 'blob',
+            'Content-Type': 'application/json',
+          }
         }
       );
-
-      const contentDisposition = response.headers['content-disposition'];
-      let filename = 'downloaded-file.pdf';
-      if (contentDisposition) {
-        const match = contentDisposition.match(/filename="?([^"]+)"?/);
-        if (match?.length > 1) {
-          filename = match[1];
-        }
-      }
-
-      const sessionId = filename.split('_')[1].split('.')[0];
-      const fileBlob = new Blob([response.data], { type: 'application/pdf' });
-      const fileUrl = URL.createObjectURL(fileBlob);
-
+      
+      // Navigate to the analyze page with the session info
+      const sessionId = timestamp; // Use the timestamp as session ID
+      
       navigate("/analyze", {
         state: {
-          fileUrl,
-          filename,
+          filename: filename,
           module: selectedModule,
-          sessionId,
+          sessionId: sessionId,
+          allResponses: content
         },
       });
 
     } catch (err) {
       console.error("Upload error:", err);
       alert("Upload failed.");
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
+  const uploadFileToBacked = async (file) => {
+    if (!file || !selectedModule) return;
+    setIsUploading(true);
+    
+    try {
+      const formData = new FormData();
+      formData.append("files", file);
+      
+      const moduleMap = {
+        "ESG Analyzer": 1,
+        "Carbon Estimator": 2,
+        "Sustainability Report Generator": 3,
+      };
+      formData.append("module", moduleMap[selectedModule]);
+      
+      const response = await axios.post(
+        `http://localhost:8000/get-missing-fields`,
+        formData,
+        { 
+          headers: { 'Content-Type': 'multipart/form-data' }
+        }
+      );
+      
+      const { responses } = response.data;
+      
+      // Store all responses
+      setAllResponses(responses);
+      
+      // Filter for questions with missing information
+      const missingFieldsData = responses.filter(item => {
+        return item.response.includes("does not contain") || 
+               item.response.includes("unable to") || 
+               item.response.includes("not possible") || 
+               item.response === "NA";
+      });
+      
+      setMissingFields(missingFieldsData);
+      
+      // Initialize form data inputs for missing fields
+      const initialFormData = {};
+      const initialDummyValues = {};
+      missingFieldsData.forEach(field => {
+        initialFormData[field.key] = '';
+        initialDummyValues[field.key] = false;
+      });
+      setFormDataInputs(initialFormData);
+      setDummyValues(initialDummyValues);
+      
+    } catch (err) {
+      console.error("Analysis error:", err);
+      alert("Error analyzing document. Please try again.");
     } finally {
       setIsUploading(false);
     }
@@ -102,6 +162,7 @@ const Upload = ({ selectedModule }) => {
     const droppedFile = e.dataTransfer.files[0];
     if (droppedFile && !selectedFiles.find(f => f.name === droppedFile.name)) {
       setSelectedFiles(prev => [...prev, droppedFile]);
+      uploadFileToBacked(droppedFile);
     }
   };
 
@@ -109,17 +170,41 @@ const Upload = ({ selectedModule }) => {
     const file = e.target.files[0];
     if (file && !selectedFiles.find(f => f.name === file.name)) {
       setSelectedFiles(prev => [...prev, file]);
+      uploadFileToBacked(file);
     }
     e.target.value = "";
   };
 
   const removeFile = (name) => {
     setSelectedFiles(prev => prev.filter(f => f.name !== name));
+    // Clear all data when removing a file
+    setMissingFields([]);
+    setAllResponses([]);
+    setFormDataInputs({});
+    setDummyValues({});
   };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormDataInputs(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleDummyValueChange = (e) => {
+    const { name, checked } = e.target;
+    setDummyValues(prev => ({ ...prev, [name]: checked }));
+    
+    // If checkbox is checked, disable the input and set a placeholder value
+    if (checked) {
+      setFormDataInputs(prev => ({ 
+        ...prev, 
+        [name]: "This will be filled by dummy value" 
+      }));
+    } else {
+      setFormDataInputs(prev => ({ 
+        ...prev, 
+        [name]: "" 
+      }));
+    }
   };
 
   return (
@@ -174,57 +259,58 @@ const Upload = ({ selectedModule }) => {
         className="hidden"
       />
 
-      {/* Quick Questionnaire (Compact) */}
-      {/* Quick Questionnaire (Text Fields Version) */}
-<div style={{fontFamily:'var(--font-primary) !important'}} className="w-full max-w-lg space-y-2 text-left text-gray-700 text-sm mt-1">
-  <p className="font-semibold text-sm">Quick Questionnaire</p>
+      {/* Display Dynamic Missing Fields with Scroll */}
+      {missingFields.length > 0 ? (
+        <div 
+          style={{fontFamily:'var(--font-primary) !important'}} 
+          className="w-full max-w-lg space-y-2 text-left text-gray-700 text-sm mt-1 flex-1 overflow-hidden flex flex-col"
+        >
+          <p className="font-semibold text-sm">Please provide the following missing information:</p>
 
-  <div className="flex flex-col gap-y-2">
-    {/* Industry sector */}
-    <label className="flex flex-col">
-      <span className="mb-[2px] text-xs">1. What is your industry sector?</span>
-      <input
-        type="text"
-        name="industry"
-        value={formDataInputs.industry}
-        onChange={handleInputChange}
-        placeholder="e.g. Manufacturing, IT, Retail..."
-        className="border border-gray-300 rounded px-2 py-1 text-xs focus:outline-none focus:ring-2 focus:ring-blue-400"
-      />
-    </label>
-
-    {/* Electricity usage */}
-    <label className="flex flex-col">
-      <span className="mb-[2px] text-xs">2. How much electricity do you consume monthly (in kWh)?</span>
-      <input
-        type="text"
-        name="electricity"
-        value={formDataInputs.electricity}
-        onChange={handleInputChange}
-        placeholder="e.g. 2000"
-        className="border border-gray-300 rounded px-2 py-1 text-xs focus:outline-none focus:ring-2 focus:ring-blue-400"
-      />
-    </label>
-
-    {/* Vehicle fuel type */}
-    <label className="flex flex-col">
-      <span className="mb-[2px] text-xs">3. What type of fuel do your vehicles use?</span>
-      <input
-        type="text"
-        name="fuelType"
-        value={formDataInputs.fuelType}
-        onChange={handleInputChange}
-        placeholder="e.g. Diesel, Petrol, Electric"
-        className="border border-gray-300 rounded px-2 py-1 text-xs focus:outline-none focus:ring-2 focus:ring-blue-400"
-      />
-    </label>
-  </div>
-</div>
-
+          <div className="flex-1 overflow-y-auto pr-2 custom-scrollbar">
+            <div className="flex flex-col gap-y-2">
+              {missingFields.map((field, index) => (
+                <div key={field.key} className="flex flex-col mb-3">
+                  <label className="flex flex-col">
+                    <span className="mb-[2px] text-xs">{index + 1}. {field.question}</span>
+                    <input
+                      type="text"
+                      name={field.key}
+                      value={formDataInputs[field.key] || ''}
+                      onChange={handleInputChange}
+                      placeholder={`Enter ${field.key.replace(/_/g, ' ')}...`}
+                      className="border border-gray-300 rounded px-2 py-1 text-xs focus:outline-none focus:ring-2 focus:ring-blue-400"
+                      disabled={dummyValues[field.key]}
+                    />
+                  </label>
+                  <label className="flex items-center mt-1 ml-1 text-xs text-gray-600">
+                    <input
+                      type="checkbox"
+                      name={field.key}
+                      checked={dummyValues[field.key] || false}
+                      onChange={handleDummyValueChange}
+                      className="mr-1 h-3 w-3"
+                    />
+                    Fill with dummy value
+                  </label>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      ) : selectedFiles.length > 0 ? (
+        <div className="w-full max-w-lg text-center text-gray-700">
+          <p className="text-sm">Analyzing document...</p>
+        </div>
+      ) : null}
 
       {/* Upload Button */}
       <div className="w-full max-w-xs">
-        <UploadButton onUpload={handleUpload} loading={isUploading} />
+        <UploadButton 
+          onUpload={handleUpload} 
+          loading={isUploading} 
+          text={missingFields.length > 0 ? "Continue with Analysis" : "Process Document"} 
+        />
       </div>
     </div>
   );
