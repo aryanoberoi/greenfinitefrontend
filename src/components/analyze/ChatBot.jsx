@@ -1,101 +1,115 @@
 import React, { useState } from 'react';
+import { X } from 'lucide-react';
 import axios from 'axios';
+const API_URL = import.meta.env.VITE_API_URL;
 
-/**
- * ChatMessage Component
- * Renders a single chat message, aligning it left or right based on the sender.
- *
- * @param {object} props - The component props.
- * @param {string} props.sender - The sender of the message ('user' or 'ai').
- * @param {string} props.message - The content of the message.
- * @param {string} props.timestamp - The timestamp of the message.
- */
 const ChatMessage = ({ sender, message, timestamp }) => {
     const isUser = sender === 'user';
-    const messageAlignment = isUser ? 'justify-end' : 'justify-start';
-    const messageBg = isUser ? 'bg-[#7B7A81] text-white' : 'bg-[#003E3E] text-white';
+    const alignment = isUser ? 'justify-end' : 'justify-start';
+    const bubbleStyle = isUser ? 'bg-[#7B7A81] text-white' : 'bg-[#003E3E] text-white';
 
     return (
-        <div className={`flex ${messageAlignment} mb-3`}>
-            <div className={`max-w-[70%] p-3 rounded-xl ${messageBg} shadow-md`}>
+        <div className={`flex ${alignment} mb-3`}>
+            <div className={`max-w-[70%] p-3 rounded-xl ${bubbleStyle} shadow-md`}>
                 <p className="leading-relaxed">
-                    <span className="font-bold">
-                        {isUser ? 'You:' : 'AI:'}
-                    </span>{' '}
+                    <span className="font-bold">{isUser ? 'You:' : 'AI:'}</span>{' '}
                     {message}
                 </p>
                 {timestamp && (
-                    <p className="text-xs mt-1 text-right text-gray-300">
-                        {timestamp}
-                    </p>
+                    <p className="text-xs mt-1 text-right text-gray-300">{timestamp}</p>
                 )}
             </div>
         </div>
     );
 };
 
-/**
- * ChatBot Component
- * Renders the main chat interface with an input field and send button.
- * Sends messages to the backend and displays responses.
- *
- * @param {object} props - The component props.
- * @param {string} props.sessionId - The session ID for the chat.
- */
-const ChatBot = ({ sessionId }) => {
+const ChatBot = ({ sessionId, onClose }) => {
     const [chatHistory, setChatHistory] = useState([]);
     const [inputValue, setInputValue] = useState('');
 
     const handleSendMessage = async () => {
         if (!inputValue.trim()) return;
 
-        const newMessage = {
+        const userMessage = {
             id: chatHistory.length + 1,
             sender: 'user',
             message: inputValue,
             timestamp: new Date().toLocaleTimeString(),
         };
 
-        setChatHistory([...chatHistory, newMessage]);
+        setChatHistory([...chatHistory, userMessage]);
         setInputValue('');
 
         try {
-            const response = await axios.post('http://localhost:8000/chat', { message: inputValue, sessionid: sessionId });
+            const response = await axios.post(`${API_URL}/chat`, {
+                message: inputValue,
+                sessionid: sessionId,
+            });
+
             const aiMessage = {
                 id: chatHistory.length + 2,
                 sender: 'ai',
-                message: response.data.response, // Adjusted to match the FastAPI response format
+                message: response.data.response,
                 timestamp: new Date().toLocaleTimeString(),
             };
-            setChatHistory(prevHistory => [...prevHistory, aiMessage]);
+
+            setChatHistory((prev) => [...prev, aiMessage]);
         } catch (error) {
-            console.error("Error fetching AI response:", error);
+            console.error('Error fetching AI response:', error);
         }
     };
 
     return (
-        <div className="w-full md:w-[48%] h-[33em] bg-white bg-opacity-90 rounded-xl shadow-2xl p-6 flex flex-col transition-all duration-300 hover:shadow-xl hover:scale-[1.005] font-sans">
-            <h2 className="text-2xl font-bold mb-5 text-gray-800 text-center" style={{fontFamily: 'var(--font-primary) !important'}}>Talk to our chatbot, Earth v1.0</h2>
+        <div className="w-full md:w-[48%] h-[33em] bg-white bg-opacity-90 rounded-xl shadow-2xl p-6 flex flex-col transition-all duration-300 hover:shadow-xl hover:scale-[1.005] font-sans relative z-0">
 
-            <div className="flex-1 border border-gray-300 bg-gray-50 rounded-lg p-4 mb-4 overflow-y-auto custom-scrollbar flex flex-col" style={{fontFamily: 'var(--font-primary) !important'}}>
+            {/* Close Button */}
+            <button
+    onClick={onClose}
+    className="absolute top-3 right-3 sm:top-8 sm:right-8 !bg-transparent p-2 z-20 text-gray-500 hover:text-black transition duration-200"
+    title="Close Chatbot"
+>
+    <X className="w-6 h-6" />
+</button>
+
+
+
+
+
+            {/* Title */}
+            <h2 className="text-2xl font-bold mb-5 text-gray-800 text-center flex items-center justify-center gap-2" style={{ fontFamily: 'var(--font-primary)' }}>
+                <img className="w-[4vw] h-auto" src="/chatbot.png" alt="Chatbot" />
+                Talk to our chatbot, Earth v1.0
+            </h2>
+
+            {/* Chat Area */}
+            <div
+                className="flex-1 border border-gray-300 bg-gray-50 rounded-lg p-4 mb-4 overflow-y-auto custom-scrollbar flex flex-col"
+                style={{ fontFamily: 'var(--font-primary) !important' }}
+            >
                 {chatHistory.map((msg) => (
-                    <ChatMessage key={msg.id} sender={msg.sender} message={msg.message} timestamp={msg.timestamp} />
+                    <ChatMessage
+                        key={msg.id}
+                        sender={msg.sender}
+                        message={msg.message}
+                        timestamp={msg.timestamp}
+                    />
                 ))}
             </div>
 
-            <div className="flex items-center">
+            {/* Input */}
+            <div className="flex items-center w-full max-w-3xl mx-auto px-2 sm:px-4 gap-x-2">
                 <input
                     type="text"
                     placeholder="Type your message here..."
                     value={inputValue}
                     onChange={(e) => setInputValue(e.target.value)}
-                    className="flex-1 border border-gray-300 rounded-l-lg p-3 text-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200"
-                    style={{fontFamily: 'var(--font-primary) !important'}}
+                    className="flex-1 border border-gray-300 rounded-lg px-3 py-2 sm:py-3 text-sm sm:text-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200 font-sans"
+                    style={{ fontFamily: 'var(--font-primary)' }}
                 />
                 <button
                     onClick={handleSendMessage}
-                    className="bg-blue-600 text-white px-6 py-3 rounded-r-lg text-lg font-semibold hover:bg-blue-700 transition-colors duration-200 shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    style={{fontFamily: 'var(--font-primary) !important'}}
+                    className="!bg-[#003E3E] text-white px-4 py-2 sm:px-6 sm:py-3 rounded-lg text-sm sm:text-lg font-semibold hover:bg-green-700 transition-colors duration-200 shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 font-sans"
+                    style={{ fontFamily: 'var(--font-primary)' }}
                 >
                     Send
                 </button>

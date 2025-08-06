@@ -36,7 +36,11 @@ const Upload = ({ selectedModule }) => {
       formData.append("module", moduleMap[selectedModule]);
   
       const response = await axios.post(
+<<<<<<< HEAD
         `http://localhost:8000/uploadpdf`,
+=======
+        `https://api.greenfinite.ai/uploadpdf`,
+>>>>>>> 4b61abb04d5bc589363c0e373f196aca95136d81
         formData,
         {
           headers: {

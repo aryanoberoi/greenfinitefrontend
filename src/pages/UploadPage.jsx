@@ -11,14 +11,18 @@ export default function UploadPage() {
   };
 
   return (
-    <div
-      className="min-h-screen flex flex-col"
-      
-    >
-      <div className="w-screen">
+    <div className="min-h-screen flex flex-col bg-offwhite overflow-x-hidden">
+      <div className="w-full">
         <div className="min-h-[30vh] flex flex-col">
-          <main className="flex-1 flex justify-center items-center min-h-[50vh] gap-[8em]">
-            {/* ✅ Pass the function to ModuleCard here */}
+          <main
+            className="
+              flex-1 flex flex-col md:flex-row 
+              justify-center items-center 
+              gap-6 md:gap-[8em] 
+              px-4 py-8 md:px-0 md:py-0
+              w-full max-w-screen-xl mx-auto
+            "
+          >
             <ModuleCard onModuleSelect={handleModuleSelect} />
             <Upload selectedModule={selectedModule} />
           </main>
