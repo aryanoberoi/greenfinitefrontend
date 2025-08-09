@@ -42,12 +42,12 @@
 }
 
 :root {
-  --font-primary: 'Poppins', sans-serif;
-  --font-secondary: 'Playfair Display', serif;
+  --font-primary: 'JetBrains Mono', monospace;
+  --font-secondary: 'Georgia', serif;
 }
 
 body {
-  font-family: var(--font-primary);
+  font-family: var(--font-primary) !important;
 }
 
 h1 {
