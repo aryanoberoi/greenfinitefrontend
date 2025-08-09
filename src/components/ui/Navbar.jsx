@@ -20,10 +20,9 @@ const MobileMenuOverlay = ({ isOpen, onClose, activeTab, setActiveTab }) => {
   
     if (!isOpen) return null;
   
-    const tabs = ['home', 'services', 'about', 'contact'];
+    const tabs = ['home', 'about', 'contact'];
     const tabIcons = {
       home: HomeIcon,
-      services: GearIcon,
       about: InfoCircledIcon,
       contact: EnvelopeClosedIcon
     };
@@ -96,7 +95,6 @@ const TopNavigationBar = ({ toggleMenu, activeTab, setActiveTab }) => {
 
   const tabIcons = {
     home: HomeIcon,
-    services: GearIcon,
     about: InfoCircledIcon,
     contact: EnvelopeClosedIcon
   };
@@ -131,7 +129,7 @@ const TopNavigationBar = ({ toggleMenu, activeTab, setActiveTab }) => {
 
       {/* Desktop Nav Links */}
       <div className="hidden md:flex items-center space-x-8">
-        {['home', 'about', 'services', 'contact'].map((tab) => {
+        {['home', 'about','contact'].map((tab) => {
           const Icon = tabIcons[tab];
           return (
             <a

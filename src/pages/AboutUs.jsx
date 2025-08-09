@@ -7,7 +7,7 @@ export default function AboutUs() {
     <div className="min-h-screen flex flex-col bg-cover bg-center">
       <div
         className="w-full"
-        id="about"
+        
         style={{ fontFamily: 'var(--font-primary) !important' }}
       >
         {/* Top Divider Line */}
@@ -76,7 +76,7 @@ export default function AboutUs() {
               </ul>
               <p className="text-lg md:text-xl leading-relaxed max-w-5xl mx-auto">
                 And unlike legacy ESG tools, we don’t assume you already have policies in place.
-                We help you generate them — from carbon estimates to sustainability reports to ESG policy drafts — all with <a href="https://greenfinite.ai" className="text-green-700 font-semibold hover:underline" target="_blank" rel="noopener noreferrer">Greenfinite.ai</a>.
+                We help you generate them — from carbon estimates to sustainability reports to ESG policy drafts — all with <a href="https://greenfinite.ai" className="!text-green-700 font-semibold hover:underline" target="_blank" rel="noopener noreferrer">Greenfinite.ai</a>.
               </p>
             </section>
           </div>
