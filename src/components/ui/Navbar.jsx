@@ -13,63 +13,63 @@ import {
 // Mobile Menu Component
 // ----------------------
 const MobileMenuOverlay = ({ isOpen, onClose, activeTab, setActiveTab }) => {
-    useEffect(() => {
-      document.body.style.overflow = isOpen ? 'hidden' : '';
-      return () => { document.body.style.overflow = ''; };
-    }, [isOpen]);
-  
-    if (!isOpen) return null;
-  
-    const tabs = ['home', 'about', 'contact'];
-    const tabIcons = {
-      home: HomeIcon,
-      about: InfoCircledIcon,
-      contact: EnvelopeClosedIcon
-    };
-  
-    const handleLinkClick = (tab) => {
-      setActiveTab(tab);
-      onClose();
-    };
-  
-    return (
-      <div className="fixed inset-0 bg-black bg-opacity-80 backdrop-blur-md z-50 flex flex-col items-center justify-center px-6 py-10">
-        {/* Close Button */}
-        <button
-          onClick={onClose}
-          className="absolute top-6 right-6 text-white z-50"
-          aria-label="Close menu"
-        >
-          <Cross1Icon className="w-8 h-8" />
-        </button>
-  
-        {/* Mobile Links */}
-        <nav className="flex flex-col space-y-8 text-center">
-          {tabs.map((tab) => {
-            const Icon = tabIcons[tab];
-            const isActive = activeTab === tab;
-            return (
-                <a
-                key={tab}
-                href={`#${tab}`}
-                onClick={() => handleLinkClick(tab)}
-                className={`relative text-xl font-offwhite flex items-center justify-center gap-3 transition-colors duration-200 
+  useEffect(() => {
+    document.body.style.overflow = isOpen ? 'hidden' : '';
+    return () => { document.body.style.overflow = ''; };
+  }, [isOpen]);
+
+  if (!isOpen) return null;
+
+  const tabs = ['home', 'about', 'contact'];
+  const tabIcons = {
+    home: HomeIcon,
+    about: InfoCircledIcon,
+    contact: EnvelopeClosedIcon
+  };
+
+  const handleLinkClick = (tab) => {
+    setActiveTab(tab);
+    onClose();
+  };
+
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-80 backdrop-blur-md z-50 flex flex-col items-center justify-center px-6 py-10">
+      {/* Close Button */}
+      <button
+        onClick={onClose}
+        className="absolute top-6 right-6 text-white z-50"
+        aria-label="Close menu"
+      >
+        <Cross1Icon className="w-8 h-8" />
+      </button>
+
+      {/* Mobile Links */}
+      <nav className="flex flex-col space-y-8 text-center">
+        {tabs.map((tab) => {
+          const Icon = tabIcons[tab];
+          const isActive = activeTab === tab;
+          return (
+            <a
+              key={tab}
+              href={`#${tab}`}
+              onClick={() => handleLinkClick(tab)}
+              className={`relative text-xl font-offwhite flex items-center justify-center gap-3 transition-colors duration-200 
                             after:absolute after:bottom-0 after:left-0 after:w-0 hover:after:w-full after:h-0.5 after:bg-[#F8F7F2] after:transition-all after:duration-300
                             ${isActive ? 'text-white' : 'text-gray-300 hover:text-green-400'}`}
-              >
-                {Icon && <Icon className="w-8 h-8" />}
-                <span style={{ fontFamily: 'var(--font-primary)' }}>
-                  {tab.charAt(0).toUpperCase() + tab.slice(1)}
-                </span>
-              </a>
-              
-            );
-          })}
-        </nav>
-      </div>
-    );
-  };
-  
+            >
+              {Icon && <Icon className="w-8 h-8" />}
+              <span style={{ fontFamily: 'var(--font-primary)' }}>
+                {tab.charAt(0).toUpperCase() + tab.slice(1)}
+              </span>
+            </a>
+
+          );
+        })}
+      </nav>
+    </div>
+  );
+};
+
 
 
 // ----------------------
@@ -107,8 +107,8 @@ const TopNavigationBar = ({ toggleMenu, activeTab, setActiveTab }) => {
   };
 
   return (
-<nav className="fixed top-0 left-0 w-full h-[115px] py-8 px-6 sm:px-10 md:px-[104px] flex justify-between items-center bg-[#003E3E] shadow-2xl z-50 transition-transform duration-300 ease-out">
-      
+    <nav className="fixed top-0 left-0 w-full h-[80px] py-8 px-6 sm:px-10 md:px-[104px] flex justify-between items-center bg-green-900 shadow-2xl z-50 transition-transform duration-300 ease-out">
+
       {/* Logo */}
       <a
         href="/"
@@ -129,16 +129,16 @@ const TopNavigationBar = ({ toggleMenu, activeTab, setActiveTab }) => {
 
       {/* Desktop Nav Links */}
       <div className="hidden md:flex items-center space-x-8">
-        {['home', 'about','contact'].map((tab) => {
+        {['home', 'about', 'contact'].map((tab) => {
           const Icon = tabIcons[tab];
           return (
             <a
               key={tab}
               href={tab === 'home' ? '/' : `#${tab}`}
               onClick={() => setActiveTab(tab)}
-              className={`focus:outline-none flex items-center group ${getLinkClass(tab)}`}
+              className={`focus:outline-none flex items-center group ${getLinkClass(tab)} `}
             >
-              <span className="text-base sm:text-lg font-normal font-mono capitalize">{tab}</span>
+              <span className="text-base sm:text-lg font-normal font-mono capitalize group-hover:text-green-400">{tab}</span>
               {Icon && (
                 <Icon className="ml-2 transition-opacity duration-300 w-5 h-5 group-hover:text-green-400" />
               )}

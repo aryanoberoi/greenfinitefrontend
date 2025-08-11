@@ -98,7 +98,7 @@ const App = ({ onModuleSelect }) => {
   const currentModuleData = modulesData[activeModule];
 
   return (
-    <div style={{fontFamily: 'var(--font-primary) !important'}} className="!w-full !max-w-[35em] !h-auto md:!h-[35em] !flex !flex-col !justify-between !items-center !p-6 md:!p-10 !bg-white !bg-opacity-80 !rounded-xl !shadow-2xl !space-y-6 !border-4 !border-transparent !font-inter">
+    <div style={{fontFamily: 'var(--font-primary) !important'}} className="!w-full !max-w-[35em] !h-auto md:!h-[35em] !flex !flex-col !justify-between !items-center !p-6 md:!p-10 !bg-white !bg-opacity-80 !rounded-xl  !space-y-6 !border-4 !border-transparent !font-inter">
       <ModuleSelector
         modules={modulesData}
         activeModule={activeModule}

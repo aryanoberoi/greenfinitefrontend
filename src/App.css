@@ -42,7 +42,7 @@
 }
 
 :root {
-  --font-primary: 'JetBrains Mono', monospace;
+  --font-primary: 'JetBrains Mono', monospace !important;
   --font-secondary: 'Georgia', serif;
 }
 

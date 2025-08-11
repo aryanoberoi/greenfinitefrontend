@@ -4,7 +4,7 @@ import GreenFiniteQuote from '@/components/GreenFiniteQuote';
 
 export default function AboutUs() {
   return (
-    <div className="min-h-screen flex flex-col bg-cover bg-center">
+    <div id="#about" className="min-h-screen flex flex-col bg-cover bg-center">
       <div
         className="w-full"
         
@@ -23,7 +23,7 @@ export default function AboutUs() {
           >
             {/* Who We Are */}
             <section className="mb-12">
-              <h2 className="text-3xl font-semibold mb-4 py-8">Who We Are</h2>
+              <h2 className="text-3xl font-semibold py-18">Who We Are</h2>
               <p className="text-lg md:text-xl leading-relaxed mb-4 max-w-5xl mx-auto">
                 At <a href="https://greenfinite.ai" className="!text-green-700 font-semibold hover:underline" target="_blank" rel="noopener noreferrer">Greenfinite.ai</a>, we’re a team of sustainability-minded builders, technologists, and change-makers on a mission to make ESG accessible to everyone — not just big corporations.
               </p>

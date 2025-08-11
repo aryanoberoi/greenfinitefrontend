@@ -38,7 +38,7 @@ const Footer = () => {
 
   return (
     <footer id='contact' className="font-inter bg-offwhite text-amber-800 py-1 px-4 sm:px-6 lg:px-8 flex flex-col justify-center min-h-[1px]" style={{fontFamily: 'var(--font-primary) !important'}}>
-      <div className="max-w-7xl mx-auto w-full overflow-hidden">
+      <div style={{ fontFamily: 'var(--font-primary) !important' }} className="max-w-7xl mx-auto w-full overflow-hidden">
         {/* Top Section */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-3 pb-4 border-b border-t border-gray-300">
           {/* Logo Column */}

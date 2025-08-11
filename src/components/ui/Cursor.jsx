@@ -45,18 +45,18 @@ function CustomCursor() {
   return (
     <>
       {/* Inject CSS to hide the default cursor */}
-      {/* <style>
+      <style>
         {`
           .hide-default-cursor {
             cursor: none !important;
           }
         `}
-      </style> */}
+      </style>
       <img
         ref={cursorRef}
         src="/plant.png" // Replace with your sapling path
         alt="cursor"
-        className={`fixed pointer-events-none z-50 transition-transform duration-300 ease-out 
+        className={`fixed pointer-events-none z-[9999] transition-transform duration-300 ease-out 
           ${location.pathname === "/analyze" ? "w-15 h-15" : "w-10 h-10"}`}
         style={{
           transform: "translate(-50%, -50%)",

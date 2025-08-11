@@ -31,12 +31,12 @@ const Upload = ({ selectedModule }) => {
     try {
       // Create a complete content object with all responses
       const content = {};
-      
+
       // Add all the responses from the API
       allResponses.forEach(response => {
         content[response.key] = response.response;
       });
-      
+
       // Override with user-provided answers for the missing fields
       if (missingFields.length > 0) {
         missingFields.forEach(field => {
@@ -47,20 +47,20 @@ const Upload = ({ selectedModule }) => {
           }
         });
       }
-      
+
       // Generate a filename using the original file's name
       const originalFileName = selectedFiles[0].name;
       const fileNameWithoutExt = originalFileName.split('.')[0];
       const timestamp = new Date().getTime();
       const filename = `${fileNameWithoutExt}_${timestamp}.json`;
-      
+
       // Create the JSON payload
       const jsonPayload = {
         filename: filename,
         content: content,
         moduleType: selectedModule
       };
-      
+
       // Send JSON to the endpoint
       const response = await axios.post(
         `${API_URL}/uploadpdf`,
@@ -71,10 +71,10 @@ const Upload = ({ selectedModule }) => {
           }
         }
       );
-      
+
       // Navigate to the analyze page with the session info
       const sessionId = timestamp; // Use the timestamp as session ID
-      
+
       navigate("/analyze", {
         state: {
           filename: filename,
@@ -95,41 +95,41 @@ const Upload = ({ selectedModule }) => {
   const uploadFileToBacked = async (file) => {
     if (!file || !selectedModule) return;
     setIsUploading(true);
-    
+
     try {
       const formData = new FormData();
       formData.append("files", file);
-      
+
       const moduleMap = {
         "ESG Analyzer": 1,
         "Carbon Estimator": 2,
         "Sustainability Report Generator": 3,
       };
       formData.append("module", moduleMap[selectedModule]);
-      
+
       const response = await axios.post(
         `${API_URL}/get-missing-fields`,
         formData,
-        { 
+        {
           headers: { 'Content-Type': 'multipart/form-data' }
         }
       );
-      
+
       const { responses } = response.data;
-      
+
       // Store all responses
       setAllResponses(responses);
-      
+
       // Filter for questions with missing information
       const missingFieldsData = responses.filter(item => {
-        return item.response.includes("does not contain") || 
-               item.response.includes("unable to") || 
-               item.response.includes("not possible") || 
-               item.response === "NA";
+        return item.response.includes("does not contain") ||
+          item.response.includes("unable to") ||
+          item.response.includes("not possible") ||
+          item.response === "NA";
       });
-      
+
       setMissingFields(missingFieldsData);
-      
+
       // Initialize form data inputs for missing fields
       const initialFormData = {};
       const initialDummyValues = {};
@@ -139,7 +139,7 @@ const Upload = ({ selectedModule }) => {
       });
       setFormDataInputs(initialFormData);
       setDummyValues(initialDummyValues);
-      
+
     } catch (err) {
       console.error("Analysis error:", err);
       alert("Error analyzing document. Please try again.");
@@ -194,23 +194,23 @@ const Upload = ({ selectedModule }) => {
   const handleDummyValueChange = (e) => {
     const { name, checked } = e.target;
     setDummyValues(prev => ({ ...prev, [name]: checked }));
-    
+
     // If checkbox is checked, disable the input and set a placeholder value
     if (checked) {
-      setFormDataInputs(prev => ({ 
-        ...prev, 
-        [name]: "This will be filled by dummy value" 
+      setFormDataInputs(prev => ({
+        ...prev,
+        [name]: "This will be filled by dummy value"
       }));
     } else {
-      setFormDataInputs(prev => ({ 
-        ...prev, 
-        [name]: "" 
+      setFormDataInputs(prev => ({
+        ...prev,
+        [name]: ""
       }));
     }
   };
 
   return (
-    <div className="w-full md:w-[35em] h-auto md:h-[35em] flex flex-col justify-between items-center p-4 bg-white bg-opacity-80 rounded-xl shadow-2xl border-4 border-transparent space-y-3 overflow-hidden">
+    <div className="w-full md:w-[35em] h-auto md:h-[35em] flex flex-col justify-between items-center p-4 bg-white bg-opacity-80 rounded-xl  border-4 border-transparent space-y-3 overflow-hidden">
 
       {/* Selected Module Info */}
       <p className="text-sm text-gray-700 text-center leading-tight" style={{ fontFamily: 'var(--font-primary) !important' }}>
@@ -249,7 +249,6 @@ const Upload = ({ selectedModule }) => {
       >
         <CloudUpload className="w-10 h-10 mb-1 text-gray-500" />
         <p className="text-sm font-medium mb-1">Drag & Drop or Click to Add File</p>
-        <p className="text-xs">One file at a time</p>
       </div>
 
       {/* Hidden File Input */}
@@ -259,12 +258,13 @@ const Upload = ({ selectedModule }) => {
         ref={fileInputRef}
         onChange={handleFileChange}
         className="hidden"
+        multiple
       />
 
       {/* Display Dynamic Missing Fields with Scroll */}
       {missingFields.length > 0 ? (
-        <div 
-          style={{fontFamily:'var(--font-primary) !important'}} 
+        <div
+          style={{ fontFamily: 'var(--font-primary) !important' }}
           className="w-full max-w-lg space-y-2 text-left text-gray-700 text-sm mt-1 flex-1 overflow-hidden flex flex-col"
         >
           <p className="font-semibold text-sm">Please provide the following missing information:</p>
@@ -302,16 +302,19 @@ const Upload = ({ selectedModule }) => {
         </div>
       ) : selectedFiles.length > 0 ? (
         <div className="w-full max-w-lg text-center text-gray-700">
-          <p className="text-sm">Analyzing document...</p>
+          <p
+            style={{ fontFamily: 'var(--font-primary) !important' }}
+            className="text-sm">Analyzing document...
+          </p>
         </div>
       ) : null}
 
       {/* Upload Button */}
       <div className="w-full max-w-xs">
-        <UploadButton 
-          onUpload={handleUpload} 
-          loading={isUploading} 
-          text={missingFields.length > 0 ? "Continue with Analysis" : "Process Document"} 
+        <UploadButton
+          onUpload={handleUpload}
+          loading={isUploading}
+          text={missingFields.length > 0 ? "Continue with Analysis" : "Process Document"}
         />
       </div>
     </div>

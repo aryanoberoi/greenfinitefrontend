@@ -1,9 +1,30 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+
+// A custom component for the typewriter effect
+const Typewriter = ({ text, speed = 50 }) => {
+  const [displayText, setDisplayText] = useState('');
+  const [i, setI] = useState(0);
+
+  useEffect(() => {
+    if (i < text.length) {
+      const timeoutId = setTimeout(() => {
+        setDisplayText(displayText + text.charAt(i));
+        setI(i + 1);
+      }, speed);
+
+      return () => clearTimeout(timeoutId);
+    }
+  }, [displayText, i, text, speed]);
+
+  return <span>{displayText}</span>;
+};
 
 export default function GreenfiniteStatement() {
+  const quote = "It's high time we move beyond promises. The planet doesn't need more talk, it needs action.";
+
   return (
     <div
-      className="min-h-screen w-full bg-[offwhite] flex items-center justify-center px-4 py-8 font-inter text-[#2C3E2C] relative overflow-hidden"
+      className="min-h-screen w-full bg-[#F8F8F8] flex items-center justify-center px-4 py-8 font-inter text-[#2C3E2C] relative overflow-hidden"
     >
       {/* Subtle Background SVG */}
       <svg
@@ -42,7 +63,7 @@ export default function GreenfiniteStatement() {
         {/* Quote Section */}
         <div className="w-full md:w-1/2 flex flex-col justify-center text-center md:text-left">
           <p className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-semibold leading-snug text-emerald-900 drop-shadow-sm">
-            "It's high time we move beyond promises. The planet doesn't need more talk, it needs action."
+            <Typewriter text={quote} speed={70} />
           </p>
           <p className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-normal text-green-700 mt-4">
             — Greenfinite
