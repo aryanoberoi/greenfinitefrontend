@@ -39,7 +39,7 @@ export default function NewsletterPopup() {
         e.preventDefault();
       
         try {
-          const res = await fetch("http://localhost:5678/webhook/newsletter", {
+          const res = await fetch("http://localhost:8000/webhook/newsletter", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -100,7 +100,7 @@ export default function NewsletterPopup() {
                                 </div>
                                 <button
                                     type="submit"
-                                    className="w-[20vh] mx-auto bg-green-700 text-gray-100 font-bold py-3 px-4 hover:bg-green-800 hover:scale-105 transition-all block"
+                                    className="w-[20vh] mx-auto bg-green-700 text-gray-100 font-bold py-3 px-4 hover:bg-green-900 hover:scale-115 transition-all block"
                                 >
                                     Subscribe
                                 </button>
