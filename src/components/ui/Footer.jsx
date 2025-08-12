@@ -37,7 +37,7 @@ const Footer = () => {
   const isFormValid = email && phone;
 
   return (
-    <footer id='contact' className="font-inter bg-offwhite text-amber-800 py-1 px-4 sm:px-6 lg:px-8 flex flex-col justify-center min-h-[1px]" style={{fontFamily: 'var(--font-primary) !important'}}>
+    <footer id='contact' className="font-inter bg-offwhite text-amber-800 py-1 px-4 sm:px-6 lg:px-8 flex flex-col justify-center min-h-[1px]" style={{ fontFamily: 'var(--font-primary) !important' }}>
       <div style={{ fontFamily: 'var(--font-primary) !important' }} className="max-w-7xl mx-auto w-full overflow-hidden">
         {/* Top Section */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-3 pb-4 border-b border-t border-gray-300">
@@ -60,7 +60,7 @@ const Footer = () => {
           {/* Connect Form */}
           <div className="flex flex-col md:items-end pt-8">
             <div className="w-full max-w-sm mx-auto md:ml-auto md:mr-0 pl-0">
-              <h3 className="text-amber-900 text-lg font-semibold mb-4 text-left">Connect with Us</h3>
+              <h3 className="text-green-900 text-lg font-semibold mb-4 text-left">Connect with Us</h3>
               {/* Added hover:bg-white to the form */}
               <form className="flex flex-col space-y-3 w-full p-5 rounded-lg shadow-lg items-start bg-gray-50 border border-gray-300 hover:bg-white transition-colors duration-300">
                 <input
@@ -101,7 +101,7 @@ const Footer = () => {
 
                   <span
                     // Changed text color to white for the "Submit" text
-                    className={`absolute left-1/2 -translate-x-1/2 font-semibold transition-all duration-500 ease-in-out text-white ${isSubmitted ? 'opacity-0 translate-x-12' : 'opacity-100'}`}
+                    className={`absolute left-1/2 -translate-x-1/2 font-semibold transition-all duration-500 ease-in-out text-grey ${isSubmitted ? 'opacity-0 translate-x-12' : 'opacity-100'}`}
                   >
                     Submit
                   </span>
@@ -119,16 +119,16 @@ const Footer = () => {
 
         {/* Bottom Section */}
         <div className="flex flex-col md:flex-row justify-between items-center text-sm mt-4">
-          <div className="flex flex-wrap justify-center md:justify-start gap-x-4 gap-y-2 mb-2 md:mb-0 text-amber-700" >
+          <div className="flex flex-wrap justify-center md:justify-start gap-x-4 gap-y-2 mb-2 md:mb-0 text-green-700" >
             {/* Added hover:text-white to the links */}
-            <a href="/legal/privacy.html" className="transform scale-100 hover:scale-90 transition duration-300 hover:text-white" style={{color:"brown"}}>Privacy Policy</a>
-            <a href="/legal/terms.html" className="transform scale-100 hover:scale-90 transition duration-300 hover:text-white" style={{color:"brown"}}>Terms & Conditions</a>
-            <a href="/legal/refund.html" className="transform scale-100 hover:scale-90 transition duration-300 hover:text-white" style={{color:"brown"}}>Refund Policy</a>
+            <a href="/legal/privacy.html" className="transform scale-100 hover:scale-90 transition duration-300 hover:text-green-800" style={{ color: "green" }}>Privacy Policy</a>
+            <a href="/legal/terms.html" className="transform scale-100 hover:scale-90 transition duration-300 hover:text-green-800" style={{ color: "  green" }}>Terms & Conditions</a>
+            <a href="/legal/refund.html" className="transform scale-100 hover:scale-90 transition duration-300 hover:text-green-800" style={{ color: " green" }}>Refund Policy</a>
           </div>
         </div>
 
         {/* Copyright */}
-        <p className="text-brown-600 text-sm text-center mt-6">
+        <p className="text-green-600 text-sm text-center mt-6">
           &copy; 2025 Greenfinite. All rights reserved.
         </p>
       </div>

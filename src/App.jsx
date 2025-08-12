@@ -9,7 +9,7 @@ function App() {
     <div className="w-screen h-screen flex flex-col">
     <CustomCursor />
 
-    {/* {location.pathname === '/' && <NewsletterPopup />} */}
+    {location.pathname === '/' && <NewsletterPopup />}
 
       <div className="flex-1">
         <Routes>
