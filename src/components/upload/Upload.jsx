@@ -54,11 +54,17 @@ const Upload = ({ selectedModule }) => {
       const timestamp = new Date().getTime();
       const filename = `${fileNameWithoutExt}_${timestamp}.json`;
 
+      const moduleMap = {
+        "ESG Analyzer": 1,
+        "Carbon Estimator": 2,
+        "Sustainability Report Generator": 3,
+      };
+
       // Create the JSON payload
       const jsonPayload = {
         filename: filename,
         content: content,
-        moduleType: selectedModule
+        module: moduleMap[selectedModule]  // <-- key must be "module" and value an integer
       };
 
       // Send JSON to the endpoint
@@ -293,7 +299,7 @@ const Upload = ({ selectedModule }) => {
                       onChange={handleDummyValueChange}
                       className="mr-1 h-3 w-3"
                     />
-                    Fill with dummy value
+                    Assume industry average
                   </label>
                 </div>
               ))}
