@@ -41,7 +41,7 @@ const Upload = ({ selectedModule }) => {
       if (missingFields.length > 0) {
         missingFields.forEach(field => {
           if (dummyValues[field.key]) {
-            content[field.key] = "This will be filled by dummy value";
+            content[field.key] = "Assume industry average";
           } else if (formDataInputs[field.key]) {
             content[field.key] = formDataInputs[field.key];
           }
@@ -205,7 +205,7 @@ const Upload = ({ selectedModule }) => {
     if (checked) {
       setFormDataInputs(prev => ({
         ...prev,
-        [name]: "This will be filled by dummy value"
+        [name]: "Assume industry average"
       }));
     } else {
       setFormDataInputs(prev => ({
