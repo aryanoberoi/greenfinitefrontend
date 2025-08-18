@@ -7,7 +7,7 @@ function App() {
   return (
 
     <div className="w-screen h-screen flex flex-col">
-    <CustomCursor />
+    {/* <CustomCursor /> */}
 
     {location.pathname === '/' && <NewsletterPopup />}
 
