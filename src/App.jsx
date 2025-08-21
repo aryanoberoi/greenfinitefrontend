@@ -4,6 +4,8 @@ import CustomCursor from './components/ui/Cursor';
 import Analyze from './pages/Analyze';
 import NewsletterPopup from './components/NewsletterPopup';
 function App() {
+  const location = useLocation(); // <-- must call inside component
+
   return (
 
     <div className="w-screen h-screen flex flex-col">

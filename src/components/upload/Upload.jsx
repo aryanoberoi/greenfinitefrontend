@@ -74,15 +74,25 @@ const Upload = ({ selectedModule }) => {
         {
           headers: {
             'Content-Type': 'application/json',
-          }
+          },
+          responseType: 'blob' // <--- IMPORTANT: tell axios to expect binary
         }
       );
 
-      // Navigate to the analyze page with the session info
+      const docId = response.headers['x-doc-id'] || null;
+
+
+      // Build a Blob and an object URL
+      const pdfBlob = new Blob([response.data], { type: 'application/pdf' });
+      const fileUrl = URL.createObjectURL(pdfBlob);
+
+      // Navigate to the analyze page with the session info 
       const sessionId = timestamp; // Use the timestamp as session ID
 
       navigate("/analyze", {
         state: {
+          fileUrl,
+          docId,
           filename: filename,
           module: selectedModule,
           sessionId: sessionId,

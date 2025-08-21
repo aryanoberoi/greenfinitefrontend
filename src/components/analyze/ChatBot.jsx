@@ -1,121 +1,194 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { X } from 'lucide-react';
 import axios from 'axios';
+import { useLocation, useNavigate } from 'react-router-dom';
+
 const API_URL = import.meta.env.VITE_API_URL;
 
 const ChatMessage = ({ sender, message, timestamp }) => {
-    const isUser = sender === 'user';
-    const alignment = isUser ? 'justify-end' : 'justify-start';
-    const bubbleStyle = isUser ? 'bg-[#7B7A81] text-white' : 'bg-[#003E3E] text-white';
+  const isUser = sender === 'user';
+  const alignment = isUser ? 'justify-end' : 'justify-start';
+  const bubbleStyle = isUser ? 'bg-[#7B7A81] text-white' : 'bg-[#003E3E] text-white';
 
-    return (
-        <div className={`flex ${alignment} mb-3`}>
-            <div className={`max-w-[70%] p-3 rounded-xl ${bubbleStyle} shadow-md`}>
-                <p className="leading-relaxed">
-                    <span className="font-bold">{isUser ? 'You:' : 'AI:'}</span>{' '}
-                    {message}
-                </p>
-                {timestamp && (
-                    <p className="text-xs mt-1 text-right text-gray-300">{timestamp}</p>
-                )}
-            </div>
-        </div>
-    );
+  return (
+    <div className={`flex ${alignment} mb-3`}>
+      <div className={`max-w-[70%] p-3 rounded-xl ${bubbleStyle} shadow-md`}>
+        <p className="leading-relaxed">
+          <span className="font-bold">{isUser ? 'You:' : 'AI:'}</span>{' '}
+          {message}
+        </p>
+        {timestamp && (
+          <p className="text-xs mt-1 text-right text-gray-300">{timestamp}</p>
+        )}
+      </div>
+    </div>
+  );
 };
 
-const ChatBot = ({ sessionId, onClose }) => {
-    const [chatHistory, setChatHistory] = useState([]);
-    const [inputValue, setInputValue] = useState('');
+/**
+ * ChatBot reads module & docId from location.state (like DocPreview).
+ * Props:
+ *  - onClose: function to close the chat panel
+ */
+const ChatBot = ({ onClose }) => {
+  const location = useLocation();
+  const navigate = useNavigate();
 
-    const handleSendMessage = async () => {
-        if (!inputValue.trim()) return;
+  const fileUrl = location.state?.fileUrl || null;
+  const docId = location.state?.docId || null;
+  const moduleName = location.state?.module || '';
 
-        const userMessage = {
-            id: chatHistory.length + 1,
-            sender: 'user',
-            message: inputValue,
-            timestamp: new Date().toLocaleTimeString(),
-        };
+  const [chatHistory, setChatHistory] = useState([]);
+  const [inputValue, setInputValue] = useState('');
+  const [isSending, setIsSending] = useState(false);
 
-        setChatHistory([...chatHistory, userMessage]);
-        setInputValue('');
+  // Initialize global in-memory store (persists only while tab is open)
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      if (!window.__chat_history__) window.__chat_history__ = {};
+    }
+  }, []);
 
-        try {
-            const response = await axios.post(`${API_URL}/chat`, {
-                message: inputValue,
-                sessionid: sessionId,
-            });
+  // Guard: if we don't have the ephemeral session, redirect (same UX as DocPreview)
+  useEffect(() => {
+    if (!fileUrl || !docId) {
+      navigate('/', { replace: true });
+      return;
+    }
 
-            const aiMessage = {
-                id: chatHistory.length + 2,
-                sender: 'ai',
-                message: response.data.response,
-                timestamp: new Date().toLocaleTimeString(),
-            };
+    // Load from the in-memory store for this docId (if any)
+    const existing = (window.__chat_history__ && window.__chat_history__[docId]) || [];
+    setChatHistory(existing);
+    // no cleanup - keep it on window until tab refresh/close
+  }, [fileUrl, docId, navigate]);
 
-            setChatHistory((prev) => [...prev, aiMessage]);
-        } catch (error) {
-            console.error('Error fetching AI response:', error);
-        }
+  const persistHistory = (newHistory) => {
+    if (typeof window === 'undefined') return;
+    if (!window.__chat_history__) window.__chat_history__ = {};
+    window.__chat_history__[docId] = newHistory;
+  };
+
+  const handleSendMessage = async () => {
+    const trimmed = inputValue.trim();
+    if (!trimmed) return;
+
+    const userMessage = {
+      id: Date.now() + Math.random(),
+      sender: 'user',
+      message: trimmed,
+      timestamp: new Date().toLocaleTimeString(),
     };
 
-    return (
-        <div className="w-full md:w-[48%] h-[33em] bg-white bg-opacity-90 rounded-xl shadow-2xl p-6 flex flex-col transition-all duration-300 hover:shadow-xl hover:scale-[1.005] font-sans relative z-0">
+    const afterUser = [...chatHistory, userMessage];
+    setChatHistory(afterUser);
+    persistHistory(afterUser);
 
-            {/* Close Button */}
-            <button
-    onClick={onClose}
-    className="absolute top-3 right-3 sm:top-8 sm:right-8 !bg-transparent p-2 z-20 text-gray-500 hover:text-black transition duration-200"
-    title="Close Chatbot"
->
-    <X className="w-6 h-6" />
-</button>
+    setInputValue('');
+    setIsSending(true);
 
+    try {
+      const response = await axios.post(`${API_URL}/chat`, {
+        message: trimmed,
+        sessionid: docId, // use docId from location.state
+        module: moduleName,
+      });
 
+      const aiText = response?.data?.response ?? 'No response from server.';
+      const aiMessage = {
+        id: Date.now() + Math.random(),
+        sender: 'ai',
+        message: aiText,
+        timestamp: new Date().toLocaleTimeString(),
+      };
 
+      const afterAI = [...afterUser, aiMessage];
+      setChatHistory(afterAI);
+      persistHistory(afterAI);
+    } catch (error) {
+      console.error('Error fetching AI response:', error);
+      const errMsg = {
+        id: Date.now() + Math.random(),
+        sender: 'ai',
+        message: 'Error: failed to get response. Try again.',
+        timestamp: new Date().toLocaleTimeString(),
+      };
+      const afterErr = [...afterUser, errMsg];
+      setChatHistory(afterErr);
+      persistHistory(afterErr);
+    } finally {
+      setIsSending(false);
+    }
+  };
 
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      if (!isSending) handleSendMessage();
+    }
+  };
 
-            {/* Title */}
-            <h2 className="text-2xl font-bold mb-5 text-gray-800 text-center flex items-center justify-center gap-2" style={{ fontFamily: 'var(--font-primary)' }}>
-                <img className="w-[4vw] h-auto" src="/chatbot.png" alt="Chatbot" />
-                Talk to our chatbot, Earth v1.0
-            </h2>
+  // If guard redirected, component may briefly render — protect render
+  if (!fileUrl || !docId) return null;
 
-            {/* Chat Area */}
-            <div
-                className="flex-1 border border-gray-300 bg-gray-50 rounded-lg p-4 mb-4 overflow-y-auto custom-scrollbar flex flex-col"
-                style={{ fontFamily: 'var(--font-primary) !important' }}
-            >
-                {chatHistory.map((msg) => (
-                    <ChatMessage
-                        key={msg.id}
-                        sender={msg.sender}
-                        message={msg.message}
-                        timestamp={msg.timestamp}
-                    />
-                ))}
-            </div>
+  return (
+    <div className="w-full md:w-[48%] h-[33em] bg-white bg-opacity-90 rounded-xl shadow-2xl p-6 flex flex-col transition-all duration-300 hover:shadow-xl hover:scale-[1.005] font-sans relative z-0">
+      {/* Close Button */}
+      <button
+        onClick={onClose}
+        className="absolute top-3 right-3 sm:top-8 sm:right-8 !bg-transparent p-2 z-20 text-gray-500 hover:text-black transition duration-200"
+        title="Close Chatbot"
+      >
+        <X className="w-6 h-6" />
+      </button>
 
-            {/* Input */}
-            <div className="flex items-center w-full max-w-3xl mx-auto px-2 sm:px-4 gap-x-2">
-                <input
-                    type="text"
-                    placeholder="Type your message here..."
-                    value={inputValue}
-                    onChange={(e) => setInputValue(e.target.value)}
-                    className="flex-1 border border-gray-300 rounded-lg px-3 py-2 sm:py-3 text-sm sm:text-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200 font-sans"
-                    style={{ fontFamily: 'var(--font-primary)' }}
-                />
-                <button
-                    onClick={handleSendMessage}
-                    className="!bg-[#003E3E] text-white px-4 py-2 sm:px-6 sm:py-3 rounded-lg text-sm sm:text-lg font-semibold hover:bg-green-700 transition-colors duration-200 shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 font-sans"
-                    style={{ fontFamily: 'var(--font-primary)' }}
-                >
-                    Send
-                </button>
-            </div>
-        </div>
-    );
+      {/* Title */}
+      <h2 className="text-2xl font-bold mb-1 text-gray-800 text-center flex items-center justify-center gap-2" style={{ fontFamily: 'var(--font-primary)' }}>
+        <img className="w-[4vw] h-auto" src="/chatbot.png" alt="Chatbot" />
+        Talk to our chatbot, Earth v1.0
+      </h2>
+
+      {/* Module | DocId line */}
+      <p className="text-sm text-gray-500 text-center mb-1 italic truncate">
+        {moduleName ? `Module: ${moduleName}` : ''} {moduleName ? '|' : ''} {docId}
+      </p>
+
+      {/* Chat Area */}
+      <div
+        className="flex-1 border border-gray-300 bg-gray-50 rounded-lg p-4 mb-4 overflow-y-auto custom-scrollbar flex flex-col"
+        style={{ fontFamily: 'var(--font-primary) !important' }}
+      >
+        {chatHistory.length === 0 ? (
+          <p className="text-sm text-gray-500 text-center mt-6">Start the conversation — ask about the document or module.</p>
+        ) : (
+          chatHistory.map(msg => (
+            <ChatMessage key={msg.id} sender={msg.sender} message={msg.message} timestamp={msg.timestamp} />
+          ))
+        )}
+      </div>
+
+      {/* Input */}
+      <div className="flex items-center w-full max-w-3xl mx-auto px-2 sm:px-4 gap-x-2">
+        <input
+          type="text"
+          placeholder="Type your message here..."
+          value={inputValue}
+          onChange={(e) => setInputValue(e.target.value)}
+          onKeyDown={handleKeyDown}
+          className="flex-1 border border-gray-300 rounded-lg px-3 py-2 sm:py-3 text-sm sm:text-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200 font-sans"
+          style={{ fontFamily: 'var(--font-primary)' }}
+          disabled={isSending}
+        />
+        <button
+          onClick={handleSendMessage}
+          disabled={isSending}
+          className="!bg-[#003E3E] text-white px-4 py-2 sm:px-6 sm:py-3 rounded-lg text-sm sm:text-lg font-semibold hover:bg-green-700 transition-colors duration-200 shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 font-sans"
+          style={{ fontFamily: 'var(--font-primary)' }}
+        >
+          {isSending ? 'Sending...' : 'Send'}
+        </button>
+      </div>
+    </div>
+  );
 };
 
 export default ChatBot;
