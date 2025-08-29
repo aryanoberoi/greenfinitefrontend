@@ -6,10 +6,15 @@ export default function NewsletterPopup() {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [email, setEmail] = useState("");
 
+  // Safely access VITE_API_URL with a fallback
+  const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
+
+  // Always open modal on page load
   useEffect(() => {
     setIsModalOpen(true);
   }, []);
 
+  // Animate modal in
   useEffect(() => {
     if (isModalOpen) {
       const timer = setTimeout(() => setShowModalContent(true), 50);
@@ -17,6 +22,7 @@ export default function NewsletterPopup() {
     }
   }, [isModalOpen]);
 
+  // Animate modal out on submission
   useEffect(() => {
     if (isSubmitted) {
       const timer = setTimeout(() => {
@@ -27,6 +33,7 @@ export default function NewsletterPopup() {
     }
   }, [isSubmitted]);
 
+  // Close modal (no storage)
   const closeModal = () => {
     setShowModalContent(false);
     setTimeout(() => setIsModalOpen(false), 300);
@@ -35,23 +42,26 @@ export default function NewsletterPopup() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    setIsSubmitted(true); // Show success message immediately
+
     try {
-      const res = await fetch("http://localhost:8000/webhook/newsletter", {
+      const res = await fetch(`${API_URL}/webhook/newsletter`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email }), // payload as object with email key
+        body: JSON.stringify({ email }),
       });
 
       if (res.ok) {
         console.log("✅ Email sent successfully");
-        setIsSubmitted(true);
       } else {
         console.error("❌ Error:", await res.text());
+        setIsSubmitted(false); // Hide success if error
       }
     } catch (err) {
       console.error("⚠️ Network Error:", err);
+      setIsSubmitted(false); // Hide success if error
     }
   };
 
