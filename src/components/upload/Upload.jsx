@@ -14,6 +14,7 @@ const Upload = ({ selectedModule }) => {
   const [missingFields, setMissingFields] = useState([]);
   const [allResponses, setAllResponses] = useState([]);
   const [dummyValues, setDummyValues] = useState({});
+  const [errors, setErrors] = useState({}); // 🔴 NEW
 
   const fileInputRef = useRef(null);
   const navigate = useNavigate();
@@ -25,6 +26,23 @@ const Upload = ({ selectedModule }) => {
   }, [selectedModule]);
 
   const handleUpload = async () => {
+    // ✅ Validation before processing
+    const newErrors = {};
+    let hasError = false;
+
+    missingFields.forEach(field => {
+      if (!formDataInputs[field.key] && !dummyValues[field.key]) {
+        newErrors[field.key] = true;
+        hasError = true;
+      }
+    });
+
+    if (hasError) {
+      setErrors(newErrors);
+      return; // Stop processing
+    }
+    setErrors({}); // Clear errors if all filled
+
     if (selectedFiles.length === 0) return;
     setIsUploading(true);
 
@@ -80,7 +98,6 @@ const Upload = ({ selectedModule }) => {
       );
 
       const docId = response.headers['x-doc-id'] || null;
-
 
       // Build a Blob and an object URL
       const pdfBlob = new Blob([response.data], { type: 'application/pdf' });
@@ -200,11 +217,13 @@ const Upload = ({ selectedModule }) => {
     setAllResponses([]);
     setFormDataInputs({});
     setDummyValues({});
+    setErrors({});
   };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormDataInputs(prev => ({ ...prev, [name]: value }));
+    setErrors(prev => ({ ...prev, [name]: false })); // clear error when typing
   };
 
   const handleDummyValueChange = (e) => {
@@ -217,6 +236,7 @@ const Upload = ({ selectedModule }) => {
         ...prev,
         [name]: "Assume industry average"
       }));
+      setErrors(prev => ({ ...prev, [name]: false })); // clear error if checked
     } else {
       setFormDataInputs(prev => ({
         ...prev,
@@ -288,7 +308,7 @@ const Upload = ({ selectedModule }) => {
           <div className="flex-1 overflow-y-auto pr-2 custom-scrollbar">
             <div className="flex flex-col gap-y-2">
               {missingFields.map((field, index) => (
-                <div key={field.key} className="flex flex-col mb-3">
+                <div key={field.key} className="flex flex-col mb-5 relative">
                   <label className="flex flex-col">
                     <span className="mb-[2px] text-xs">{index + 1}. {field.question}</span>
                     <input
@@ -297,10 +317,20 @@ const Upload = ({ selectedModule }) => {
                       value={formDataInputs[field.key] || ''}
                       onChange={handleInputChange}
                       placeholder={`Enter ${field.key.replace(/_/g, ' ')}...`}
-                      className="border border-gray-300 rounded px-2 py-1 text-xs focus:outline-none focus:ring-2 focus:ring-blue-400"
+                      className={`border rounded px-2 py-1 text-xs focus:outline-none focus:ring-2 transition-all duration-300
+                        ${errors[field.key] ? "border-red-500 focus:ring-red-400" : "border-gray-300 focus:ring-blue-400"}`}
                       disabled={dummyValues[field.key]}
                     />
                   </label>
+
+                  {/* Animated Error Message */}
+                  <p
+                    className={`absolute left-0 -bottom-4 text-xs text-red-500 transform transition-all duration-300
+                      ${errors[field.key] ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-1"}`}
+                  >
+                    Please fill this field
+                  </p>
+
                   <label className="flex items-center mt-1 ml-1 text-xs text-gray-600">
                     <input
                       type="checkbox"
@@ -331,6 +361,7 @@ const Upload = ({ selectedModule }) => {
           onUpload={handleUpload}
           loading={isUploading}
           text={missingFields.length > 0 ? "Continue with Analysis" : "Process Document"}
+          disabled={missingFields.some(field => !formDataInputs[field.key] && !dummyValues[field.key])}
         />
       </div>
     </div>
