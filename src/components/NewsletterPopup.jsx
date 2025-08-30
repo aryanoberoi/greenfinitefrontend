@@ -6,15 +6,12 @@ export default function NewsletterPopup() {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [email, setEmail] = useState("");
 
-  // Safely access VITE_API_URL with a fallback
   const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
 
-  // Always open modal on page load
   useEffect(() => {
     setIsModalOpen(true);
   }, []);
 
-  // Animate modal in
   useEffect(() => {
     if (isModalOpen) {
       const timer = setTimeout(() => setShowModalContent(true), 50);
@@ -22,7 +19,6 @@ export default function NewsletterPopup() {
     }
   }, [isModalOpen]);
 
-  // Animate modal out on submission
   useEffect(() => {
     if (isSubmitted) {
       const timer = setTimeout(() => {
@@ -33,7 +29,6 @@ export default function NewsletterPopup() {
     }
   }, [isSubmitted]);
 
-  // Close modal (no storage)
   const closeModal = () => {
     setShowModalContent(false);
     setTimeout(() => setIsModalOpen(false), 300);
@@ -41,61 +36,50 @@ export default function NewsletterPopup() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    setIsSubmitted(true); // Show success message immediately
+    setIsSubmitted(true);
 
     try {
       const res = await fetch(`${API_URL}/webhook/newsletter`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email }),
       });
 
-      if (res.ok) {
-        console.log("✅ Email sent successfully");
-      } else {
-        console.error("❌ Error:", await res.text());
-        setIsSubmitted(false); // Hide success if error
-      }
+      if (!res.ok) setIsSubmitted(false);
     } catch (err) {
-      console.error("⚠️ Network Error:", err);
-      setIsSubmitted(false); // Hide success if error
+      console.error(err);
+      setIsSubmitted(false);
     }
   };
 
   if (!isModalOpen) return null;
 
   return (
-    <div
-      style={{ fontFamily: "var(--font-primary)" }}
-      className="fixed inset-0 flex items-center justify-center z-50"
-    >
+    <div     style={{ fontFamily: "var(--font-primary)" }} className="fixed inset-0 flex items-center justify-center z-50 px-4">
       <div
-        className={`bg-white shadow-2xl overflow-hidden max-w-sm w-full md:max-w-md transform transition-all duration-300 ${
+        className={`bg-white shadow-2xl overflow-hidden w-full max-w-sm sm:max-w-md transform transition-all duration-300 ${
           showModalContent ? "scale-100 opacity-100" : "scale-95 opacity-0"
         }`}
       >
-        <div className="bg-green-200 p-6 flex justify-between items-center">
-          <h2 className="text-2xl font-bold text-black">Join Our Newsletter!</h2>
+        <div className="bg-green-200 p-4 sm:p-6 flex justify-between items-center">
+          <h2 className="text-lg sm:text-xl font-bold text-black">Join Our Newsletter!</h2>
           <button
             onClick={closeModal}
-            className="text-gray-700 text-3xl hover:text-gray-900 transition-colors"
+            className="text-gray-700 text-2xl sm:text-3xl hover:text-gray-900 transition-colors"
           >
             &times;
           </button>
         </div>
 
-        <div className="p-6">
+        <div className="p-4 sm:p-6">
           {!isSubmitted ? (
             <>
-              <p className="text-gray-700 mb-6">
+              <p className="text-gray-700 mb-4 sm:mb-6 text-sm sm:text-base">
                 Stay up-to-date with our latest news and offers by subscribing to our newsletter.
               </p>
-              <form onSubmit={handleSubmit} className="space-y-4">
+              <form onSubmit={handleSubmit} className="space-y-3 sm:space-y-4">
                 <div>
-                  <label className="block text-gray-700 text-sm font-semibold mb-2">
+                  <label className="block text-gray-700 text-xs sm:text-sm font-semibold mb-1 sm:mb-2">
                     Email Address
                   </label>
                   <input
@@ -104,19 +88,19 @@ export default function NewsletterPopup() {
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="you@example.com"
                     required
-                    className="w-full px-4 py-2 border border-gray-300 focus:ring-2 focus:ring-green-400"
+                    className="w-full px-3 sm:px-4 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-green-400 text-sm sm:text-base"
                   />
                 </div>
                 <button
                   type="submit"
-                  className="w-[20vh] mx-auto bg-green-700 text-gray-100 font-bold py-3 px-4 hover:bg-green-900 hover:scale-115 transition-all block"
+                  className="w-full sm:w-auto mx-auto bg-green-700 text-gray-100 font-bold py-2 sm:py-3 px-4 sm:px-6 hover:bg-green-900 hover:scale-105 transition-all block text-sm sm:text-base"
                 >
                   Subscribe
                 </button>
               </form>
             </>
           ) : (
-            <div className="p-4 text-sm text-green-700 bg-green-100 rounded-lg">
+            <div className="p-3 sm:p-4 text-sm sm:text-base text-green-700 bg-green-100 rounded-lg text-center">
               <span className="font-medium">Success!</span> You have been subscribed.
             </div>
           )}
