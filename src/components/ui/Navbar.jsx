@@ -110,14 +110,19 @@ const TopNavigationBar = ({ toggleMenu, activeTab, setActiveTab }) => {
     <nav className="fixed top-0 left-0 w-full h-[80px] py-8 px-6 sm:px-10 md:px-[104px] flex justify-between items-center bg-green-900 shadow-2xl z-50 transition-transform duration-300 ease-out">
 
       {/* Logo */}
-      <a href="/"><img src="/logo.png" alt="Greenfinite Logo" className="h-10 mb-1.7 ml-0" /></a>
-      <a
-        href="/"
-        className=" mr-0 md:mr-180 text-2xl sm:text-3xl font-bold font-mono text-[#F8F7F2] hover:text-green-400 transition-colors duration-1000"
-        style={{ fontFamily: 'var(--font-primary)' }}
-      >
-        Greenfinite
-      </a>
+      <div className="flex items-center space-x-4 md:space-x-10">
+        <a href="/">
+          <img src="/logo.png" alt="Greenfinite Logo" className="h-10 mb-1" />
+        </a>
+        <a
+          href="/"
+          className="text-2xl sm:text-3xl font-bold font-mono text-[#F8F7F2] hover:text-green-400 transition-colors duration-1000"
+          style={{ fontFamily: 'var(--font-primary)' }}
+        >
+          Greenfinite
+        </a>
+      </div>
+
 
       {/* Hamburger (mobile only) */}
       <button

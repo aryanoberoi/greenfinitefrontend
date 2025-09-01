@@ -199,25 +199,10 @@ const emissionsData = {
                     TC: { emissions: "88,360", rank: 197 }, // Turks and Caicos
                     VC: { emissions: "82,790", rank: 198 }, // St. Vincent & Grenadines
                     KI: { emissions: "73,960", rank: 199 }, // Kiribati
-                    DM: { emissions: "68,810", rank: 200 }  // Dominica
-                   
-                    // VA: { emissions: "45,520", rank: 203 }, // Vatican City
-                    // NR: { emissions: "43,840", rank: 204 }, // Nauru
-                    // WF: { emissions: "42,110", rank: 205 }, // Wallis & Futuna
-                    // TV: { emissions: "41,050", rank: 206 }, // Tuvalu
-                    // SX: { emissions: "34,760", rank: 207 }, // Sint Maarten
-                    // MS: { emissions: "29,070", rank: 208 }, // Montserrat
-                    // SH: { emissions: "25,830", rank: 209 }, // St. Helena
-                    // PM: { emissions: "19,690", rank: 210 }, // St. Pierre & Miquelon
-                    // AI: { emissions: "18,910", rank: 211 }, // Anguilla
-                    // FK: { emissions: "16,390", rank: 212 }, // Falkland Islands
-                    // NU: { emissions: "14,090", rank: 213 }, // Niue
-                    // GS: { emissions: "12,760", rank: 214 }, // S. Georgia & S. Sandwich
-                    // VG: { emissions: "10,640", rank: 215 }, // British Virgin Islands
-                    // BL: { emissions: "9,710", rank: 216 }, // St. Barthelemy
-                    // TF: { emissions: "8,530", rank: 217 }, // French Southern Territories
-                    // AQ: { emissions: "7,940", rank: 218 }, // Antarctica (if included in dataset)
+                    DM: { emissions: "68,810", rank: 200 },  // Dominica
+                    NP: { emissions: "68,810", rank: 95 },  //Nepal
+                    LK: { emissions: "18,535,920", rank: 91 },  //Nepal
+
 };
-  
-  export default emissionsData;
-  
+    
+    export default emissionsData;
