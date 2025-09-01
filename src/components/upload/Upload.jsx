@@ -122,7 +122,10 @@ const Upload = ({ selectedModule }) => {
       const response = await axios.post(
         `${API_URL}/get-missing-fields`,
         formData,
-        { headers: { 'Content-Type': 'multipart/form-data' } }
+        {
+          headers: { 'Content-Type': 'multipart/form-data' },
+          timeout: 120000, // 2 minutes in milliseconds
+        }
       );
 
       const { responses } = response.data;
