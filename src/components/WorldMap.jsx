@@ -30,7 +30,7 @@ const Earth = () => {
         data: {
           emissions: {
             name: "CO₂ Emissions",
-            format: "{0} MtCO₂",
+            format: "{0} tCO₂E",
             thousandSeparator: ",",
             thresholdMax: 10000,
             thresholdMin: 100,
@@ -62,7 +62,7 @@ const Earth = () => {
         Global CO₂ Emissions by Country
       </h2>
       <p className="text-center text-base sm:text-lg mb-6 text-gray-700 font-medium">
-        World Total Emissions: {worldEmission.toLocaleString()} MtCO₂
+        World Total Emissions: {worldEmission.toLocaleString()} tCO₂E
       </p>
 
       <div className="relative overflow-x-auto">
