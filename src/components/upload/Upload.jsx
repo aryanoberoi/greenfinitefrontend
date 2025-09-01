@@ -6,7 +6,8 @@ import axios from 'axios';
 
 const API_URL = import.meta.env.VITE_API_URL;
 
-const Upload = ({ selectedModule }) => {
+const Upload = ({ selectedModule: incomingModule }) => {
+  const selectedModule = incomingModule || "ESG Analyzer"; //fallback to "ESG Analyzer" if nothing is passed
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [isDragOver, setIsDragOver] = useState(false);
   const [isUploading, setIsUploading] = useState(false);

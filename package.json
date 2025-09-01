@@ -30,6 +30,7 @@
     "react-intersection-observer": "^9.16.0",
     "react-ripples": "^2.2.1",
     "react-router-dom": "^7.7.0",
+    "svgmap": "^2.14.0",
     "tailwind-merge": "^3.3.0",
     "three": "^0.178.0"
   },

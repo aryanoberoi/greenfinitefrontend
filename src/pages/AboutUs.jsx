@@ -1,6 +1,7 @@
 import React from 'react';
 import Quotes from '../components/EarthWithQuotes';
 import GreenFiniteQuote from '@/components/GreenFiniteQuote';
+import WorldMap from '@/components/WorldMap';
 
 export default function AboutUs() {
   return (
@@ -81,9 +82,13 @@ export default function AboutUs() {
             </section>
           </div>
 
-          <div className=''>
-            <Quotes />
+          <div>
+            <WorldMap />
           </div>
+
+          {/* <div className=''>
+            <Quotes />
+          </div> */}
           <div>
             <GreenFiniteQuote />
           </div>
