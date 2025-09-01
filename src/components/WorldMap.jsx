@@ -21,10 +21,10 @@ const Earth = () => {
 
     new svgMap({
       targetElementID: "svgMap",
-      colorMin: "#dc2626",
-      colorMid: "#facc15",
-      colorMax: "#16a34a",
-      colorNoData: "#facc15",
+      colorMin: "#dc2626", // red - high emissions
+      colorMid: "#facc15", // yellow - moderate emissions
+      colorMax: "#16a34a", // green - low emissions
+      colorNoData: "#e5e7eb", // light gray for no data
       flagType: "image",
       data: {
         data: {
@@ -64,11 +64,28 @@ const Earth = () => {
       <p className="text-center text-base sm:text-lg mb-6 text-gray-700 font-medium">
         World Total Emissions: {worldEmission.toLocaleString()} MtCO₂
       </p>
-      <div className="overflow-x-auto">
-        <div
-          id="svgMap"
-          className="w-[1200px] sm:w-full h-[500px] sm:h-[825px] rounded-xl"
-        ></div>
+
+      <div className="relative overflow-x-auto">
+        <div className="relative w-[1200px] sm:w-full h-[500px] sm:h-[825px] rounded-xl">
+          <div id="svgMap" className="w-full h-full rounded-xl"></div>
+
+          {/* Legend inside map */}
+          <div className="absolute bottom-40 left-6 bg-white bg-opacity-80 p-3 rounded-lg shadow-md text-gray-700 text-sm w-40">
+            <h3 className="font-semibold mb-2 text-gray-800">Emissions Legend</h3>
+            <div className="flex items-center gap-2 mb-1">
+              <span className="w-5 h-5 rounded" style={{ backgroundColor: "#dc2626" }}></span>
+              <span>High Emissions</span>
+            </div>
+            {/* <div className="flex items-center gap-2 mb-1">
+              <span className="w-5 h-5 rounded" style={{ backgroundColor: "#facc15" }}></span>
+              <span>Moderate Emissions</span>
+            </div> */}
+            <div className="flex items-center gap-2">
+              <span className="w-5 h-5 rounded" style={{ backgroundColor: "#16a34a" }}></span>
+              <span>Low Emissions</span>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
