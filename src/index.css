@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400&display=swap');
+
 @import "tailwindcss";
 @import "tw-animate-css";
 
@@ -7,7 +9,6 @@
 
 @custom-variant dark (&:is(.dark *));
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
@@ -191,7 +192,11 @@ button:focus-visible {
   }
 }
 
-:root {
-  --font-primary: 'JetBrains Mono', monospace !important;
-  --font-secondary: 'Georgia', serif;
+@layer base {
+  body {
+    font-family: var(--font-primary);
+  }
+  h1 {
+    font-family: var(--font-secondary);
+  }
 }
