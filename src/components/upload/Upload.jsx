@@ -124,8 +124,7 @@ const Upload = ({ selectedModule: incomingModule }) => {
         `${API_URL}/get-missing-fields`,
         formData,
         {
-          headers: { 'Content-Type': 'multipart/form-data' },
-          timeout: 200000, // 3 minutes in milliseconds
+          headers: { 'Content-Type': 'multipart/form-data' }
         }
       );
 
