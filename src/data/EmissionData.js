@@ -201,7 +201,32 @@ const emissionsData = {
                     KI: { emissions: "73,960", rank: 199 }, // Kiribati
                     DM: { emissions: "68,810", rank: 200 },  // Dominica
                     NP: { emissions: "68,810", rank: 95 },  //Nepal
-                    LK: { emissions: "18,535,920", rank: 91 },  //Nepal
+                    LK: { emissions: "18,535,920", rank: 91 },  //Srilanka
+
+                    LY: { emissions: "62,743,000", rank: 50 }, // Libya
+                    SD: { emissions: "24,523,230", rank: 78 }, // Sudan
+                    SS: { emissions: "728,211", rank: 174 }, // South Sudan
+                    KE: { emissions: "21,527,440", rank: 86 }, // Kenya
+                    ET: { emissions: "21,106,910", rank: 87 }, // Ethiopia
+                    TZ: { emissions: "16,978,750", rank: 94 }, // Tanzania
+                    AO: { emissions: "20,185,660", rank: 88 }, // Angola
+                    GH: { emissions: "24,452,990", rank: 79 }, // Ghana
+                    CI: { emissions: "14,491,920", rank: 96 }, // Ivory Coast (Côte d'Ivoire)
+                    BO: { emissions: "21,959,530", rank: 84 }, // Bolivia
+                    YE: { emissions: "12,263,170", rank: 100 }, // Yemen
+                    KP: { emissions: "54,403,780", rank: 56 }, // North Korea
+                    CU: { emissions: "24,770,800", rank: 77 }, // Cuba
+                    FK: { emissions: "21,770", rank: 204 },    // Falkland Islands
+                    DO: { emissions: "23,456,970", rank: 82 },  // Dominican Republic
+
+                    LA: { emissions: "20,125,910", rank: 89 }, // Laos
+                    EC: { emissions: "46,106,910", rank: 60 }, // Ecuador
+                    MM: { emissions: "37,394,010", rank: 66 },  // Myanmar
+                    TW: { emissions: "275,573,980", rank: 24 } // Taiwan
+
+
+
+                    
 
 };
     

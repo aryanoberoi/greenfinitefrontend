@@ -76,10 +76,10 @@ const Earth = () => {
               <span className="w-5 h-5 rounded" style={{ backgroundColor: "#dc2626" }}></span>
               <span>High Emissions</span>
             </div>
-            {/* <div className="flex items-center gap-2 mb-1">
-              <span className="w-5 h-5 rounded" style={{ backgroundColor: "#facc15" }}></span>
+            <div className="flex items-center gap-2 mb-1">
+              <span className="w-5 h-5 rounded" style={{ backgroundColor: "#8B4513" }}></span>
               <span>Moderate Emissions</span>
-            </div> */}
+            </div>
             <div className="flex items-center gap-2">
               <span className="w-5 h-5 rounded" style={{ backgroundColor: "#16a34a" }}></span>
               <span>Low Emissions</span>
