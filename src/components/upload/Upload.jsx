@@ -125,7 +125,7 @@ const Upload = ({ selectedModule: incomingModule }) => {
         formData,
         {
           headers: { 'Content-Type': 'multipart/form-data' },
-          timeout: 120000, // 2 minutes in milliseconds
+          timeout: 200000, // 3 minutes in milliseconds
         }
       );
 
