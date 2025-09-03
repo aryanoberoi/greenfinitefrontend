@@ -19,6 +19,7 @@ const Upload = ({ selectedModule: incomingModule }) => {
 
   const fileInputRef = useRef(null);
   const navigate = useNavigate();
+  const fieldRefs = useRef({}); // 🔑 store refs for inputs
 
   useEffect(() => {
     if (selectedModule) {
@@ -30,16 +31,27 @@ const Upload = ({ selectedModule: incomingModule }) => {
   const handleUpload = async () => {
     const newErrors = {};
     let hasError = false;
+    let firstUnfilledKey = null;
 
     missingFields.forEach(field => {
       if (!formDataInputs[field.key] && !dummyValues[field.key]) {
         newErrors[field.key] = true;
         hasError = true;
+        if (!firstUnfilledKey) firstUnfilledKey = field.key; // get first missing
       }
     });
 
     if (hasError) {
       setErrors(newErrors);
+      alert("⚠️ Please fill all the fields.");
+      // 🔑 scroll + focus first unfilled
+      if (firstUnfilledKey && fieldRefs.current[firstUnfilledKey]) {
+        fieldRefs.current[firstUnfilledKey].scrollIntoView({
+          behavior: "smooth",
+          block: "center"
+        });
+        fieldRefs.current[firstUnfilledKey].focus();
+      }
       return;
     }
     setErrors({});
@@ -210,14 +222,27 @@ const Upload = ({ selectedModule: incomingModule }) => {
   const handleDummyValueChange = (e) => {
     const { name, checked } = e.target;
     setDummyValues(prev => ({ ...prev, [name]: checked }));
-
+  
     if (checked) {
       setFormDataInputs(prev => ({ ...prev, [name]: "Assume industry average" }));
       setErrors(prev => ({ ...prev, [name]: false }));
+  
+      // 🔑 Auto-scroll to the next field
+      const fieldKeys = missingFields.map(f => f.key);
+      const currentIndex = fieldKeys.indexOf(name);
+      const nextKey = fieldKeys[currentIndex + 1];
+      if (nextKey && fieldRefs.current[nextKey]) {
+        fieldRefs.current[nextKey].scrollIntoView({
+          behavior: "smooth",
+          block: "center"
+        });
+        fieldRefs.current[nextKey].focus();
+      }
     } else {
       setFormDataInputs(prev => ({ ...prev, [name]: "" }));
     }
   };
+  
 
   return (
     <div className="w-full md:w-[35em] h-auto md:h-[35em] flex flex-col justify-between items-center p-4 bg-white bg-opacity-80 rounded-xl border-4 border-transparent space-y-3 overflow-hidden">
@@ -272,6 +297,7 @@ const Upload = ({ selectedModule: incomingModule }) => {
                   <label className="flex flex-col">
                     <span className="mb-[2px] text-xs">{index + 1}. {field.question}</span>
                     <input
+                      ref={(el) => (fieldRefs.current[field.key] = el)} // 🔑 store ref
                       type="text"
                       name={field.key}
                       value={formDataInputs[field.key] || ''}
