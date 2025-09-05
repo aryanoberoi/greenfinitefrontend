@@ -7,7 +7,7 @@ import axios from 'axios';
 const API_URL = import.meta.env.VITE_API_URL;
 
 const Upload = ({ selectedModule: incomingModule }) => {
-  const selectedModule = incomingModule || "ESG Analyzer"; //fallback to "ESG Analyzer" if nothing is passed
+  const selectedModule = incomingModule || "ESG Analyzer";
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [isDragOver, setIsDragOver] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
@@ -19,7 +19,7 @@ const Upload = ({ selectedModule: incomingModule }) => {
 
   const fileInputRef = useRef(null);
   const navigate = useNavigate();
-  const fieldRefs = useRef({}); // 🔑 store refs for inputs
+  const fieldRefs = useRef({});
 
   useEffect(() => {
     if (selectedModule) {
@@ -27,7 +27,7 @@ const Upload = ({ selectedModule: incomingModule }) => {
     }
   }, [selectedModule]);
 
-  // ---- Upload JSON to /uploadpdf (no files) ----
+  // ---- Upload JSON to /uploadpdf ----
   const handleUpload = async () => {
     const newErrors = {};
     let hasError = false;
@@ -37,14 +37,13 @@ const Upload = ({ selectedModule: incomingModule }) => {
       if (!formDataInputs[field.key] && !dummyValues[field.key]) {
         newErrors[field.key] = true;
         hasError = true;
-        if (!firstUnfilledKey) firstUnfilledKey = field.key; // get first missing
+        if (!firstUnfilledKey) firstUnfilledKey = field.key;
       }
     });
 
     if (hasError) {
       setErrors(newErrors);
       alert("⚠️ Please fill all the fields.");
-      // 🔑 scroll + focus first unfilled
       if (firstUnfilledKey && fieldRefs.current[firstUnfilledKey]) {
         fieldRefs.current[firstUnfilledKey].scrollIntoView({
           behavior: "smooth",
@@ -227,7 +226,6 @@ const Upload = ({ selectedModule: incomingModule }) => {
       setFormDataInputs(prev => ({ ...prev, [name]: "Assume industry average" }));
       setErrors(prev => ({ ...prev, [name]: false }));
   
-      // 🔑 Auto-scroll to the next field
       const fieldKeys = missingFields.map(f => f.key);
       const currentIndex = fieldKeys.indexOf(name);
       const nextKey = fieldKeys[currentIndex + 1];
@@ -250,6 +248,15 @@ const Upload = ({ selectedModule: incomingModule }) => {
       <p className="text-sm text-gray-700 text-center leading-tight" style={{ fontFamily: 'var(--font-primary) !important' }}>
         {selectedModule ? `Selected Module: ${selectedModule}` : 'Select a module to begin.'}
       </p>
+
+      {/* ✅ Show Image if no file selected */}
+      {selectedFiles.length === 0 && (
+        <img 
+          src="/img1.png"  // replace with your image path
+          alt="Upload Placeholder"
+          className="w-80 h-80 object-contain opacity-80"
+        />
+      )}
 
       <div className="flex flex-wrap gap-2 justify-start w-full max-w-lg max-h-[3em] overflow-y-auto">
         {selectedFiles.map((file, index) => (
@@ -297,7 +304,7 @@ const Upload = ({ selectedModule: incomingModule }) => {
                   <label className="flex flex-col">
                     <span className="mb-[2px] text-xs">{index + 1}. {field.question}</span>
                     <input
-                      ref={(el) => (fieldRefs.current[field.key] = el)} // 🔑 store ref
+                      ref={(el) => (fieldRefs.current[field.key] = el)}
                       type="text"
                       name={field.key}
                       value={formDataInputs[field.key] || ''}
