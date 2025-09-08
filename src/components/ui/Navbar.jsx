@@ -112,7 +112,7 @@ const TopNavigationBar = ({ toggleMenu, activeTab, setActiveTab }) => {
       {/* Logo */}
       <div className="flex items-center space-x-4 md:space-x-2">
         <a href="/">
-          <img src="/logo.png" alt="Greenfinite Logo" className="h-10 mb-1" />
+          <img src="/logo1.png" alt="Greenfinite Logo" className="h-20 mb-1" />
         </a>
         <a
           href="/"

@@ -19,7 +19,7 @@ export default function UploadPage() {
               flex-1 flex flex-col md:flex-row 
               justify-center items-center 
               gap-6 md:gap-[8em] 
-              px-4 py-8 md:px-0 md:py-0
+              px-4 py-0 md:px-0 md:py-0
               w-full max-w-screen-xl mx-auto
             "
           >
