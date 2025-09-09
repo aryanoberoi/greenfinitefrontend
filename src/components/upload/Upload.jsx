@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { CloudUpload, X } from 'lucide-react';
+import { CloudUpload, X, Lock } from 'lucide-react';
 import UploadButton from './UploadButton';
 import axios from 'axios';
 
@@ -245,18 +245,52 @@ const Upload = ({ selectedModule: incomingModule }) => {
   return (
     <div className="w-full md:w-[35em] h-auto md:h-[35em] flex flex-col justify-between items-center p-4 bg-white bg-opacity-80 rounded-xl  space-y-3 overflow-hidden border border-gray-200">
 
-      <p className="text-sm text-gray-700 text-center leading-tight" style={{ sfontFamily: 'var(--font-primary) !important' }}>
+<p className="text-sm text-gray-700 text-center leading-tight" style={{ sfontFamily: 'var(--font-primary) !important' }}>
         {selectedModule ? `Selected Module: ${selectedModule}` : 'Select a module to begin.'}
       </p>
 
-      {/* ✅ Show Image if no file selected */}
-      {selectedFiles.length === 0 && (
-        <img 
-          src="/img1.png"  // replace with your image path
-          alt="Upload Placeholder"
-          className="w-80 h-80 object-contain opacity-80"
-        />
-      )}
+      {/* ✅ Steps Section */}
+      <div className="w-full max-w-lg bg-white rounded-lg p-4 shadow-sm mb-4">
+        <p className="text-center text-gray-800 font-semibold mb-2">
+          Upload Your Documents to Get Instant Insights
+        </p>
+        <p className="text-center text-gray-500 text-sm mb-4">
+          Our AI analyzes your files securely and generates a tailored report in minutes.
+        </p>
+
+        <div className="flex items-center justify-between relative">
+          {/* Line connectors */}
+          <div className="absolute top-4 left-1/6 w-1/3 h-[2px] bg-gray-300"></div>
+          <div className="absolute top-4 left-1/2 w-1/3 h-[2px] bg-gray-300"></div>
+
+          {/* Step 1 */}
+          <div className="flex flex-col items-center w-1/3 z-10">
+            <div className="w-8 h-8 flex items-center justify-center rounded-full bg-blue-500 text-white font-bold">
+              1
+            </div>
+            <p className="mt-2 font-medium text-sm">Upload Documents</p>
+          </div>
+
+          {/* Step 2 */}
+          <div className="flex flex-col items-center w-1/3 z-10">
+            <div className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-200 text-gray-600 font-bold">
+              2
+            </div>
+            <p className="mt-2 font-medium text-sm">AI Analysis</p>
+          </div>
+
+          {/* Step 3 */}
+          <div className="flex flex-col items-center w-1/3 z-10">
+            <div className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-200 text-gray-600 font-bold">
+              3
+            </div>
+            <p className="mt-2 font-medium text-sm">Download Report</p>
+          </div>
+        </div>
+      </div>
+
+
+
 
       <div className="flex flex-wrap gap-2 justify-start w-full max-w-lg max-h-[3em] overflow-y-auto">
         {selectedFiles.map((file, index) => (
@@ -346,6 +380,10 @@ const Upload = ({ selectedModule: incomingModule }) => {
           disabled={missingFields.some(field => !formDataInputs[field.key] && !dummyValues[field.key])}
         />
       </div>
+      <div className="flex items-center justify-center text-gray-600 text-sm mt-3">
+  <Lock className="w-4 h-4 mr-2 text-gray-500" />
+  <span>Your data is GDPR-compliant and securely processed</span>
+</div>
     </div>
   );
 };
