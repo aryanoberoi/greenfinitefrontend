@@ -78,7 +78,7 @@ const Upload = ({ selectedModule: incomingModule }) => {
       const moduleMap = {
         "ESG Analyzer": 1,
         "Carbon Estimator": 2,
-        "Sustainability Report Generator": 3,
+        "ESG Policy Maker": 3,
       };
 
       const response = await axios.post(
@@ -127,7 +127,7 @@ const Upload = ({ selectedModule: incomingModule }) => {
       const moduleMap = {
         "ESG Analyzer": 1,
         "Carbon Estimator": 2,
-        "Sustainability Report Generator": 3,
+        "ESG Policy Maker": 3,
       };
       formData.append("module", moduleMap[selectedModule]);
 
@@ -265,7 +265,7 @@ const Upload = ({ selectedModule: incomingModule }) => {
 
           {/* Step 1 */}
           <div className="flex flex-col items-center w-1/3 z-10">
-            <div className="w-8 h-8 flex items-center justify-center rounded-full bg-blue-500 text-white font-bold">
+            <div className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-200 text-gray-600 font-bold">
               1
             </div>
             <p className="mt-2 font-medium text-sm">Upload Documents</p>
@@ -333,36 +333,41 @@ const Upload = ({ selectedModule: incomingModule }) => {
           <p className="font-semibold text-sm">Please provide the following missing information:</p>
           <div className="flex-1 overflow-y-auto pr-2 custom-scrollbar">
             <div className="flex flex-col gap-y-2">
-              {missingFields.map((field, index) => (
-                <div key={field.key} className="flex flex-col mb-5 relative">
-                  <label className="flex flex-col">
-                    <span className="mb-[2px] text-xs">{index + 1}. {field.question}</span>
-                    <input
-                      ref={(el) => (fieldRefs.current[field.key] = el)}
-                      type="text"
-                      name={field.key}
-                      value={formDataInputs[field.key] || ''}
-                      onChange={handleInputChange}
-                      placeholder={`Enter ${field.key.replace(/_/g, ' ')}...`}
-                      className={`border rounded px-2 py-1 text-xs focus:outline-none focus:ring-2 transition-all duration-300 ${errors[field.key] ? "border-red-500 focus:ring-red-400" : "border-gray-300 focus:ring-blue-400"}`}
-                      disabled={dummyValues[field.key]}
-                    />
-                  </label>
-                  <p className={`absolute left-0 -bottom-4 text-xs text-red-500 transform transition-all duration-300 ${errors[field.key] ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-1"}`}>
-                    Please fill this field
-                  </p>
-                  <label className="flex items-center mt-1 ml-1 text-xs text-gray-600">
-                    <input
-                      type="checkbox"
-                      name={field.key}
-                      checked={dummyValues[field.key] || false}
-                      onChange={handleDummyValueChange}
-                      className="mr-1 h-3 w-3"
-                    />
-                    Assume industry average
-                  </label>
-                </div>
-              ))}
+{missingFields.map((field, index) => (
+  <div key={field.key} className="flex flex-col mb-5 relative">
+    <label className="flex flex-col">
+      <span className="mb-[2px] text-xs">
+        {index + 1}. {selectedModule === "ESG Policy Maker" ? field.sentence : field.question}
+      </span>
+      {selectedModule === "ESG Policy Maker" ? (
+        <label className="flex items-center mt-1 ml-1 text-xs text-gray-600">
+          <input
+            type="checkbox"
+            name={field.key}
+            checked={dummyValues[field.key] || false}
+            onChange={handleDummyValueChange}
+            className="mr-1 h-3 w-3"
+          />
+          We comply
+        </label>
+      ) : (
+        <input
+          ref={(el) => (fieldRefs.current[field.key] = el)}
+          type="text"
+          name={field.key}
+          value={formDataInputs[field.key] || ''}
+          onChange={handleInputChange}
+          placeholder={`Enter ${field.key.replace(/_/g, ' ')}...`}
+          className={`border rounded px-2 py-1 text-xs focus:outline-none focus:ring-2 transition-all duration-300 ${errors[field.key] ? "border-red-500 focus:ring-red-400" : "border-gray-300 focus:ring-blue-400"}`}
+          disabled={dummyValues[field.key]}
+        />
+      )}
+    </label>
+    <p className={`absolute left-0 -bottom-4 text-xs text-red-500 transform transition-all duration-300 ${errors[field.key] ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-1"}`}>
+      Please fill this field
+    </p>
+  </div>
+))}
             </div>
           </div>
         </div>

@@ -50,8 +50,8 @@ const modulesData = {
       "➡️ No problem if you only fill in part of the picture — we’ll use what you have to estimate your total footprint.",
   },
 
-  "Sustainability Report Generator": {
-    title: "Generate Your Sustainability Report",
+  "ESG Policy Maker": {
+    title: "Generate Your ESG Policy Report",
     subtitle:
       "Turn your ESG and carbon efforts into a polished report. Upload your goals and branding elements.",
     instruction: "Select your inputs to upload",
