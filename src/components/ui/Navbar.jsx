@@ -183,7 +183,7 @@ const App = () => {
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundAttachment: 'fixed',
-        minHeight: '20vh'  // ⛔ This is forcing unnecessary vertical space
+        minHeight: '11vh'  // ⛔ This is forcing unnecessary vertical space
 
       }}
     >

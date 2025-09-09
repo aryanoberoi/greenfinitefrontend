@@ -14,6 +14,15 @@ export default function UploadPage() {
     <div className="min-h-screen flex flex-col bg-offwhite overflow-x-hidden">
       <div className="w-full">
         <div className="min-h-[30vh] flex flex-col">
+          <div className="text-center py-1">
+            <h6 className="text-lg sm:text-3xl font-bold text-green-900">
+              Upload. Analyze. Report. AI-powered ESG compliance for SMEs.
+            </h6>
+            <p className="mt-1 text-sm sm:text-base text-gray-600">
+              Simplifying sustainability, Guiding you from Zero to NetZero
+            </p>
+          </div>
+
           <main
             className="
               flex-1 flex flex-col md:flex-row 
