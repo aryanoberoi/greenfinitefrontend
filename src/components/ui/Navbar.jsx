@@ -110,13 +110,13 @@ const TopNavigationBar = ({ toggleMenu, activeTab, setActiveTab }) => {
     <nav className="fixed top-0 left-0 w-full h-[80px] py-8 px-6 sm:px-10 md:px-[104px] flex justify-between items-center bg-green-900 shadow-2xl z-50 transition-transform duration-300 ease-out">
 
       {/* Logo */}
-      <div className="flex items-center space-x-4 md:space-x-2">
+      <div className="flex items-center space-x-4 md:space-x-0">
         <a href="/">
-          <img src="/logo1.png" alt="Greenfinite Logo" className="h-20 mb-1" />
+          <img src="/new_logo.jpg" alt="Greenfinite Logo" className="h-40 w-30 mb-0" />
         </a>
         <a
           href="/"
-          className="text-2xl sm:text-3xl font-bold font-mono text-[#F8F7F2] hover:text-green-400 transition-colors duration-1000"
+          className="text-2xl sm:text-3xl font-bold font-mono text-[#F8F7F2] hover:text-green-400 transition-colors duration-1000 mr-4"
           style={{ fontFamily: 'var(--font-primary)' }}
         >
           Greenfinite

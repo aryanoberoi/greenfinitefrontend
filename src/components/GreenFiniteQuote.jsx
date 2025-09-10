@@ -46,7 +46,7 @@ export default function GreenfiniteStatement() {
           className="w-full md:w-1/2 flex justify-center"
         >
           <img
-            src="/logo1.png"
+            src="/new_logo.jpg"
             alt="Greenfinite Logo"
             className="w-4/5 sm:w-2/3 md:w-full max-w-sm drop-shadow-lg"
             onError={(e) => {

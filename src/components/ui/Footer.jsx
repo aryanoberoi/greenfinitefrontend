@@ -47,9 +47,9 @@ const Footer = () => {
               <div className="aspect-[16/9]">
                 {/* Replaced logo.png with a placeholder image for demonstration */}
                 <img
-                  src="/logo.png"
+                  src="/new_logo.jpg"
                   alt="greenfinite Logo"
-                  className="w-24 h-24 md:w-48 md:h-48 lg:w-80 lg:h-45 rounded-md hidden md:block mt-14"
+                  className="w-24 h-24 md:w-48 md:h-48 lg:w-60 lg:h-65 rounded-md hidden md:block mb-0"
                   // Fallback for image loading errors
                   onError={(e) => { e.target.onerror = null; e.target.src = "https://placehold.co/320x180/F5F5DC/8B4513?text=Logo+Error"; }}
                 />
