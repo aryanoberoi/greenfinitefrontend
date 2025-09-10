@@ -250,44 +250,46 @@ const Upload = ({ selectedModule: incomingModule }) => {
       </p>
 
       {/* ✅ Steps Section */}
-      <div className="w-full max-w-lg bg-white rounded-lg p-4 shadow-sm mb-4">
-        <p className="text-center text-gray-800 font-semibold mb-2">
-          Upload Your Documents to Get Instant Insights
-        </p>
-        <p className="text-center text-gray-500 text-sm mb-4">
-          Our AI analyzes your files securely and generates a tailored report in minutes.
-        </p>
+      {selectedFiles.length === 0 && (
+        <div className="w-full max-w-lg bg-white rounded-lg p-4 shadow-sm mb-4">
+          <p className="text-center text-gray-800 font-semibold mb-2">
+            Upload Your Documents to Get Instant Insights
+          </p>
+          <p className="text-center text-gray-500 text-sm mb-4">
+            Our AI analyzes your files securely and generates a tailored report in minutes.
+          </p>
 
-        <div className="flex items-center justify-between relative">
-          {/* Line connectors */}
-          <div className="absolute top-4 left-1/6 w-1/3 h-[2px] bg-gray-300"></div>
-          <div className="absolute top-4 left-1/2 w-1/3 h-[2px] bg-gray-300"></div>
+          <div className="flex items-center justify-between relative">
+            {/* Line connectors */}
+            <div className="absolute top-4 left-1/6 w-1/3 h-[2px] bg-gray-300"></div>
+            <div className="absolute top-4 left-1/2 w-1/3 h-[2px] bg-gray-300"></div>
 
-          {/* Step 1 */}
-          <div className="flex flex-col items-center w-1/3 z-10">
-            <div className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-200 text-gray-600 font-bold">
-              1
+            {/* Step 1 */}
+            <div className="flex flex-col items-center w-1/3 z-10">
+              <div className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-200 text-gray-600 font-bold">
+                1
+              </div>
+              <p className="mt-2 font-medium text-sm">Upload Documents</p>
             </div>
-            <p className="mt-2 font-medium text-sm">Upload Documents</p>
-          </div>
 
-          {/* Step 2 */}
-          <div className="flex flex-col items-center w-1/3 z-10">
-            <div className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-200 text-gray-600 font-bold">
-              2
+            {/* Step 2 */}
+            <div className="flex flex-col items-center w-1/3 z-10">
+              <div className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-200 text-gray-600 font-bold">
+                2
+              </div>
+              <p className="mt-2 font-medium text-sm">AI Analysis</p>
             </div>
-            <p className="mt-2 font-medium text-sm">AI Analysis</p>
-          </div>
 
-          {/* Step 3 */}
-          <div className="flex flex-col items-center w-1/3 z-10">
-            <div className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-200 text-gray-600 font-bold">
-              3
+            {/* Step 3 */}
+            <div className="flex flex-col items-center w-1/3 z-10">
+              <div className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-200 text-gray-600 font-bold">
+                3
+              </div>
+              <p className="mt-2 font-medium text-sm">Download Report</p>
             </div>
-            <p className="mt-2 font-medium text-sm">Download Report</p>
           </div>
         </div>
-      </div>
+      )}
 
 
 
