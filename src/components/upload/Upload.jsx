@@ -343,6 +343,16 @@ const Upload = ({ selectedModule: incomingModule }) => {
       <span className="mb-[2px] text-xs">
         {index + 1}. {selectedModule === "ESG Policy Maker" ? field.sentence : field.question}
       </span>
+      <input
+        ref={(el) => (fieldRefs.current[field.key] = el)}
+        type="text"
+        name={field.key}
+        value={formDataInputs[field.key] || ''}
+        onChange={handleInputChange}
+        placeholder={`Enter ${field.key.replace(/_/g, ' ')}...`}
+        className={`border rounded px-2 py-1 text-xs focus:outline-none focus:ring-2 transition-all duration-300 ${errors[field.key] ? "border-red-500 focus:ring-red-400" : "border-gray-300 focus:ring-blue-400"}`}
+        disabled={dummyValues[field.key]}
+      />
       {selectedModule === "ESG Policy Maker" ? (
         <label className="flex items-center mt-1 ml-1 text-xs text-gray-600">
           <input
@@ -355,16 +365,16 @@ const Upload = ({ selectedModule: incomingModule }) => {
           We comply
         </label>
       ) : (
-        <input
-          ref={(el) => (fieldRefs.current[field.key] = el)}
-          type="text"
-          name={field.key}
-          value={formDataInputs[field.key] || ''}
-          onChange={handleInputChange}
-          placeholder={`Enter ${field.key.replace(/_/g, ' ')}...`}
-          className={`border rounded px-2 py-1 text-xs focus:outline-none focus:ring-2 transition-all duration-300 ${errors[field.key] ? "border-red-500 focus:ring-red-400" : "border-gray-300 focus:ring-blue-400"}`}
-          disabled={dummyValues[field.key]}
-        />
+        <div className="flex items-center mt-1 ml-1 text-xs text-gray-600">
+          <input
+            type="checkbox"
+            name={field.key}
+            checked={dummyValues[field.key] || false}
+            onChange={handleDummyValueChange}
+            className="mr-1 h-3 w-3"
+          />
+          Assume industry average
+        </div>
       )}
     </label>
     <p className={`absolute left-0 -bottom-4 text-xs text-red-500 transform transition-all duration-300 ${errors[field.key] ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-1"}`}>
