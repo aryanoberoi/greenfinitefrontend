@@ -309,17 +309,19 @@ const Upload = ({ selectedModule: incomingModule }) => {
         ))}
       </div>
 
-      <div
-        className={`flex flex-col justify-center items-center w-full max-w-lg p-4 text-center border-2 border-gray-300 border-dashed rounded-lg bg-gray-50 text-gray-600 hover:border-blue-400 hover:text-blue-500 cursor-pointer transition-all duration-300 ${isDragOver ? 'border-blue-500' : ''}`}
-        onDragOver={handleDragOver}
-        onDragLeave={handleDragLeave}
-        onDrop={handleDrop}
-        onClick={() => fileInputRef.current?.click()}
-        style={{ fontFamily: 'var(--font-primary) !important' }}
-      >
-        <CloudUpload className="w-10 h-10 mb-1 text-gray-500" />
-        <p className="text-sm font-medium mb-1">Drag & Drop or Click to Add Files</p>
-      </div>
+      {selectedFiles.length === 0 && (
+        <div
+          className={`flex flex-col justify-center items-center w-full max-w-lg p-4 text-center border-2 border-gray-300 border-dashed rounded-lg bg-gray-50 text-gray-600 hover:border-blue-400 hover:text-blue-500 cursor-pointer transition-all duration-300 ${isDragOver ? 'border-blue-500' : ''}`}
+          onDragOver={handleDragOver}
+          onDragLeave={handleDragLeave}
+          onDrop={handleDrop}
+          onClick={() => fileInputRef.current?.click()}
+          style={{ fontFamily: 'var(--font-primary) !important' }}
+        >
+          <CloudUpload className="w-10 h-10 mb-1 text-gray-500" />
+          <p className="text-sm font-medium mb-1">Drag & Drop or Click to Add Files</p>
+        </div>
+      )}
 
       <input
         type="file"

@@ -112,11 +112,11 @@ const TopNavigationBar = ({ toggleMenu, activeTab, setActiveTab }) => {
       {/* Logo */}
       <div className="flex items-center space-x-4 md:space-x-0">
         <a href="/">
-          <img src="/new_logo.jpg" alt="Greenfinite Logo" className="h-40 w-30 mb-0" />
+          <img src="/new_logo.jpg" alt="Greenfinite Logo" className="h-40 w-40" />
         </a>
         <a
           href="/"
-          className="text-2xl sm:text-3xl font-bold font-mono text-[#F8F7F2] hover:text-green-400 transition-colors duration-1000 mr-4"
+          className="text-2xl sm:text-3xl font-bold font-mono text-[#F8F7F2] hover:text-green-400 transition-colors duration-1000 ml-0"
           style={{ fontFamily: 'var(--font-primary)' }}
         >
           Greenfinite
