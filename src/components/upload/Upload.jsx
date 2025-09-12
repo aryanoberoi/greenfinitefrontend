@@ -225,17 +225,6 @@ const Upload = ({ selectedModule: incomingModule }) => {
     if (checked) {
       setFormDataInputs(prev => ({ ...prev, [name]: "Assume industry average" }));
       setErrors(prev => ({ ...prev, [name]: false }));
-  
-      const fieldKeys = missingFields.map(f => f.key);
-      const currentIndex = fieldKeys.indexOf(name);
-      const nextKey = fieldKeys[currentIndex + 1];
-      if (nextKey && fieldRefs.current[nextKey]) {
-        fieldRefs.current[nextKey].scrollIntoView({
-          behavior: "smooth",
-          block: "center"
-        });
-        fieldRefs.current[nextKey].focus();
-      }
     } else {
       setFormDataInputs(prev => ({ ...prev, [name]: "" }));
     }
@@ -365,7 +354,7 @@ const Upload = ({ selectedModule: incomingModule }) => {
           We comply
         </label>
       ) : (
-        <div className="flex items-center mt-1 ml-1 text-xs text-gray-600">
+        <div className="flex items-center mt-1 ml-1 text-xs text-gray-600 cursor-pointer" onClick={() => handleDummyValueChange({ target: { name: field.key, checked: !dummyValues[field.key] } })}>
           <input
             type="checkbox"
             name={field.key}
