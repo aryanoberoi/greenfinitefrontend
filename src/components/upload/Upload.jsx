@@ -81,6 +81,12 @@ const Upload = ({ selectedModule: incomingModule }) => {
         "ESG Policy Maker": 3,
       };
 
+      
+      if (selectedModule === "ESG Policy Maker") {
+        content["company_name"] = formDataInputs.company_name || "Unknown Company";
+        content["generated_date"] = new Date().toISOString().split("T")[0];
+      }
+      
       const response = await axios.post(
         `${API_URL}/uploadpdf`,
         {
@@ -90,6 +96,8 @@ const Upload = ({ selectedModule: incomingModule }) => {
         },
         { headers: { 'Content-Type': 'application/json' }, responseType: 'blob' }
       );
+
+      
 
       const docId = response.headers['x-doc-id'] || null;
       const pdfBlob = new Blob([response.data], { type: 'application/pdf' });
@@ -221,7 +229,7 @@ const Upload = ({ selectedModule: incomingModule }) => {
   const handleDummyValueChange = (e) => {
     const { name, checked } = e.target;
     setDummyValues(prev => ({ ...prev, [name]: checked }));
-  
+
     if (checked) {
       setFormDataInputs(prev => ({ ...prev, [name]: "Assume industry average" }));
       setErrors(prev => ({ ...prev, [name]: false }));
@@ -229,12 +237,12 @@ const Upload = ({ selectedModule: incomingModule }) => {
       setFormDataInputs(prev => ({ ...prev, [name]: "" }));
     }
   };
-  
+
 
   return (
     <div className="w-full md:w-[35em] h-auto md:h-[35em] flex flex-col justify-between items-center p-4 bg-white bg-opacity-80 rounded-xl  space-y-3 overflow-hidden border border-gray-200">
 
-<p className="text-sm text-gray-700 text-center leading-tight" style={{ sfontFamily: 'var(--font-primary) !important' }}>
+      <p className="text-sm text-gray-700 text-center leading-tight" style={{ sfontFamily: 'var(--font-primary) !important' }}>
         {selectedModule ? `Selected Module: ${selectedModule}` : 'Select a module to begin.'}
       </p>
 
@@ -323,54 +331,76 @@ const Upload = ({ selectedModule: incomingModule }) => {
 
       {missingFields.length > 0 ? (
         <div style={{ fontFamily: 'var(--font-primary) !important' }} className="w-full max-w-lg space-y-2 text-left text-gray-700 text-sm mt-1 flex-1 overflow-hidden flex flex-col">
+          {/* ✅ Company Name always on top (for ESG Policy Maker) */}
+    {selectedModule === "ESG Policy Maker" && (
+      <div className="flex flex-col mb-4">
+        <label className="text-sm font-medium text-gray-700">Company Name</label>
+        <input
+          type="text"
+          name="company_name"
+          value={formDataInputs.company_name || ""}
+          onChange={handleInputChange}
+          placeholder="Enter company name..."
+          className={`w-full border rounded px-2 py-1 text-sm mt-1 focus:outline-none focus:ring-2 transition-all duration-300 ${
+            errors.company_name
+              ? "border-red-500 focus:ring-red-400"
+              : "border-gray-300 focus:ring-blue-400"
+          }`}
+        />
+        {errors.company_name && (
+          <p className="text-xs text-red-500 mt-1">Please fill this field</p>
+        )}
+      </div>
+    )}
+
           <p className="font-semibold text-sm">Please provide the following missing information:</p>
           <div className="flex-1 overflow-y-auto pr-2 custom-scrollbar">
             <div className="flex flex-col gap-y-2">
-{missingFields.map((field, index) => (
-  <div key={field.key} className="flex flex-col mb-5 relative">
-    <label className="flex flex-col">
-      <span className="mb-[2px] text-xs">
-        {index + 1}. {selectedModule === "ESG Policy Maker" ? field.sentence : field.question}
-      </span>
-      <input
-        ref={(el) => (fieldRefs.current[field.key] = el)}
-        type="text"
-        name={field.key}
-        value={formDataInputs[field.key] || ''}
-        onChange={handleInputChange}
-        placeholder={`Enter ${field.key.replace(/_/g, ' ')}...`}
-        className={`border rounded px-2 py-1 text-xs focus:outline-none focus:ring-2 transition-all duration-300 ${errors[field.key] ? "border-red-500 focus:ring-red-400" : "border-gray-300 focus:ring-blue-400"}`}
-        disabled={dummyValues[field.key]}
-      />
-      {selectedModule === "ESG Policy Maker" ? (
-        <label className="flex items-center mt-1 ml-1 text-xs text-gray-600">
-          <input
-            type="checkbox"
-            name={field.key}
-            checked={dummyValues[field.key] || false}
-            onChange={handleDummyValueChange}
-            className="mr-1 h-3 w-3"
-          />
-          We comply
-        </label>
-      ) : (
-        <div className="flex items-center mt-1 ml-1 text-xs text-gray-600 cursor-pointer" onClick={() => handleDummyValueChange({ target: { name: field.key, checked: !dummyValues[field.key] } })}>
-          <input
-            type="checkbox"
-            name={field.key}
-            checked={dummyValues[field.key] || false}
-            onChange={handleDummyValueChange}
-            className="mr-1 h-3 w-3"
-          />
-          Assume industry average
-        </div>
-      )}
-    </label>
-    <p className={`absolute left-0 -bottom-4 text-xs text-red-500 transform transition-all duration-300 ${errors[field.key] ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-1"}`}>
-      Please fill this field
-    </p>
-  </div>
-))}
+              {missingFields.map((field, index) => (
+                <div key={field.key} className="flex flex-col mb-5 relative">
+                  <label className="flex flex-col">
+                    <span className="mb-[2px] text-xs">
+                      {index + 1}. {selectedModule === "ESG Policy Maker" ? field.sentence : field.question}
+                    </span>
+                    <input
+                      ref={(el) => (fieldRefs.current[field.key] = el)}
+                      type="text"
+                      name={field.key}
+                      value={formDataInputs[field.key] || ''}
+                      onChange={handleInputChange}
+                      placeholder={`Enter ${field.key.replace(/_/g, ' ')}...`}
+                      className={`border rounded px-2 py-1 text-xs focus:outline-none focus:ring-2 transition-all duration-300 ${errors[field.key] ? "border-red-500 focus:ring-red-400" : "border-gray-300 focus:ring-blue-400"}`}
+                      disabled={dummyValues[field.key]}
+                    />
+                    {selectedModule === "ESG Policy Maker" ? (
+                      <label className="flex items-center mt-1 ml-1 text-xs text-gray-600">
+                        <input
+                          type="checkbox"
+                          name={field.key}
+                          checked={dummyValues[field.key] || false}
+                          onChange={handleDummyValueChange}
+                          className="mr-1 h-3 w-3"
+                        />
+                        We comply
+                      </label>
+                    ) : (
+                      <div className="flex items-center mt-1 ml-1 text-xs text-gray-600 cursor-pointer" onClick={() => handleDummyValueChange({ target: { name: field.key, checked: !dummyValues[field.key] } })}>
+                        <input
+                          type="checkbox"
+                          name={field.key}
+                          checked={dummyValues[field.key] || false}
+                          onChange={handleDummyValueChange}
+                          className="mr-1 h-3 w-3"
+                        />
+                        Assume industry average
+                      </div>
+                    )}
+                  </label>
+                  <p className={`absolute left-0 -bottom-4 text-xs text-red-500 transform transition-all duration-300 ${errors[field.key] ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-1"}`}>
+                    Please fill this field
+                  </p>
+                </div>
+              ))}
             </div>
           </div>
         </div>
@@ -389,9 +419,9 @@ const Upload = ({ selectedModule: incomingModule }) => {
         />
       </div>
       <div className="flex items-center justify-center text-gray-600 text-sm mt-3">
-  <Lock className="w-4 h-4 mr-2 text-gray-500" />
-  <span>Your data is GDPR-compliant and securely processed</span>
-</div>
+        <Lock className="w-4 h-4 mr-2 text-gray-500" />
+        <span>Your data is GDPR-compliant and securely processed</span>
+      </div>
     </div>
   );
 };
