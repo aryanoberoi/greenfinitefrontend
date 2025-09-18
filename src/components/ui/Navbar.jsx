@@ -107,7 +107,7 @@ const TopNavigationBar = ({ toggleMenu, activeTab, setActiveTab }) => {
   };
 
   return (
-    <nav className="fixed top-0 left-0 w-full h-[80px] py-8 px-6 sm:px-10 md:px-[104px] flex justify-between items-center bg-green-900 shadow-2xl z-50 transition-transform duration-300 ease-out">
+    <nav className="fixed top-0 left-0 w-full h-[80px] py-8 px-6 sm:px-10 md:px-[104px] flex justify-between items-center bg-green-700 shadow-2xl z-50 transition-transform duration-300 ease-out">
 
       {/* Logo */}
       <div className="flex items-center space-x-4 md:space-x-0">
