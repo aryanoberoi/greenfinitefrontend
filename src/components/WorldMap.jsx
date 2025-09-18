@@ -26,6 +26,10 @@ const Earth = () => {
       colorMax: "#16a34a", // green - low emissions
       colorNoData: "#e5e7eb", // light gray for no data
       flagType: "image",
+
+      mouseWheelZoomEnabled: false,
+
+      
       data: {
         data: {
           emissions: {
