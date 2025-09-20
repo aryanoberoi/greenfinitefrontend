@@ -183,6 +183,25 @@ button:focus-visible {
   --sidebar-ring: oklch(0.552 0.016 285.938);
 }
 
+.custom-scrollbar {
+  overflow-y: scroll;           /* Always show Vertical scrollbar */
+  scrollbar-width: thin;        /* For Firefox */
+  scrollbar-color: #888 #f1f1f1;/* For Firefox: Thumb & Track color */
+}
+
+/* For Chrome, Safari, Edge (Webkit browsers) */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 12px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 8px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
