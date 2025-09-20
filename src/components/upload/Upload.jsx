@@ -378,7 +378,14 @@ const Upload = ({ selectedModule: incomingModule }) => {
                           type="checkbox"
                           name={field.key}
                           checked={dummyValues[field.key] || false}
-                          onChange={handleDummyValueChange}
+                          onChange={(e) => {
+                            handleDummyValueChange(e);
+                            if (e.target.checked) {
+                              setFormDataInputs(prev => ({ ...prev, [field.key]: "We comply" }));
+                            } else {
+                              setFormDataInputs(prev => ({ ...prev, [field.key]: "" }));
+                            }
+                          }}
                           className="mr-1 h-3 w-3"
                         />
                         We comply
