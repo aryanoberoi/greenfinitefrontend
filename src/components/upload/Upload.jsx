@@ -238,6 +238,19 @@ const Upload = ({ selectedModule: incomingModule }) => {
     }
   };
 
+  const handleMarkAllChange = (e) => {
+    const { checked } = e.target;
+    const newDummyValues = {};
+    const newFormDataInputs = {};
+
+    missingFields.forEach(field => {
+      newDummyValues[field.key] = checked;
+      newFormDataInputs[field.key] = checked ? (selectedModule === "ESG Policy Maker" ? "We comply" : "Assume industry average") : "";
+    });
+
+    setDummyValues(newDummyValues);
+    setFormDataInputs(newFormDataInputs);
+  };
 
   return (
     <div className="w-full md:w-[35em] h-auto md:h-[35em] flex flex-col justify-between items-center p-4 bg-white bg-opacity-80 rounded-xl  space-y-3 overflow-hidden border border-gray-200">
@@ -288,9 +301,6 @@ const Upload = ({ selectedModule: incomingModule }) => {
         </div>
       )}
 
-
-
-
       <div className="flex flex-wrap gap-2 justify-start w-full max-w-lg max-h-[3em] overflow-y-auto">
         {selectedFiles.map((file, index) => (
           <div key={index} className="flex items-center gap-1 bg-green-100 text-green-800 px-2 py-[2px] rounded-full text-xs relative group">
@@ -332,26 +342,37 @@ const Upload = ({ selectedModule: incomingModule }) => {
       {missingFields.length > 0 ? (
         <div style={{ fontFamily: 'var(--font-primary) !important' }} className="w-full max-w-lg space-y-2 text-left text-gray-700 text-sm mt-1 flex-1 overflow-hidden flex flex-col">
           {/* ✅ Company Name always on top (for ESG Policy Maker) */}
-    {selectedModule === "ESG Policy Maker" && (
-      <div className="flex flex-col mb-4">
-        <label className="text-sm font-medium text-gray-700">Company Name</label>
-        <input
-          type="text"
-          name="company_name"
-          value={formDataInputs.company_name || ""}
-          onChange={handleInputChange}
-          placeholder="Enter company name..."
-          className={`w-full border rounded px-2 py-1 text-sm mt-1 focus:outline-none focus:ring-2 transition-all duration-300 ${
-            errors.company_name
-              ? "border-red-500 focus:ring-red-400"
-              : "border-gray-300 focus:ring-blue-400"
-          }`}
-        />
-        {errors.company_name && (
-          <p className="text-xs text-red-500 mt-1">Please fill this field</p>
-        )}
-      </div>
-    )}
+          {selectedModule === "ESG Policy Maker" && (
+            <div className="flex flex-col mb-4">
+              <label className="text-sm font-medium text-gray-700">Company Name</label>
+              <input
+                type="text"
+                name="company_name"
+                value={formDataInputs.company_name || ""}
+                onChange={handleInputChange}
+                placeholder="Enter company name..."
+                className={`w-full border rounded px-2 py-1 text-sm mt-1 focus:outline-none focus:ring-2 transition-all duration-300 ${
+                  errors.company_name
+                    ? "border-red-500 focus:ring-red-400"
+                    : "border-gray-300 focus:ring-blue-400"
+                }`}
+              />
+              {errors.company_name && (
+                <p className="text-xs text-red-500 mt-1">Please fill this field</p>
+              )}
+            </div>
+          )}
+
+          <div className="flex items-center mb-4">
+            <input
+              type="checkbox"
+              onChange={handleMarkAllChange}
+              className="mr-2 h-4 w-4"
+            />
+            <span className="text-sm">
+              {selectedModule === "ESG Policy Maker" ? "Mark all unfilled fields as We comply" : "Mark all unfilled fields as Assume industry average"}
+            </span>
+          </div>
 
           <p className="font-semibold text-sm">Please provide the following missing information:</p>
           <div className="flex-1 overflow-y-auto pr-2 custom-scrollbar">
