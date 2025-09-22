@@ -14,24 +14,6 @@ import {
 } from "lucide-react";
 
 const modulesData = {
-  "ESG Analyzer": {
-    title: "Analyze Your ESG Policies in Minutes",
-    subtitle:
-      "Upload your ESG policies and certifications. Our AI highlights gaps and provides a simple scorecard with recommendations.",
-    instruction: "Select your documents to upload",
-    note: "You don’t need all of these — just pick what you have.",
-    cards: [
-      { icon: <FileText size={16} />, label: "ESG Policy" },
-      { icon: <Users size={16} />, label: "Diversity & Inclusion Policy" },
-      { icon: <Scale size={16} />, label: "Code of Conduct" },
-      { icon: <Globe size={16} />, label: "Human Rights Policy" },
-      { icon: <CheckCircle size={16} />, label: "Certifications (ISO 14001, B Corp, etc.)" },
-      { icon: <ClipboardList size={16} />, label: "Audit Reports/Incident Summaries" },
-    ],
-    footer:
-      "🔑 Even if you only have one document, that’s enough to start. We’ll score it and show you where to improve.",
-  },
-
   "Carbon Estimator": {
     title: "Estimate Your Carbon Footprint in Minutes",
     subtitle:
@@ -48,6 +30,24 @@ const modulesData = {
     ],
     footer:
       "➡️ No problem if you only fill in part of the picture — we’ll use what you have to estimate your total footprint.",
+  },
+
+  "ESG Analyzer": {
+    title: "Analyze Your ESG Policies in Minutes",
+    subtitle:
+      "Upload your ESG policies and certifications. Our AI highlights gaps and provides a simple scorecard with recommendations.",
+    instruction: "Select your documents to upload",
+    note: "You don’t need all of these — just pick what you have.",
+    cards: [
+      { icon: <FileText size={16} />, label: "ESG Policy" },
+      { icon: <Users size={16} />, label: "Diversity & Inclusion Policy" },
+      { icon: <Scale size={16} />, label: "Code of Conduct" },
+      { icon: <Globe size={16} />, label: "Human Rights Policy" },
+      { icon: <CheckCircle size={16} />, label: "Certifications (ISO 14001, B Corp, etc.)" },
+      { icon: <ClipboardList size={16} />, label: "Audit Reports/Incident Summaries" },
+    ],
+    footer:
+      "🔑 Even if you only have one document, that’s enough to start. We’ll score it and show you where to improve.",
   },
 
   "ESG Policy Maker": {
