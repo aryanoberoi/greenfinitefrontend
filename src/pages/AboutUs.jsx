@@ -160,7 +160,7 @@ export default function AboutUs() {
 
               <FadeInSection direction="up" delay={0.6}>
                 <StyledText>
-                  We believe climate action shouldn’t require a compliance department. With <a href="https://greenfinite.ai" className="text-green-700 font-semibold hover:underline" target="_blank" rel="noopener noreferrer">Greenfinite.ai</a>, any SME can start their sustainability journey with guided tools, smart estimates, and AI support — no PhD required.
+                  We believe climate action shouldn’t require a compliance department. With <a href="https://greenfinite.ai" className="!text-green-700 font-semibold hover:underline" target="_blank" rel="noopener noreferrer">Greenfinite.ai</a>, any SME can start their sustainability journey with guided tools, smart estimates, and AI support — no PhD required.
                 </StyledText>
               </FadeInSection>
 
