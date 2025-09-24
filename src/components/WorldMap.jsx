@@ -21,15 +21,12 @@ const Earth = () => {
 
     new svgMap({
       targetElementID: "svgMap",
-      colorMin: "#dc2626", // red - high emissions
-      colorMid: "#facc15", // yellow - moderate emissions
-      colorMax: "#16a34a", // green - low emissions
-      colorNoData: "#e5e7eb", // light gray for no data
+      colorMin: "#dc2626",
+      colorMid: "#facc15",
+      colorMax: "#16a34a",
+      colorNoData: "#e5e7eb",
       flagType: "image",
-
       mouseWheelZoomEnabled: false,
-
-      
       data: {
         data: {
           emissions: {
@@ -52,7 +49,6 @@ const Earth = () => {
     });
 
     setWorldEmission(calculateWorldEmission());
-
     const interval = setInterval(() => {
       setWorldEmission(calculateWorldEmission());
     }, 10000);
@@ -62,6 +58,24 @@ const Earth = () => {
 
   return (
     <div className="w-full bg-offwhite p-6 sm:p-10 rounded-5xl shadow-lg relative">
+      {/* Mobile scrollbar styling */}
+      <style>
+        {`
+          @media (max-width: 640px) {
+            .mobile-scrollbar::-webkit-scrollbar {
+              height: 12px;
+            }
+            .mobile-scrollbar::-webkit-scrollbar-thumb {
+              background-color: #9ca3af;
+              border-radius: 9999px;
+            }
+            .mobile-scrollbar::-webkit-scrollbar-track {
+              background: #f3f4f6;
+            }
+          }
+        `}
+      </style>
+
       <h2 className="text-2xl sm:text-3xl font-bold text-center mb-2 text-gray-800">
         Global CO₂ Emissions by Country
       </h2>
@@ -69,25 +83,39 @@ const Earth = () => {
         World Total Emissions: {worldEmission.toLocaleString()} tCO₂E
       </p>
 
+      {/* Single map container with responsive scroll */}
       <div className="overflow-x-auto w-full mobile-scrollbar">
-  <div className="relative min-w-[1200px] h-[500px] sm:h-[825px] rounded-xl">
-    <div id="svgMap" className="w-full h-full rounded-xl"></div>
-          {/* Legend inside map */}
-          <div className="hidden sm:block absolute bottom-40 left-6 bg-white bg-opacity-80 p-3 rounded-lg shadow-md text-gray-700 text-sm w-40">
-            <h3 className="font-semibold mb-2 text-gray-800">Emissions Legend</h3>
-            <div className="flex items-center gap-2 mb-1">
-              <span className="w-5 h-5 rounded" style={{ backgroundColor: "#dc2626" }}></span>
-              <span>High Emissions</span>
-            </div>
-            <div className="flex items-center gap-2 mb-1">
-              <span className="w-5 h-5 rounded" style={{ backgroundColor: "#8B4513" }}></span>
-              <span>Moderate Emissions</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="w-5 h-5 rounded" style={{ backgroundColor: "#16a34a" }}></span>
-              <span>Low Emissions</span>
-            </div>
-          </div>
+        <div className="min-w-[1200px] w-full h-[500px] sm:h-[825px]">
+          <div
+            id="svgMap"
+            className="w-[1200px] h-[500px] sm:w-full sm:h-[825px] rounded-xl"
+          ></div>
+        </div>
+      </div>
+
+      {/* Legend */}
+      <div className="hidden sm:block absolute bottom-50 left-15 bg-white bg-opacity-80 p-3 rounded-lg shadow-md text-gray-700 text-sm w-40">
+        <h3 className="font-semibold mb-2 text-gray-800">Emissions Legend</h3>
+        <div className="flex items-center gap-2 mb-1">
+          <span
+            className="w-5 h-5 rounded"
+            style={{ backgroundColor: "#dc2626" }}
+          ></span>
+          <span>High Emissions</span>
+        </div>
+        <div className="flex items-center gap-2 mb-1">
+          <span
+            className="w-5 h-5 rounded"
+            style={{ backgroundColor: "#facc15" }}
+          ></span>
+          <span>Moderate Emissions</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <span
+            className="w-5 h-5 rounded"
+            style={{ backgroundColor: "#16a34a" }}
+          ></span>
+          <span>Low Emissions</span>
         </div>
       </div>
     </div>
