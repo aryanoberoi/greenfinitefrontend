@@ -69,12 +69,11 @@ const Earth = () => {
         World Total Emissions: {worldEmission.toLocaleString()} tCO₂E
       </p>
 
-      <div className="relative overflow-x-auto">
-        <div className="relative w-[1200px] sm:w-full h-[500px] sm:h-[825px] rounded-xl">
-          <div id="svgMap" className="w-full h-full rounded-xl"></div>
-
+      <div className="overflow-x-auto w-full mobile-scrollbar">
+  <div className="relative min-w-[1200px] h-[500px] sm:h-[825px] rounded-xl">
+    <div id="svgMap" className="w-full h-full rounded-xl"></div>
           {/* Legend inside map */}
-          <div className="absolute bottom-40 left-6 bg-white bg-opacity-80 p-3 rounded-lg shadow-md text-gray-700 text-sm w-40">
+          <div className="hidden sm:block absolute bottom-40 left-6 bg-white bg-opacity-80 p-3 rounded-lg shadow-md text-gray-700 text-sm w-40">
             <h3 className="font-semibold mb-2 text-gray-800">Emissions Legend</h3>
             <div className="flex items-center gap-2 mb-1">
               <span className="w-5 h-5 rounded" style={{ backgroundColor: "#dc2626" }}></span>
