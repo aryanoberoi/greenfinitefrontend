@@ -45,7 +45,7 @@ export default function UploadPage() {
       {showChat && (
         <div className="fixed bottom-6 left-6 z-50 w-[360px] md:w-[850px]">
           <ChatBot
-            sessionId={'Ask me anything ?'}
+            sessionId={'Ask me how to get started.'}
             moduleName={selectedModule || ''}
             endpoint="/homepagechatbot"
             onClose={() => setShowChat(false)}
