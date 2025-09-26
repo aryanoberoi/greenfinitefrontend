@@ -14,8 +14,7 @@ const ChatMessage = ({ sender, message, timestamp }) => {
     <div className={`flex ${alignment} mb-3`}>
       <div className={`max-w-[70%] p-3 rounded-xl ${bubbleStyle} shadow-md`}>
         <p className="leading-relaxed">
-          <span className="font-bold">{isUser ? 'You:' : 'AI:'}</span>{' '}
-          {message}
+          <span className="font-bold">{isUser ? 'You:' : 'AI:'}</span> {message}
         </p>
         {timestamp && (
           <p className="text-xs mt-1 text-right text-gray-300">{timestamp}</p>
@@ -26,46 +25,41 @@ const ChatMessage = ({ sender, message, timestamp }) => {
 };
 
 /**
- * ChatBot reads module & docId from location.state (like DocPreview).
  * Props:
- *  - onClose: function to close the chat panel
+ * - onClose: function to close the chat
+ * - sessionId: optional string (like docId)
+ * - moduleName: optional string
+ * - endpoint: API route string, defaults to /chat
  */
-const ChatBot = ({ onClose }) => {
+const ChatBot = ({ onClose, sessionId = null, moduleName = '', endpoint = '/chat' }) => {
   const location = useLocation();
   const navigate = useNavigate();
 
   const fileUrl = location.state?.fileUrl || null;
-  const docId = location.state?.docId || null;
-  const moduleName = location.state?.module || '';
+  const docId = sessionId || location.state?.docId || null;
+  const modName = moduleName || location.state?.module || '';
 
   const [chatHistory, setChatHistory] = useState([]);
   const [inputValue, setInputValue] = useState('');
   const [isSending, setIsSending] = useState(false);
 
-  // Initialize global in-memory store (persists only while tab is open)
+  // Global in-memory store
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      if (!window.__chat_history__) window.__chat_history__ = {};
+    if (typeof window !== 'undefined' && !window.__chat_history__) {
+      window.__chat_history__ = {};
     }
   }, []);
 
-  // Guard: if we don't have the ephemeral session, redirect (same UX as DocPreview)
+  // Load existing history for this session
   useEffect(() => {
-    if (!fileUrl || !docId) {
-      navigate('/', { replace: true });
-      return;
-    }
-
-    // Load from the in-memory store for this docId (if any)
     const existing = (window.__chat_history__ && window.__chat_history__[docId]) || [];
     setChatHistory(existing);
-    // no cleanup - keep it on window until tab refresh/close
-  }, [fileUrl, docId, navigate]);
+  }, [docId]);
 
   const persistHistory = (newHistory) => {
     if (typeof window === 'undefined') return;
     if (!window.__chat_history__) window.__chat_history__ = {};
-    window.__chat_history__[docId] = newHistory;
+    if (docId) window.__chat_history__[docId] = newHistory;
   };
 
   const handleSendMessage = async () => {
@@ -87,10 +81,10 @@ const ChatBot = ({ onClose }) => {
     setIsSending(true);
 
     try {
-      const response = await axios.post(`${API_URL}/chat`, {
+      const response = await axios.post(`${API_URL}${endpoint}`, {
         message: trimmed,
-        sessionid: docId, // use docId from location.state
-        module: moduleName,
+        sessionid: docId,
+        module: modName,
       });
 
       const aiText = response?.data?.response ?? 'No response from server.';
@@ -127,38 +121,38 @@ const ChatBot = ({ onClose }) => {
     }
   };
 
-  // If guard redirected, component may briefly render — protect render
-  if (!fileUrl || !docId) return null;
-
   return (
-    <div className="w-full md:w-[48%] h-[33em] bg-white bg-opacity-90 rounded-xl shadow-2xl p-6 flex flex-col transition-all duration-300 hover:shadow-xl  font-sans relative z-0">
+    <div className="w-full md:w-[48%] h-[33em] bg-white bg-opacity-90 rounded-xl shadow-2xl p-6 flex flex-col transition-all duration-300 hover:shadow-xl font-sans relative z-0">
       {/* Close Button */}
-      <button
-        onClick={onClose}
-        className="absolute top-3 right-3 sm:top-8 sm:right-8 !bg-transparent p-2 z-20 text-gray-500 hover:text-black transition duration-200"
-        title="Close Chatbot"
-      >
-        <X className="w-6 h-6" />
-      </button>
+      {onClose && (
+        <button
+          onClick={onClose}
+          className="absolute top-3 right-3 sm:top-8 sm:right-8 !bg-transparent p-2 z-20 text-gray-500 hover:text-black transition duration-200"
+          title="Close Chatbot"
+        >
+          <X className="w-6 h-6" />
+        </button>
+      )}
 
       {/* Title */}
-      <h2 className="text-2xl font-bold mb-1 text-gray-800 text-center flex items-center justify-center gap-2" style={{ fontFamily: 'var(--font-primary)' }}>
+      <h2 className="text-2xl font-bold mb-1 text-gray-800 text-center flex items-center justify-center gap-2">
         <img className="w-[4vw] h-auto" src="/chatbot.png" alt="Chatbot" />
         Talk to our chatbot, Earth v1.0
       </h2>
 
       {/* Module | DocId line */}
-      <p className="text-sm text-gray-500 text-center mb-1 italic truncate">
-        {moduleName ? `Module: ${moduleName}` : ''} {moduleName ? '|' : ''} {docId}
-      </p>
+      {docId && (
+        <p className="text-sm text-gray-500 text-center mb-1 italic truncate">
+          {modName ? `Module: ${modName}` : ''} {modName ? '|' : ''} {docId}
+        </p>
+      )}
 
       {/* Chat Area */}
-      <div
-        className="flex-1 border border-gray-300 bg-gray-50 rounded-lg p-4 mb-4 overflow-y-auto custom-scrollbar flex flex-col"
-        style={{ fontFamily: 'var(--font-primary) !important' }}
-      >
+      <div className="flex-1 border border-gray-300 bg-gray-50 rounded-lg p-4 mb-4 overflow-y-auto custom-scrollbar flex flex-col">
         {chatHistory.length === 0 ? (
-          <p className="text-sm text-gray-500 text-center mt-6">Start the conversation — ask about the document or module.</p>
+          <p className="text-sm text-gray-500 text-center mt-6">
+            Start the conversation — ask anything!
+          </p>
         ) : (
           chatHistory.map(msg => (
             <ChatMessage key={msg.id} sender={msg.sender} message={msg.message} timestamp={msg.timestamp} />
@@ -175,14 +169,12 @@ const ChatBot = ({ onClose }) => {
           onChange={(e) => setInputValue(e.target.value)}
           onKeyDown={handleKeyDown}
           className="flex-1 border border-gray-300 rounded-lg px-3 py-2 sm:py-3 text-sm sm:text-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200 font-sans"
-          style={{ fontFamily: 'var(--font-primary)' }}
           disabled={isSending}
         />
         <button
           onClick={handleSendMessage}
           disabled={isSending}
           className="!bg-[#003E3E] text-white px-4 py-2 sm:px-6 sm:py-3 rounded-lg text-sm sm:text-lg font-semibold hover:bg-green-700 transition-colors duration-200 shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 font-sans"
-          style={{ fontFamily: 'var(--font-primary)' }}
         >
           {isSending ? 'Sending...' : 'Send'}
         </button>

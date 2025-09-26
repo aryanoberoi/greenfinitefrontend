@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import Upload from '../components/upload/Upload';
 import ModuleCard from '../components/upload/ModuleCard';
+import ChatBot from '../components/analyze/ChatBot';
 
 export default function UploadPage() {
   const [selectedModule, setSelectedModule] = useState(null);
+  const [showChat, setShowChat] = useState(true); // toggle chat visibility
 
   const handleModuleSelect = (moduleName) => {
     console.log('Selected module:', moduleName);
@@ -11,7 +13,8 @@ export default function UploadPage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-offwhite overflow-x-hidden">
+    <div className="min-h-screen flex flex-col bg-offwhite overflow-x-hidden relative">
+      {/* Page Content */}
       <div className="w-full">
         <div className="min-h-[30vh] flex flex-col">
           <div className="text-center py-10">
@@ -37,6 +40,29 @@ export default function UploadPage() {
           </main>
         </div>
       </div>
+
+      {/* Floating ChatBot on the left side */}
+      {showChat && (
+        <div className="fixed bottom-6 left-6 z-50 w-[360px] md:w-[850px]">
+          <ChatBot
+            sessionId={'Ask me anything ?'}
+            moduleName={selectedModule || ''}
+            endpoint="/homepagechatbot"
+            onClose={() => setShowChat(false)}
+          />
+        </div>
+      )}
+
+      {/* Optional Chat Toggle Button */}
+      {!showChat && (
+        <button
+          onClick={() => setShowChat(true)}
+          className="fixed bottom-6 left-6 z-50 bg-transparent  text-white px-0 py-1 rounded-full "
+        >
+          <img className="w-20 h-auto md:w-[6vw]" src="/chatbot.png" alt="Chatbot" />
+        </button>
+      )}
+
     </div>
   );
 }
