@@ -5,7 +5,7 @@ import ChatBot from '../components/analyze/ChatBot';
 
 export default function UploadPage() {
   const [selectedModule, setSelectedModule] = useState(null);
-  const [showChat, setShowChat] = useState(true); // toggle chat visibility
+  const [showChat, setShowChat] = useState(false); // toggle chat visibility
 
   const handleModuleSelect = (moduleName) => {
     console.log('Selected module:', moduleName);
@@ -43,7 +43,7 @@ export default function UploadPage() {
 
       {/* Floating ChatBot on the left side */}
       {showChat && (
-        <div className="fixed bottom-6 left-6 z-50 w-[360px] md:w-[950px]">
+        <div className="fixed bottom-6 left-6 z-50 w-[360px] md:w-[1050px]">
           <ChatBot
             sessionId={'Ask me how to get started.'}
             moduleName={selectedModule || ''}
