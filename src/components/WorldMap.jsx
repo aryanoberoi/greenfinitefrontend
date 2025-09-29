@@ -26,7 +26,7 @@ const Earth = () => {
       colorMax: "#16a34a",
       colorNoData: "#e5e7eb",
       flagType: "image",
-      mouseWheelZoomEnabled: true, // Enable mouse wheel zoom for all devices
+      mouseWheelZoomEnabled: window.innerWidth <= 640,
       data: {
         data: {
           emissions: {
@@ -58,6 +58,24 @@ const Earth = () => {
 
   return (
     <div className="w-full bg-offwhite p-6 sm:p-10 rounded-5xl shadow-lg relative">
+      {/* Mobile scrollbar styling */}
+      {/* <style>
+        {`
+          @media (max-width: 640px) {
+            .mobile-scrollbar::-webkit-scrollbar {
+              height: 12px;
+            }
+            .mobile-scrollbar::-webkit-scrollbar-thumb {
+              background-color: #9ca3af;
+              border-radius: 9999px;
+            }
+            .mobile-scrollbar::-webkit-scrollbar-track {
+              background: #f3f4f6;
+            }
+          }
+        `}
+      </style> */}
+
       <h2 className="text-2xl sm:text-3xl font-bold text-center mb-2 text-gray-800">
         Global CO₂ Emissions by Country
       </h2>
