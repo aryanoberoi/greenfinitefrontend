@@ -26,7 +26,7 @@ const Earth = () => {
       colorMax: "#16a34a",
       colorNoData: "#e5e7eb",
       flagType: "image",
-      mouseWheelZoomEnabled: false,
+      mouseWheelZoomEnabled: window.innerWidth <= 640, // Enable mouse wheel zoom for mobile
       data: {
         data: {
           emissions: {
