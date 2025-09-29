@@ -59,7 +59,7 @@ const Earth = () => {
   return (
     <div className="w-full bg-offwhite p-6 sm:p-10 rounded-5xl shadow-lg relative">
       {/* Mobile scrollbar styling */}
-      <style>
+      {/* <style>
         {`
           @media (max-width: 640px) {
             .mobile-scrollbar::-webkit-scrollbar {
@@ -74,7 +74,7 @@ const Earth = () => {
             }
           }
         `}
-      </style>
+      </style> */}
 
       <h2 className="text-2xl sm:text-3xl font-bold text-center mb-2 text-gray-800">
         Global CO₂ Emissions by Country
