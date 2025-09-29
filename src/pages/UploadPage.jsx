@@ -43,7 +43,7 @@ export default function UploadPage() {
 
       {/* Floating ChatBot on the left side */}
       {showChat && (
-        <div className="fixed bottom-6 left-6 z-50 w-[360px] md:w-[850px]">
+        <div className="fixed bottom-6 left-6 z-50 w-[360px] md:w-[950px]">
           <ChatBot
             sessionId={'Ask me how to get started.'}
             moduleName={selectedModule || ''}

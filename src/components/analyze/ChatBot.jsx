@@ -11,7 +11,7 @@ const ChatMessage = ({ sender, message, timestamp }) => {
   const bubbleStyle = isUser ? 'bg-[#7B7A81] text-white' : 'bg-[#003E3E] text-white';
 
   return (
-    <div className={`flex ${alignment} mb-3`}>
+    <div style={{ fontFamily: 'var(--font-primary) !important' }} className={`flex ${alignment} mb-3`}>
       <div className={`max-w-[70%] p-3 rounded-xl ${bubbleStyle} shadow-md`}>
         <p className="leading-relaxed">
           <span className="font-bold">{isUser ? 'You:' : 'AI:'}</span> {message}
@@ -122,7 +122,7 @@ const ChatBot = ({ onClose, sessionId = null, moduleName = '', endpoint = '/chat
   };
 
   return (
-    <div className="w-full md:w-[48%] h-[33em] bg-white bg-opacity-90 rounded-xl shadow-2xl p-6 flex flex-col transition-all duration-300 hover:shadow-xl font-sans relative z-0">
+    <div style={{ fontFamily: 'var(--font-primary) !important' }} className="w-full md:w-[48%] h-[33em] bg-white bg-opacity-90 rounded-xl shadow-2xl p-6 flex flex-col transition-all duration-300 hover:shadow-xl font-sans relative z-0">
       {/* Close Button */}
       {onClose && (
         <button
@@ -163,6 +163,7 @@ const ChatBot = ({ onClose, sessionId = null, moduleName = '', endpoint = '/chat
       {/* Input */}
       <div className="flex items-center w-full max-w-3xl mx-auto px-2 sm:px-4 gap-x-2">
         <input
+        style={{ fontFamily: 'var(--font-primary) !important' }}
           type="text"
           placeholder="Type your message here..."
           value={inputValue}
@@ -171,7 +172,7 @@ const ChatBot = ({ onClose, sessionId = null, moduleName = '', endpoint = '/chat
           className="flex-1 border border-gray-300 rounded-lg px-3 py-2 sm:py-3 text-sm sm:text-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200 font-sans"
           disabled={isSending}
         />
-        <button
+        <button style={{ fontFamily: 'var(--font-primary) !important' }}
           onClick={handleSendMessage}
           disabled={isSending}
           className="!bg-[#003E3E] text-white px-4 py-2 sm:px-6 sm:py-3 rounded-lg text-sm sm:text-lg font-semibold hover:bg-green-700 transition-colors duration-200 shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 font-sans"

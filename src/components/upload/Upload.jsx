@@ -255,7 +255,7 @@ const Upload = ({ selectedModule: incomingModule }) => {
   return (
     <div className="w-full md:w-[35em] h-auto md:h-[35em] flex flex-col justify-between items-center p-4 bg-white bg-opacity-80 rounded-xl  space-y-3 overflow-hidden border border-gray-200">
 
-      <p className="text-sm text-gray-700 text-center leading-tight" style={{ sfontFamily: 'var(--font-primary) !important' }}>
+      <p className="text-sm text-gray-700 text-center leading-tight" style={{ fontFamily: 'var(--font-primary) !important' }}>
         {selectedModule ? `Selected Module: ${selectedModule}` : 'Select a module to begin.'}
       </p>
 
