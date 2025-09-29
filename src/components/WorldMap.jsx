@@ -58,24 +58,6 @@ const Earth = () => {
 
   return (
     <div className="w-full bg-offwhite p-6 sm:p-10 rounded-5xl shadow-lg relative">
-      {/* Mobile scrollbar styling */}
-      {/* <style>
-        {`
-          @media (max-width: 640px) {
-            .mobile-scrollbar::-webkit-scrollbar {
-              height: 12px;
-            }
-            .mobile-scrollbar::-webkit-scrollbar-thumb {
-              background-color: #9ca3af;
-              border-radius: 9999px;
-            }
-            .mobile-scrollbar::-webkit-scrollbar-track {
-              background: #f3f4f6;
-            }
-          }
-        `}
-      </style> */}
-
       <h2 className="text-2xl sm:text-3xl font-bold text-center mb-2 text-gray-800">
         Global CO₂ Emissions by Country
       </h2>
@@ -85,10 +67,10 @@ const Earth = () => {
 
       {/* Single map container with responsive scroll */}
       <div className="overflow-x-auto w-full mobile-scrollbar">
-        <div className="min-w-[1200px] w-full h-[500px] sm:h-[825px]">
+        <div className="w-full h-[500px] sm:h-[825px]">
           <div
             id="svgMap"
-            className="w-[1200px] h-[500px] sm:w-full sm:h-[825px] rounded-xl"
+            className="w-full h-full rounded-xl"
           ></div>
         </div>
       </div>
