@@ -127,7 +127,7 @@ const ChatBot = ({ onClose, sessionId = null, moduleName = '', endpoint = '/chat
       {onClose && (
         <button
           onClick={onClose}
-          className="absolute top-3 right-3 sm:top-1 sm:right-5 !bg-transparent p-2 z-20 text-gray-500 hover:text-black transition duration-200"
+          className="absolute top-3 right-3 sm:top-0 sm:right-0 !bg-transparent p-2 z-20 text-gray-500 hover:text-black transition duration-200"
           title="Close Chatbot"
         >
           <X className="w-6 h-6" />
