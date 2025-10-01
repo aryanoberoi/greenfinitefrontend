@@ -122,12 +122,12 @@ const ChatBot = ({ onClose, sessionId = null, moduleName = '', endpoint = '/chat
   };
 
   return (
-    <div style={{ fontFamily: 'var(--font-primary) !important' }} className="w-full md:w-[48%] h-[33em] bg-white bg-opacity-90 rounded-xl shadow-2xl p-6 flex flex-col transition-all duration-300 hover:shadow-xl font-sans relative z-0">
+    <div style={{ fontFamily: 'var(--font-primary) !important' }} className="w-full md:w-[50%] h-[35em] bg-white bg-opacity-90 rounded-xl shadow-2xl p-6 flex flex-col transition-all duration-300 hover:shadow-xl font-sans relative z-0">
       {/* Close Button */}
       {onClose && (
         <button
           onClick={onClose}
-          className="absolute top-3 right-3 sm:top-0 sm:right-0 !bg-transparent p-2 z-20 text-gray-500 hover:text-black transition duration-200"
+          className="absolute top-0 right-0 sm:top-0 sm:right-0 !bg-transparent p-2 z-20 text-gray-500 hover:text-black transition duration-200"
           title="Close Chatbot"
         >
           <X className="w-6 h-6" />

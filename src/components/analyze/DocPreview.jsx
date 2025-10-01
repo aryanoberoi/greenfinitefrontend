@@ -33,8 +33,8 @@ const DocPreview = ({ fullWidth = false }) => {
   return (
     <div
       className={`${
-        fullWidth ? 'w-full' : 'w-full md:w-[48%]'
-      } h-[33em] bg-white bg-opacity-90 rounded-xl shadow-2xl p-6 flex flex-col transition-all duration-300 hover:shadow-xl  font-sans overflow-hidden`}
+        fullWidth ? 'w-full' : 'w-full md:w-[50%]'
+      } h-[35em] bg-white bg-opacity-90 rounded-xl shadow-2xl p-6 flex flex-col transition-all duration-300 hover:shadow-xl  font-sans overflow-hidden`}
     >
       <p className="text-sm text-gray-500 text-center mb-1 italic truncate">
         {module ? `Module: ${module}` : ''} | {docId}
