@@ -1,17 +1,12 @@
-import { Routes, Route, useLocation } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import Home from './pages/Home';
 import CustomCursor from './components/ui/Cursor';
 import Analyze from './pages/Analyze';
-import NewsletterPopup from './components/NewsletterPopup';
 function App() {
-  const location = useLocation(); // <-- must call inside component
-
   return (
 
     <div className="w-screen h-screen flex flex-col">
     {/* <CustomCursor /> */}
-
-    {location.pathname === '/' && <NewsletterPopup />}
 
       <div className="flex-1">
         <Routes>
